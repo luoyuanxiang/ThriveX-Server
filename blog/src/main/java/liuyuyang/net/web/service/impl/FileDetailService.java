@@ -99,9 +99,6 @@ public class FileDetailService extends ServiceImpl<FileDetailMapper, FileDetail>
     public FileDetail toFileDetail(FileInfo info) throws JsonProcessingException {
         String url = info.getUrl();
 
-        // 如果前缀不带 https:// 则自动补全
-        if (!url.startsWith("https://")) url = "https://" + url;
-
         FileDetail detail = BeanUtil.copyProperties(
                 info, FileDetail.class, "metadata", "userMetadata", "thMetadata", "thUserMetadata", "attr", "hashInfo");
 

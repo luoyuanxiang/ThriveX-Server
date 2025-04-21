@@ -53,7 +53,7 @@ public class FileController {
             if (result == null) throw new CustomException("上传文件失败");
 
             String url = result.getUrl();
-            urls.add(url.startsWith("https://") ? url : "https://" + url);
+            urls.add(url);
         }
 
         return Result.success("文件上传成功：", urls);
@@ -73,7 +73,7 @@ public class FileController {
     @DeleteMapping("/batch")
     @ApiOperation("批量删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result batchDel(@RequestBody String[] pathList) throws QiniuException {
+    public Result<?> batchDel(@RequestBody String[] pathList) throws QiniuException {
         for (String url : pathList) {
             boolean delete = fileStorageService.delete(url.startsWith("https://") ? url : "https://" + url);
             if (!delete) throw new CustomException("删除文件失败");
@@ -94,13 +94,13 @@ public class FileController {
     @GetMapping("/dir")
     @ApiOperation("获取目录列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<Map>> getDirList() {
+    public Result<List<Map<String, Object>>> getDirList() {
         ListFilesResult result = fileStorageService.listFiles()
                 .setPlatform(OssUtils.getPlatform())
                 .listFiles();
 
         // 获取文件列表
-        List<Map> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         List<RemoteDirInfo> fileList = result.getDirList();
 
         for (RemoteDirInfo item : fileList) {
@@ -117,7 +117,7 @@ public class FileController {
     @GetMapping("/list")
     @ApiOperation("获取指定目录中的文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<Map>> getFileList(@RequestParam String dir) {
+    public Result<List<Map<String, Object>>> getFileList(@RequestParam String dir) {
         if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "请指定一个目录");
 
         ListFilesResult result = fileStorageService.listFiles()
@@ -126,7 +126,7 @@ public class FileController {
                 .listFiles();
 
         // 获取文件列表
-        List<Map> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>();
         List<RemoteFileInfo> fileList = result.getFileList();
 
         for (RemoteFileInfo item : fileList) {
@@ -143,7 +143,6 @@ public class FileController {
             data.put("type", item.getExt());
 
             String url = item.getUrl();
-            if (!url.startsWith("https://")) url = "https://" + url;
             data.put("url", url);
 
             list.add(data);

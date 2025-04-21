@@ -1,7 +1,7 @@
 package liuyuyang.net.common.config;
 
 import liuyuyang.net.common.interceptor.JwtTokenAdminInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.dromara.x.file.storage.core.FileStorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,14 +10,17 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Autowired
+    @Resource
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    @Resource
+    private FileStorageService fileStorageService;
     @Value("${file.dir}") // 从配置文件中读取上传目录
     private String uploadDir;
 
