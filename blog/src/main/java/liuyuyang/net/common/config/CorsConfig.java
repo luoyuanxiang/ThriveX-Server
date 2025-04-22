@@ -11,8 +11,6 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedOriginPatterns("*")
-                // .allowedOriginPatterns(domainWhitelist)
-                // .allowedOriginPatterns("http://*.liuyuyang.net", "https://*.liuyuyang.net")
                 .allowedMethods("*") // 支持方法
                 .allowedHeaders("*");
     }

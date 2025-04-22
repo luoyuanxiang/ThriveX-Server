@@ -4,19 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.jsonwebtoken.Claims;
 import liuyuyang.net.common.annotation.PremName;
 import liuyuyang.net.common.execption.CustomException;
-import liuyuyang.net.web.mapper.PermissionMapper;
-import liuyuyang.net.web.mapper.RoleMapper;
-import liuyuyang.net.web.mapper.RolePermissionMapper;
-import liuyuyang.net.model.Permission;
-import liuyuyang.net.model.RolePermission;
 import liuyuyang.net.common.properties.JwtProperties;
 import liuyuyang.net.common.utils.JwtUtils;
+import liuyuyang.net.model.Permission;
+import liuyuyang.net.model.RolePermission;
+import liuyuyang.net.web.mapper.RoleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Aspect
@@ -38,11 +34,7 @@ public class PremNameAspect {
     @Resource
     private JwtProperties jwtProperties;
     @Resource
-    private PermissionMapper permissionMapper;
-    @Resource
     private RoleMapper roleMapper;
-    @Autowired
-    private RolePermissionMapper rolePermissionMapper;
 
     // 定义切点，支持类和方法上的注解
     @Pointcut("@within(liuyuyang.net.common.annotation.PremName) || @annotation(liuyuyang.net.common.annotation.PremName)")
@@ -52,7 +44,7 @@ public class PremNameAspect {
     @Before("cut()")
     public void before(JoinPoint joinPoint) {
         // 获取方法上的 @PremName 注解
-        Optional<PremName> nameOpt = Optional.of(getMethodAnnotation(joinPoint).get());
+        Optional<PremName> nameOpt = getMethodAnnotation(joinPoint);
 
         // 如果注解存在，进行权限验证
         nameOpt.ifPresent(name -> {
@@ -72,7 +64,6 @@ public class PremNameAspect {
                 try {
                     // 获取请求头中的 token
                     String token = request.getHeader("Authorization");
-                    log.debug("Authorization Header: {}", token);
 
                     // 如果 token 为 null，跳过权限校验
                     if (token == null) {
@@ -91,26 +82,20 @@ public class PremNameAspect {
                     response.setStatus(401);
                     throw new CustomException(401, e.getMessage());
                 }
-
                 String mark = (String) role.get("mark");
-
                 // 如果是管理员，则不需要权限校验
                 if(Objects.equals(mark, "admin")) return;
-
                 // 查询当前角色的权限
                 LambdaQueryWrapper<RolePermission> roleLambdaQueryWrapper = new LambdaQueryWrapper<>();
                 roleLambdaQueryWrapper.eq(RolePermission::getRoleId, role.get("id"));
                 // 当前角色能访问的所有权限
                 List<Permission> role_permissions = roleMapper.getPermissionList((int) role.get("id"));
-
                 // 判断当前的 prem 权限是否存在于 role_permissions，通过 name 判断
                 boolean hasPermission = role_permissions.stream()
                         .anyMatch(permission -> permission.getName().equals(prem));
-
                 if (!hasPermission) {
                     throw new CustomException(400, "当前角色没有权限：" + prem);
                 }
-
                 log.info("角色ID：{}", role.get("id"));
             }
         });

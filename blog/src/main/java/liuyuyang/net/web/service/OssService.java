@@ -32,7 +32,7 @@ public interface OssService extends IService<Oss> {
     void saveOss(Oss oss);
 
     // 获取支持的平台
-    List<Map> getPlatform();
+    List<Map<String, String>> getPlatform();
 
     /**
      * 更新

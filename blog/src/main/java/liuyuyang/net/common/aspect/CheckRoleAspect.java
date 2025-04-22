@@ -47,16 +47,11 @@ public class CheckRoleAspect {
             if (attributes != null) {
                 HttpServletRequest request = attributes.getRequest();
                 HttpServletResponse response = attributes.getResponse();
-
                 String token = request.getHeader("Authorization");
-                System.out.println("Authorization Header: " + token);
-
                 if (token != null && token.startsWith("Bearer ")) {
                     token = token.substring(7);
                 }
-
                 Map<String, Object> role;
-
                 try {
                     Claims claims = JwtUtils.parseJWT(jwtProperties.getSecretKey(), token);
                     role = (Map<String, Object>) claims.get("role");
@@ -64,9 +59,7 @@ public class CheckRoleAspect {
                     response.setStatus(401);
                     throw new CustomException(401, "身份验证失败：无效或过期的token");
                 }
-
                 boolean isPerm = rolesList.contains(role.get("mark"));
-
                 if (!isPerm) {
                     throw new CustomException(401, "该权限仅限于： " + String.join(", ", rolesList) + " 角色");
                 }

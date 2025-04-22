@@ -4,10 +4,10 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.common.annotation.PremName;
-import liuyuyang.net.model.Oss;
 import liuyuyang.net.common.utils.Result;
-import liuyuyang.net.web.service.OssService;
+import liuyuyang.net.model.Oss;
 import liuyuyang.net.vo.oss.OssVo;
+import liuyuyang.net.web.service.OssService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -63,9 +63,6 @@ public class OssController {
         }
         OssVo vo = new OssVo();
         BeanUtils.copyProperties(oss, vo);
-        if ("local".equals(vo.getPlatform())) {
-            vo.setProjectPath(System.getProperty("user.dir"));
-        }
         return Result.success(vo);
     }
 
@@ -82,7 +79,7 @@ public class OssController {
     @PatchMapping("/enable/{id}")
     @ApiOperation("启用oss配置")
     @ApiOperationSupport(author = "laifeng", order = 6)
-    public Result enable(@PathVariable Integer id) {
+    public Result<?> enable(@PathVariable Integer id) {
         ossService.enable(id);
         return Result.success();
     }
@@ -99,7 +96,7 @@ public class OssController {
     @GetMapping("/platform")
     @ApiOperation("获取目前支持的oss平台")
     @ApiOperationSupport(author = "宇阳", order = 9)
-    public Result<List<Map>> getPlatform() {
+    public Result<List<Map<String, String>>> getPlatform() {
         return Result.success(ossService.getPlatform());
     }
 }

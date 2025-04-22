@@ -51,8 +51,6 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
         // 校验令牌
         try {
-            log.info("jwt校验：{}", token);
-
             // 如果是GET请求没有传token就直接放行，传了token就必须经过验证
             if ("GET".equalsIgnoreCase(request.getMethod())) {
                 if (token != null) {

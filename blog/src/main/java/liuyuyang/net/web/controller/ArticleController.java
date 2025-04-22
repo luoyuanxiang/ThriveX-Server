@@ -7,18 +7,24 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import liuyuyang.net.common.annotation.NoTokenRequired;
 import liuyuyang.net.common.annotation.PremName;
-import liuyuyang.net.model.Article;
-import liuyuyang.net.common.utils.Result;
-import liuyuyang.net.web.service.ArticleService;
 import liuyuyang.net.common.utils.Paging;
+import liuyuyang.net.common.utils.Result;
+import liuyuyang.net.model.Article;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
+import liuyuyang.net.web.service.ArticleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Api(tags = "文章管理")
 @RestController
@@ -59,7 +65,7 @@ public class ArticleController {
     @DeleteMapping("/batch")
     @ApiOperation("批量删除文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    public Result batchDel(@RequestBody List<Integer> ids) {
+    public Result<?> batchDel(@RequestBody List<Integer> ids) {
         articleService.delBatch(ids);
         return Result.success();
     }
@@ -95,7 +101,7 @@ public class ArticleController {
     @PostMapping("/paging")
     @ApiOperation("分页查询文章列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-    public Result paging(@RequestBody ArticleFillterVo filterVo, PageVo pageVo, @RequestHeader(value = "Authorization", required = false) String token) {
+    public Result<Map<String, Object>> paging(@RequestBody ArticleFillterVo filterVo, PageVo pageVo, @RequestHeader(value = "Authorization", required = false) String token) {
         Page<Article> list = articleService.paging(filterVo, pageVo, token);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
@@ -104,7 +110,7 @@ public class ArticleController {
     @GetMapping("/cate/{cate_id}")
     @ApiOperation("获取指定分类的文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
-    public Result getCateArticleList(@PathVariable Integer cate_id, PageVo pageVo) {
+    public Result<Map<String, Object>> getCateArticleList(@PathVariable Integer cate_id, PageVo pageVo) {
         Page<Article> list = articleService.getCateArticleList(cate_id, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
@@ -113,7 +119,7 @@ public class ArticleController {
     @GetMapping("/tag/{tag_id}")
     @ApiOperation("获取指定标签的文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
-    public Result getTagArticleList(@PathVariable Integer tag_id, PageVo pageVo) {
+    public Result<Map<String, Object>> getTagArticleList(@PathVariable Integer tag_id, PageVo pageVo) {
         Page<Article> list = articleService.getTagArticleList(tag_id, pageVo);
         Map<String, Object> result = Paging.filter(list);
         return Result.success(result);
@@ -141,5 +147,28 @@ public class ArticleController {
     public Result<String> recordView(@PathVariable Integer article_id) {
         articleService.recordView(article_id);
         return Result.success();
+    }
+
+
+    /**
+     * 导入文章
+     *
+     * @param files 文件
+     * @return {@link ResponseEntity }<{@link String }>
+     */
+    @PostMapping("/importArticles")
+    public Result<?> importArticles(@RequestBody MultipartFile[] files) throws IOException {
+        List<String> rests = new ArrayList<>();
+        for (MultipartFile file : files) {
+            // 校验文件类型
+            if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".md")) {
+                return Result.error("仅支持Markdown文件");
+            }
+            // 解析内容
+            String mdContent = new String(file.getBytes(), StandardCharsets.UTF_8);
+            String rest = articleService.parseMarkdown(mdContent);
+            rests.add(rest);
+        }
+        return Result.success(rests);
     }
 }

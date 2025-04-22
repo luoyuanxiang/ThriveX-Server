@@ -4,10 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.common.execption.CustomException;
-import liuyuyang.net.web.mapper.OssMapper;
-import liuyuyang.net.model.Oss;
-import liuyuyang.net.web.service.OssService;
+import liuyuyang.net.common.handler.DynamicResourceHandlerMapping;
 import liuyuyang.net.common.utils.OssUtils;
+import liuyuyang.net.model.Oss;
+import liuyuyang.net.web.mapper.OssMapper;
+import liuyuyang.net.web.service.OssService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +22,14 @@ import java.util.Map;
 public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssService {
     @Resource
     private OssMapper ossMapper;
+    @Resource
+    private DynamicResourceHandlerMapping dynamicResourceHandlerMapping;
 
     @Override
     public void saveOss(Oss oss) {
         // 判断是否有重复
         Integer count = this.lambdaQuery().eq(Oss::getPlatform, oss.getPlatform()).count();
         if (count > 0) throw new CustomException("该平台已存在，请勿重复添加");
-
-        if ("local".equals(oss.getPlatform())) {
-            // 获取当前项目的路径
-            String projectPath = System.getProperty("user.dir");
-            oss.setEndPoint(projectPath + "/");
-        }
-
         this.save(oss);
     }
 
@@ -74,6 +70,10 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         if (!temp2) throw new CustomException("启用失败");
 
         Oss oss = this.getById(id);
+        if (OssUtils.DEFAULT_PLATFORM.equals(oss.getPlatform())) {
+            // 添加映射信息
+            dynamicResourceHandlerMapping.addMapping(oss.getBasePath(), oss.getEndPoint());
+        }
         OssUtils.registerPlatform(oss);
     }
 
@@ -84,8 +84,8 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     }
 
     @Override
-    public List<Map> getPlatform() {
-        List<Map> result = new ArrayList<>();
+    public List<Map<String, String>> getPlatform() {
+        List<Map<String, String>> result = new ArrayList<>();
         String[] list = {"huawei", "aliyun", "qiniu", "tencent", "minio"};
 
         for (String item : list) {
@@ -102,21 +102,14 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
     public void updateOss(Oss oss) {
         String platform = oss.getPlatform();
 
-        if ("local".equals(platform)) {
-            // 获取当前项目的路径
-            String projectPath = System.getProperty("user.dir");
-            oss.setEndPoint(projectPath + "/");
-
-            // 每次修改时候，如果路径不包含static则追加上
-            if(!oss.getDomain().contains("static")){
-                oss.setDomain(oss.getDomain() + "static/");
-            }
-        }
-
         // 不允许更改平台
         oss.setPlatform(null);
         boolean result = this.updateById(oss);
         if (result) {
+            if (OssUtils.DEFAULT_PLATFORM.equals(oss.getPlatform())) {
+                // 添加映射信息
+                dynamicResourceHandlerMapping.addMapping(oss.getBasePath(), oss.getEndPoint());
+            }
             oss.setPlatform(platform);
             OssUtils.registerPlatform(oss);
         }

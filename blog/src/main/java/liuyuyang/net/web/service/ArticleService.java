@@ -38,4 +38,12 @@ public interface ArticleService extends IService<Article> {
     Article bindingData(Integer id);
 
     QueryWrapper<Article> queryWrapperArticle(ArticleFillterVo filterVo);
+
+    /**
+     * 解析 Markdown
+     *
+     * @param mdContent MD 内容
+     * @return {@link String }
+     */
+    String parseMarkdown(String mdContent);
 }

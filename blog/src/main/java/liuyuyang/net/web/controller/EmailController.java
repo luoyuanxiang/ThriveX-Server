@@ -27,10 +27,9 @@ public class EmailController {
 
     @PremName("email:dismiss")
     @PostMapping("/dismiss")
-    // @NoTokenRequired
     @ApiOperation("驳回通知邮件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result dismiss(@RequestBody DismissEmailDTO email) {
+    public Result<?> dismiss(@RequestBody DismissEmailDTO email) {
         // 处理邮件模板
         Context context = new Context();
         context.setVariable("type", email.getType());
@@ -49,7 +48,7 @@ public class EmailController {
     @PostMapping("/reply_wall")
     @ApiOperation("回复留言")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-    public Result replyWall(@RequestBody WallEmailDTO email) {
+    public Result<?> replyWall(@RequestBody WallEmailDTO email) {
         // 处理邮件模板
         Context context = new Context();
         context.setVariable("recipient", email.getRecipient());

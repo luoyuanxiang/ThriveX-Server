@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.common.execption.CustomException;
 import liuyuyang.net.model.*;
 import liuyuyang.net.web.mapper.*;
-import liuyuyang.net.web.service.ArticleCateService;
-import liuyuyang.net.web.service.ArticleService;
-import liuyuyang.net.web.service.ArticleTagService;
-import liuyuyang.net.web.service.CateService;
+import liuyuyang.net.web.service.*;
 import liuyuyang.net.common.utils.YuYangUtils;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
@@ -47,6 +44,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private CommentMapper commentMapper;
     @Resource
     private YuYangUtils yuYangUtils;
+    @Resource
+    private MarkdownParserService markdownParserService;
 
     @Override
     public void add(Article article) {
@@ -569,6 +568,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
 
         return queryWrapper;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String parseMarkdown(String mdContent) {
+        String title = markdownParserService.parseMarkdown(mdContent);
+        Article article = new Article();
+        article.setTitle(title);
+        article.setDescription("");
+        article.setContent(mdContent);
+        article.setCreateTime(new Date().getTime() + "");
+        save(article);
+        // 新增文章配置
+        ArticleConfig articleConfig = new ArticleConfig();
+        articleConfig.setArticleId(article.getId());
+        articleConfig.setStatus("default");
+        articleConfig.setIsDraft(1);
+        articleConfig.setIsEncrypt(0);
+        articleConfig.setIsDel(0);
+        articleConfigMapper.insert(articleConfig);
+        return "添加成功";
     }
 
     @NotNull

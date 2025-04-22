@@ -1,18 +1,20 @@
 package liuyuyang.net.common.config;
 
+import liuyuyang.net.common.handler.DynamicResourceHandlerMapping;
 import liuyuyang.net.common.interceptor.JwtTokenAdminInterceptor;
-import org.dromara.x.file.storage.core.FileStorageService;
-import org.springframework.beans.factory.annotation.Value;
+import liuyuyang.net.common.utils.OssUtils;
+import liuyuyang.net.web.service.OssService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Configuration
@@ -20,9 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Resource
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
     @Resource
-    private FileStorageService fileStorageService;
-    @Value("${file.dir}") // 从配置文件中读取上传目录
-    private String uploadDir;
+    private OssService ossService;
 
     private static final Set<String> EXCLUDED_PATHS = new HashSet<>(Arrays.asList(
             "/",
@@ -55,9 +55,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/user/login");
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/upload/**")
-                .addResourceLocations("file:" + uploadDir);
+    @Autowired
+    public void initializeMappings(DynamicResourceHandlerMapping handlerMapping) {
+        ossService.list().parallelStream().filter(s -> Objects.equals(s.getPlatform(), OssUtils.DEFAULT_PLATFORM))
+                .forEach(mapping ->
+                handlerMapping.addMapping(mapping.getBasePath(), mapping.getEndPoint()));
     }
 }
