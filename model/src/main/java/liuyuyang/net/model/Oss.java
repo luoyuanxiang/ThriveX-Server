@@ -33,11 +33,17 @@ public class Oss {
     @ApiModelProperty(value = "存储桶")
     private String bucketName;
 
-    @ApiModelProperty(value = "域名")
+    @ApiModelProperty(value = "访问域名")
     private String domain;
 
-    @ApiModelProperty(value = "文件目录")
+    @ApiModelProperty(value = "存储基础路径")
     private String basePath;
+
+    @ApiModelProperty(value = "本地存储路径")
+    private String storagePath;
+
+    @ApiModelProperty(value = "本地访问路径")
+    private String pathPatterns;
 
     /**
      * 是否启用 0:禁用 1：启用

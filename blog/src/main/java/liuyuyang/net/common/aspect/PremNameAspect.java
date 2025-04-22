@@ -50,7 +50,6 @@ public class PremNameAspect {
         nameOpt.ifPresent(name -> {
             // 当前接口的权限名称
             String prem = name.value();
-            log.info("权限名称：{}", prem);
 
             // 获取当前请求的上下文
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

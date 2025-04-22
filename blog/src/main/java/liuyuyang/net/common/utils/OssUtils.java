@@ -35,7 +35,7 @@ public class OssUtils {
         config.setPlatform(DEFAULT_PLATFORM);
         config.setBasePath(oss.getBasePath());
         config.setDomain(oss.getDomain());
-        config.setStoragePath(oss.getEndPoint());
+        config.setStoragePath(oss.getStoragePath());
         removeStorage(list, DEFAULT_PLATFORM);
 
         list.addAll(FileStorageServiceBuilder.buildLocalPlusFileStorage(Collections.singletonList(config)));

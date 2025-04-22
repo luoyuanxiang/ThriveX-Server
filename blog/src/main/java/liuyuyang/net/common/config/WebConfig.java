@@ -59,6 +59,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void initializeMappings(DynamicResourceHandlerMapping handlerMapping) {
         ossService.list().parallelStream().filter(s -> Objects.equals(s.getPlatform(), OssUtils.DEFAULT_PLATFORM))
                 .forEach(mapping ->
-                handlerMapping.addMapping(mapping.getBasePath(), mapping.getEndPoint()));
+                handlerMapping.addMapping(mapping.getPathPatterns(), mapping.getStoragePath()));
     }
 }

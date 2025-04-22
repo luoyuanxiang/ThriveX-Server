@@ -1,5 +1,6 @@
 package liuyuyang.net.common.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author luoyuanxiang
  */
+@Slf4j
 @Component
 public class DynamicResourceHandlerMapping extends AbstractHandlerMapping {
 
@@ -28,11 +30,15 @@ public class DynamicResourceHandlerMapping extends AbstractHandlerMapping {
     @Override
     protected Object getHandlerInternal(HttpServletRequest request) {
         String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);
+        log.info("请求路径：{}", lookupPath);
         for (Map.Entry<String, ResourceHttpRequestHandler> entry : handlerMap.entrySet()) {
             String pattern = entry.getKey();
             if (pathMatcher.match(pattern, lookupPath)) {
                 // 计算路径属性
                 String pathWithinMapping = pathMatcher.extractPathWithinPattern(pattern, lookupPath);
+                log.info("路径映射：{}", pattern);
+                log.info("匹配到路径属性：{}", pathWithinMapping);
+
 
                 // 设置关键请求属性
                 request.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, pathWithinMapping);
@@ -51,13 +57,8 @@ public class DynamicResourceHandlerMapping extends AbstractHandlerMapping {
      * @param resourcePath 资源路径
      */
     public void addMapping(String urlPattern, String resourcePath) {
-        resourcePath = resourcePath + "/" + urlPattern;
         resourcePath = resourcePath.replaceAll("\\\\", "/");
         resourcePath = resourcePath.replaceAll("//", "/");
-        urlPattern = "/static/" + urlPattern;
-        if (urlPattern.endsWith("/") && !urlPattern.endsWith("**")) {
-            urlPattern = urlPattern + "**";
-        }
         urlPattern = urlPattern.replaceAll("//", "/");
         ResourceHttpRequestHandler handler = new ResourceHttpRequestHandler();
         handler.setLocations(Collections.singletonList(new FileSystemResource(resourcePath)));
