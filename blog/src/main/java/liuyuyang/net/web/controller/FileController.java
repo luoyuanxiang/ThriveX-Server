@@ -117,7 +117,9 @@ public class FileController {
     @GetMapping("/list")
     @ApiOperation("获取指定目录中的文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<Map<String, Object>>> getFileList(@RequestParam String dir) {
+    public Result<Map<String, Object>> getFileList(@RequestParam String dir,
+                                                         @RequestParam(defaultValue = "1") Integer page,
+                                                         @RequestParam(defaultValue = "20") Integer size) {
         if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "请指定一个目录");
 
         ListFilesResult result = fileStorageService.listFiles()
@@ -127,9 +129,19 @@ public class FileController {
 
         // 获取文件列表
         List<Map<String, Object>> list = new ArrayList<>();
-        List<RemoteFileInfo> fileList = result.getFileList();
+        List<RemoteFileInfo> remoteFileList = result.getFileList();
 
-        for (RemoteFileInfo item : fileList) {
+        // 按lastModified时间降序排序（最新的在前）
+        remoteFileList.sort((a, b) -> b.getLastModified().compareTo(a.getLastModified()));
+
+        // 计算分页参数
+        int total = remoteFileList.size();
+        int startIndex = (page - 1) * size;
+        int endIndex = Math.min(startIndex + size, total);
+
+        // 分页处理
+        List<RemoteFileInfo> pageList = remoteFileList.subList(startIndex, endIndex);
+        for (RemoteFileInfo item : pageList) {
             // 如果是目录就略过
             if (Objects.equals(item.getExt(), "")) continue;
 
@@ -144,10 +156,19 @@ public class FileController {
 
             String url = item.getUrl();
             data.put("url", url);
+            data.put("date", item.getLastModified());
 
             list.add(data);
         }
 
-        return Result.success(list);
+        // 构建分页结果
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", list);
+        resultMap.put("size", size);
+        resultMap.put("page", page);
+        resultMap.put("pages", (total + size - 1) / size);
+        resultMap.put("total", total);
+
+        return Result.success(resultMap);
     }
 }
