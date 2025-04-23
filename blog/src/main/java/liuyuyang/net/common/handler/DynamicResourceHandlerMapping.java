@@ -1,5 +1,7 @@
 package liuyuyang.net.common.handler;
 
+import liuyuyang.net.common.utils.OssUtils;
+import liuyuyang.net.model.Oss;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.FileSystemResource;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -39,7 +42,6 @@ public class DynamicResourceHandlerMapping extends AbstractHandlerMapping {
                 log.info("路径映射：{}", pattern);
                 log.info("匹配到路径属性：{}", pathWithinMapping);
 
-
                 // 设置关键请求属性
                 request.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, pathWithinMapping);
                 request.setAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE, pattern);
@@ -53,13 +55,16 @@ public class DynamicResourceHandlerMapping extends AbstractHandlerMapping {
     /**
      * 添加映射
      *
-     * @param urlPattern   URL 模式
-     * @param resourcePath 资源路径
+     * @param oss 开源软件
      */
-    public void addMapping(String urlPattern, String resourcePath) {
-        resourcePath = resourcePath.replaceAll("\\\\", "/");
-        resourcePath = resourcePath.replaceAll("//", "/");
-        urlPattern = urlPattern.replaceAll("//", "/");
+    public void addMapping(Oss oss) {
+        if (oss == null || !Objects.equals(OssUtils.DEFAULT_PLATFORM, oss.getPlatform())) {
+            return;
+        }
+        String pathPatterns = oss.getPathPatterns();
+        String storagePath = oss.getStoragePath();
+        String basePath = oss.getBasePath();
+        String resourcePath = storagePath + basePath;
         ResourceHttpRequestHandler handler = new ResourceHttpRequestHandler();
         handler.setLocations(Collections.singletonList(new FileSystemResource(resourcePath)));
         handler.setResourceResolvers(Collections.singletonList(new PathResourceResolver()));
@@ -68,16 +73,7 @@ public class DynamicResourceHandlerMapping extends AbstractHandlerMapping {
         } catch (Exception e) {
             throw new RuntimeException("初始化资源处理器失败", e);
         }
-        handlerMap.put(urlPattern, handler);
-    }
-
-    /**
-     * 删除映射
-     *
-     * @param urlPattern URL 模式
-     */
-    public void removeMapping(String urlPattern) {
-        handlerMap.remove(urlPattern);
+        handlerMap.put(pathPatterns, handler);
     }
 
     @Override

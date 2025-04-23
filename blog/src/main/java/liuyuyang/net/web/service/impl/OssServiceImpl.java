@@ -70,10 +70,8 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         if (!temp2) throw new CustomException("启用失败");
 
         Oss oss = this.getById(id);
-        if (OssUtils.DEFAULT_PLATFORM.equals(oss.getPlatform())) {
-            // 添加映射信息
-            dynamicResourceHandlerMapping.addMapping(oss.getPathPatterns(), oss.getStoragePath());
-        }
+        // 添加映射信息
+        dynamicResourceHandlerMapping.addMapping(oss);
         OssUtils.registerPlatform(oss);
     }
 
@@ -106,10 +104,8 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements OssSe
         oss.setPlatform(null);
         boolean result = this.updateById(oss);
         if (result) {
-            if (OssUtils.DEFAULT_PLATFORM.equals(oss.getPlatform())) {
-                // 添加映射信息
-                dynamicResourceHandlerMapping.addMapping(oss.getPathPatterns(), oss.getStoragePath());
-            }
+            // 添加映射信息
+            dynamicResourceHandlerMapping.addMapping(oss);
             oss.setPlatform(platform);
             OssUtils.registerPlatform(oss);
         }
