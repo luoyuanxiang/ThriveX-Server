@@ -53,7 +53,7 @@ public class FileController {
             if (result == null) throw new CustomException("上传文件失败");
 
             String url = result.getUrl();
-            urls.add(url);
+            urls.add(url.startsWith("https://") ? url : "https://" + url);
         }
 
         return Result.success("文件上传成功：", urls);
@@ -73,7 +73,7 @@ public class FileController {
     @DeleteMapping("/batch")
     @ApiOperation("批量删除文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-    public Result<?> batchDel(@RequestBody String[] pathList) throws QiniuException {
+    public Result batchDel(@RequestBody String[] pathList) throws QiniuException {
         for (String url : pathList) {
             boolean delete = fileStorageService.delete(url.startsWith("https://") ? url : "https://" + url);
             if (!delete) throw new CustomException("删除文件失败");
@@ -94,13 +94,13 @@ public class FileController {
     @GetMapping("/dir")
     @ApiOperation("获取目录列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<List<Map<String, Object>>> getDirList() {
+    public Result<List<Map>> getDirList() {
         ListFilesResult result = fileStorageService.listFiles()
                 .setPlatform(OssUtils.getPlatform())
                 .listFiles();
 
         // 获取文件列表
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map> list = new ArrayList<>();
         List<RemoteDirInfo> fileList = result.getDirList();
 
         for (RemoteDirInfo item : fileList) {
@@ -117,9 +117,11 @@ public class FileController {
     @GetMapping("/list")
     @ApiOperation("获取指定目录中的文件")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-    public Result<Map<String, Object>> getFileList(@RequestParam String dir,
-                                                         @RequestParam(defaultValue = "1") Integer page,
-                                                         @RequestParam(defaultValue = "20") Integer size) {
+    public Result<Map<String, Object>> getFileList(
+            @RequestParam String dir,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "20") Integer size
+    ) {
         if (dir == null || dir.trim().isEmpty()) throw new CustomException(400, "请指定一个目录");
 
         ListFilesResult result = fileStorageService.listFiles()
@@ -128,7 +130,7 @@ public class FileController {
                 .listFiles();
 
         // 获取文件列表
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> fileList = new ArrayList<>();
         List<RemoteFileInfo> remoteFileList = result.getFileList();
 
         // 按lastModified时间降序排序（最新的在前）
@@ -138,32 +140,33 @@ public class FileController {
         int total = remoteFileList.size();
         int startIndex = (page - 1) * size;
         int endIndex = Math.min(startIndex + size, total);
-
+        
         // 分页处理
         List<RemoteFileInfo> pageList = remoteFileList.subList(startIndex, endIndex);
+
         for (RemoteFileInfo item : pageList) {
             // 如果是目录就略过
             if (Objects.equals(item.getExt(), "")) continue;
 
             Map<String, Object> data = new HashMap<>();
-
             data.put("basePath", item.getBasePath());
             data.put("dir", dir);
             data.put("path", item.getBasePath() + item.getPath() + item.getFilename());
             data.put("name", item.getFilename());
             data.put("size", item.getSize());
             data.put("type", item.getExt());
-
-            String url = item.getUrl();
-            data.put("url", url);
             data.put("date", item.getLastModified());
 
-            list.add(data);
+            String url = item.getUrl();
+            if (!url.startsWith("https://")) url = "https://" + url;
+            data.put("url", url);
+
+            fileList.add(data);
         }
 
         // 构建分页结果
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("result", list);
+        resultMap.put("result", fileList);
         resultMap.put("size", size);
         resultMap.put("page", page);
         resultMap.put("pages", (total + size - 1) / size);
