@@ -33,15 +33,11 @@ public class DynamicResourceHandlerMapping extends AbstractHandlerMapping {
     @Override
     protected Object getHandlerInternal(HttpServletRequest request) {
         String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);
-        log.info("请求路径：{}", lookupPath);
         for (Map.Entry<String, ResourceHttpRequestHandler> entry : handlerMap.entrySet()) {
             String pattern = entry.getKey();
             if (pathMatcher.match(pattern, lookupPath)) {
                 // 计算路径属性
                 String pathWithinMapping = pathMatcher.extractPathWithinPattern(pattern, lookupPath);
-                log.info("路径映射：{}", pattern);
-                log.info("匹配到路径属性：{}", pathWithinMapping);
-
                 // 设置关键请求属性
                 request.setAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE, pathWithinMapping);
                 request.setAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE, pattern);

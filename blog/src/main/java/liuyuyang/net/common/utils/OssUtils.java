@@ -22,17 +22,27 @@ public class OssUtils {
     public static final String DEFAULT_PLATFORM = "local";
     private static final FileStorageService fileStorageService = SpringUtils.getBean(FileStorageService.class);
 
+    /**
+     * 获取平台
+     *
+     * @return {@link String }
+     */
     public static String getPlatform() {
         if (platform == null) platform = DEFAULT_PLATFORM;
         return platform;
     }
 
+    /**
+     * 设置本地储存
+     *
+     * @param oss 开源软件
+     */
     public static void setPlatformToDefault(Oss oss) {
         // 获取存储平台 List
         CopyOnWriteArrayList<FileStorage> list = fileStorageService.getFileStorageList();
 
         FileStorageProperties.LocalPlusConfig config = new FileStorageProperties.LocalPlusConfig();
-        config.setPlatform(DEFAULT_PLATFORM);
+        config.setPlatform(oss.getPlatform());
         config.setBasePath(oss.getBasePath());
         config.setDomain(oss.getDomain());
         config.setStoragePath(oss.getStoragePath());
