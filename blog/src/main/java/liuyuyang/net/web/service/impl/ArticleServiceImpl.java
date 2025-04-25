@@ -93,6 +93,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setIsDraft(article.getConfig().getIsDraft());
         articleConfig.setIsEncrypt(article.getConfig().getIsEncrypt());
         articleConfig.setIsDel(0);
+        articleConfig.setComment(article.getConfig().getComment());
 
         articleConfigMapper.insert(articleConfig);
     }
@@ -179,6 +180,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setIsDraft(config.getIsDraft());
         articleConfig.setIsEncrypt(config.getIsEncrypt());
         articleConfig.setIsDel(0);
+        articleConfig.setComment(config.getComment());
         articleConfigMapper.insert(articleConfig);
 
         // 修改文章

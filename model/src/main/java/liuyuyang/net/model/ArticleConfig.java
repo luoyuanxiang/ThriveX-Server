@@ -30,4 +30,9 @@ public class ArticleConfig {
 
     @ApiModelProperty(value = "文章ID", example = "1", required = true)
     private Integer articleId;
+
+    /**
+     * 是否开启评论:1-开启，0-关闭
+     */
+    private Boolean comment;
 }

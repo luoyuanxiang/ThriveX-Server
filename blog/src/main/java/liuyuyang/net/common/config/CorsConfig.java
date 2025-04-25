@@ -9,7 +9,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:3000", "https://thrive-x-blog-green.vercel.app", "https://*.luoyuanxiang.top", "https://luoyuanxiang.top")
+                .allowedOriginPatterns("*")
                 .allowedMethods("*") // 支持方法
                 .allowedHeaders("*")
                 .maxAge(36000);
