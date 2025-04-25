@@ -10,6 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedOriginPatterns("http://localhost:3000/", "https://thrive-x-blog-green.vercel.app")
                 .allowedMethods("*") // 支持方法
                 .allowedHeaders("*")
                 .allowCredentials(false)
