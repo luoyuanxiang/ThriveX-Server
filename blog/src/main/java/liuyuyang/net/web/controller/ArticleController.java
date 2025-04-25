@@ -7,13 +7,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import liuyuyang.net.common.annotation.NoTokenRequired;
 import liuyuyang.net.common.annotation.PremName;
-import liuyuyang.net.model.Article;
-import liuyuyang.net.common.utils.Result;
-import liuyuyang.net.model.File;
-import liuyuyang.net.web.service.ArticleService;
 import liuyuyang.net.common.utils.Paging;
+import liuyuyang.net.common.utils.Result;
+import liuyuyang.net.model.Article;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
+import liuyuyang.net.web.service.ArticleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -150,8 +149,8 @@ public class ArticleController {
     @PostMapping("/import")
     @ApiOperation("批量导入文章")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 14)
-    public Result<String> importArticle(@RequestParam MultipartFile[] list) throws IOException {
-        articleService.importArticle(list);
+    public Result<String> importArticle(@RequestParam MultipartFile[] files) throws IOException {
+        articleService.importArticle(files);
         return Result.success();
     }
 

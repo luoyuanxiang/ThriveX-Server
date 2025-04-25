@@ -5,14 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.common.execption.CustomException;
-import liuyuyang.net.model.*;
-import liuyuyang.net.web.mapper.*;
-import liuyuyang.net.web.service.*;
 import liuyuyang.net.common.utils.YuYangUtils;
+import liuyuyang.net.model.*;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
+import liuyuyang.net.web.mapper.*;
+import liuyuyang.net.web.service.*;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,14 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @Service
 @Transactional
@@ -801,7 +797,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         // 返回ResponseEntity
         return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=articles.zip")
+                .header("Pragma", "no-cache")
+                .header("Cache-Control", "no-cache")
+                .header("Expires", "0")
+                .header("Content-Disposition", "attachment;filename=articles.zip")
+                .header("Content-Transfer-Encoding", "binary")
+                .header("Access-Control-Expose-Headers", "Content-Disposition")
+                .contentLength(zipBytes.length)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(zipBytes);
     }
 

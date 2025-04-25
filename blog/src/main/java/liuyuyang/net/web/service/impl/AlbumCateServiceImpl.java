@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -58,7 +59,16 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
     public List<AlbumCate> list() {
         LambdaQueryWrapper<AlbumCate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(AlbumCate::getId);
-        return albumCateMapper.selectList(lambdaQueryWrapper);
+        List<AlbumCate> albumCateList = baseMapper.selectList(lambdaQueryWrapper);
+        List<Integer> ids = albumCateList.parallelStream().map(AlbumCate::getId).collect(Collectors.toList());
+        LambdaQueryWrapper<AlbumImage> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper1.in(AlbumImage::getCateId, ids);
+        lambdaQueryWrapper1.orderByDesc(AlbumImage::getId);
+        List<AlbumImage> albumImageList = albumImageMapper.selectList(lambdaQueryWrapper1);
+        albumCateList.forEach(albumCate -> albumCate.setImages(albumImageList
+                .stream()
+                .filter(albumImage -> albumImage.getCateId().equals(albumCate.getId())).collect(Collectors.toList())));
+        return albumCateList;
     }
 
     @Override

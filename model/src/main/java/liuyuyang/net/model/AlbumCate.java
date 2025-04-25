@@ -1,10 +1,13 @@
 package liuyuyang.net.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @TableName(value = "album_cate")
@@ -18,4 +21,7 @@ public class AlbumCate {
 
     @ApiModelProperty(value = "文章封面链接", example = "http://123.com/images/example.jpg")
     private String cover;
+
+    @TableField(exist = false)
+    private List<AlbumImage> images;
 }
