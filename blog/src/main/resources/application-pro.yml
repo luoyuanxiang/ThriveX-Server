@@ -1,5 +1,9 @@
 server:
-  port: ${PORT:80}
+  port: ${PORT:443}
+  ssl:
+    key-store: classpath:server.luoyuanxiang.top.pfx
+    key-store-password: ${SSL_PASSWORD}
+    key-store-type: RSA
 
 spring:
   datasource:
