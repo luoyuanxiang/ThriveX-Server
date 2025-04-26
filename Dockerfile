@@ -10,4 +10,4 @@ EXPOSE 80
 COPY blog/target/blog-1.0-SNAPSHOT.jar /server/blog.jar
 
 # 设置启动命令
-CMD ["java", "-jar", "blog.jar"]
+CMD ["java", "-Xms128m", "-Xmx256m", "-jar", "blog.jar"]
