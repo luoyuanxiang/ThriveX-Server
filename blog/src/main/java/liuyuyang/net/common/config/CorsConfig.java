@@ -9,10 +9,10 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:*", "https://*.luoyuanxiang.top", "https://luoyuanxiang.top")
+                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
                 .allowedMethods("*") // 支持方法
                 .allowedHeaders("*")
-                .allowCredentials(true)
                 .maxAge(36000);
     }
 }
