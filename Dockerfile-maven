@@ -1,0 +1,19 @@
+FROM maven:3.8.6-eclipse-temurin-8-alpine AS builder
+WORKDIR /app
+COPY pom.xml .
+COPY model/pom.xml model/pom.xml
+COPY blog/pom.xml blog/pom.xml
+
+RUN mvn dependency:go-offline -B
+
+COPY . .
+
+RUN mvn clean package -DskipTests -P pro
+# 阶段2：运行
+FROM eclipse-temurin:8-jre-alpine
+WORKDIR /app
+
+COPY --from=builder /app/blog/target/*.jar app.jar
+
+# 设置启动命令
+CMD ["java", "-Xms256m", "-Xmx512m", "-jar", "blog.jar"]
