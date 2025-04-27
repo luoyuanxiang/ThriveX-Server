@@ -31,6 +31,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
     @Resource
     private UserTokenMapper userTokenMapper;
 
+    @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) {
         // 从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getTokenName());

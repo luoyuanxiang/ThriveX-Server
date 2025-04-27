@@ -7,8 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @TableName(value = "album_cate")
 public class AlbumCate {
@@ -23,5 +21,5 @@ public class AlbumCate {
     private String cover;
 
     @TableField(exist = false)
-    private List<AlbumImage> images;
+    private Integer count;
 }

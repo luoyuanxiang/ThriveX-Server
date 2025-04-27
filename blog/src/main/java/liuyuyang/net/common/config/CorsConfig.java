@@ -9,9 +9,18 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3001", "http://localhost:5174", "https://luoyuanxiang.top", "https://admin.luoyuanxiang.top", "https://blog.luoyuanxiang.top")
-                .allowedMethods("*") // 支持方法
+                .allowedOriginPatterns(
+                        "http://localhost:[*]",
+                        "https://luoyuanxiang.top",
+                        "https://*.luoyuanxiang.top"
+                )
+                // 允许所有方法（GET、POST等）
+                .allowedMethods("*")
+                // 允许所有请求头
                 .allowedHeaders("*")
-                .maxAge(36000);
+                // 允许携带凭证（如cookies）
+                .allowCredentials(true)
+                // 预检请求缓存时间
+                .maxAge(3600);
     }
 }

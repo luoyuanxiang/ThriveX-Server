@@ -2,6 +2,7 @@ package liuyuyang.net.common.config;
 
 import liuyuyang.net.common.handler.DynamicResourceHandlerMapping;
 import liuyuyang.net.common.interceptor.JwtTokenAdminInterceptor;
+import liuyuyang.net.common.interceptor.RateLimitInterceptor;
 import liuyuyang.net.common.utils.OssUtils;
 import liuyuyang.net.web.service.OssService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
     @Resource
     private OssService ossService;
+    @Resource
+    private RateLimitInterceptor rateLimitInterceptor;
 
     private static final Set<String> EXCLUDED_PATHS = new HashSet<>(Arrays.asList(
             "/",
@@ -53,6 +56,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/user/login");
+        registry.addInterceptor(rateLimitInterceptor)
+                .addPathPatterns("/**");
     }
 
     @Autowired

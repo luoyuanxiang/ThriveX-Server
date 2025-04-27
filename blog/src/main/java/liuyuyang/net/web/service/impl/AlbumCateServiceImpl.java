@@ -60,14 +60,13 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
         LambdaQueryWrapper<AlbumCate> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(AlbumCate::getId);
         List<AlbumCate> albumCateList = baseMapper.selectList(lambdaQueryWrapper);
-        List<Integer> ids = albumCateList.parallelStream().map(AlbumCate::getId).collect(Collectors.toList());
-        LambdaQueryWrapper<AlbumImage> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper1.in(AlbumImage::getCateId, ids);
-        lambdaQueryWrapper1.orderByDesc(AlbumImage::getId);
-        List<AlbumImage> albumImageList = albumImageMapper.selectList(lambdaQueryWrapper1);
-        albumCateList.forEach(albumCate -> albumCate.setImages(albumImageList
-                .stream()
-                .filter(albumImage -> albumImage.getCateId().equals(albumCate.getId())).collect(Collectors.toList())));
+        albumCateList.forEach(albumCate -> {
+            LambdaQueryWrapper<AlbumImage> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper1.eq(AlbumImage::getCateId, albumCate.getId());
+            lambdaQueryWrapper1.orderByDesc(AlbumImage::getId);
+            Integer i = albumImageMapper.selectCount(lambdaQueryWrapper1);
+            albumCate.setCount(i);
+        });
         return albumCateList;
     }
 
