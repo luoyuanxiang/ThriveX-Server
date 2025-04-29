@@ -16,4 +16,4 @@ WORKDIR /app
 COPY --from=builder /app/blog/target/*.jar app.jar
 
 # 设置启动命令
-CMD ["java", "-Xms256m", "-Xmx512m", "-jar", "blog.jar"]
+CMD ["java", "-Xms256m", "-Xmx512m", "-jar", "app.jar"]
