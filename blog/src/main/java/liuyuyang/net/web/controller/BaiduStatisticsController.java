@@ -1,6 +1,9 @@
 package liuyuyang.net.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.common.utils.Result;
 import liuyuyang.net.model.BaiduStatistics;
 import liuyuyang.net.web.service.BaiduStatisticsService;
@@ -21,6 +24,7 @@ import java.util.Objects;
  *
  * @author luoyuanxiang
  */
+@Api(tags = "百度统计")
 @RestController
 @RequestMapping("/baidu/statistics")
 public class BaiduStatisticsController {
@@ -34,17 +38,21 @@ public class BaiduStatisticsController {
      * @return {@link Result }<{@link BaiduStatistics }>
      */
     @GetMapping
+    @ApiOperation("获取配置")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     public Result<BaiduStatistics> get() {
         BaiduStatistics one = baiduStatisticsService.getById(1);
         return Result.success(one);
     }
 
     /**
-     * 获取
+     * 更新配置
      *
      * @return {@link Result }<{@link BaiduStatistics }>
      */
     @PutMapping
+    @ApiOperation("更新配置")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     public Result<?> edit(@RequestBody BaiduStatistics baiduStatistics) {
         baiduStatisticsService.updateById(baiduStatistics);
         return Result.success();
