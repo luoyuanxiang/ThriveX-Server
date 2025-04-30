@@ -174,7 +174,6 @@ public class DocumentServiceImpl implements DocumentService {
                 .uri(assistant.getBaseUrl() + "/v1/chat/completions")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + assistant.getApiKey())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_EVENT_STREAM)
                 .bodyValue(assistantRequest)
                 .retrieve()
                 .bodyToMono(String.class)
@@ -203,7 +202,7 @@ public class DocumentServiceImpl implements DocumentService {
                     }
                     return documentMeta;
                 })
-                .onErrorMap(e -> new RuntimeException("DeepSeek API调用失败: " + e.getMessage(), e));
+                .onErrorMap(e -> new RuntimeException("Assistant API调用失败: " + e.getMessage(), e));
     }
 
     /**
@@ -218,7 +217,6 @@ public class DocumentServiceImpl implements DocumentService {
                 .uri(assistant.getBaseUrl() + "/v1/chat/completions")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + assistant.getApiKey())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_EVENT_STREAM)
                 .bodyValue(assistantRequest)
                 .retrieve()
                 .bodyToFlux(String.class)
@@ -231,6 +229,6 @@ public class DocumentServiceImpl implements DocumentService {
                         return "";
                     }
                 })
-                .onErrorMap(e -> new RuntimeException("DeepSeek API流式调用失败: " + e.getMessage(), e));
+                .onErrorMap(e -> new RuntimeException("Assistant API流式调用失败: " + e.getMessage(), e));
     }
 }
