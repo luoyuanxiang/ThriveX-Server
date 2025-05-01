@@ -8,6 +8,7 @@ import liuyuyang.net.dto.DocumentMeta;
 import liuyuyang.net.model.Assistant;
 import liuyuyang.net.web.service.AssistantService;
 import liuyuyang.net.web.service.DocumentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
  *
  * @author luoyuanxiang
  */
+@Slf4j
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
@@ -178,6 +180,7 @@ public class DocumentServiceImpl implements DocumentService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .map(response -> {
+                    log.info("callAssistantNonStreaming Response: {}", response);
                     DocumentMeta documentMeta = new DocumentMeta();
                     // 解析JSON并获取字段
                     ObjectMapper mapper = new ObjectMapper();
@@ -221,6 +224,7 @@ public class DocumentServiceImpl implements DocumentService {
                 .retrieve()
                 .bodyToFlux(String.class)
                 .map(response -> {
+                    log.info("callAssistantStreaming Response: {}", response);
                     try {
                         ObjectMapper objectMapper = new ObjectMapper();
                         JsonNode jsonNode = objectMapper.readTree(response);
