@@ -87,7 +87,7 @@ public class DocumentServiceImpl implements DocumentService {
     private String extractJsonContent(String input) {
         Pattern pattern = Pattern.compile("```json\\s*(.*?)\\s*```", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(input);
-        return matcher.find() ? matcher.group(1).trim() : "";
+        return matcher.find() ? matcher.group(1).trim() : input;
     }
 
     /**
@@ -196,8 +196,6 @@ public class DocumentServiceImpl implements DocumentService {
                         String title = root.get("title").asText();
                         String description = root.get("description").asText();
 
-                        System.out.println("标题: " + title);
-                        System.out.println("描述: " + description);
                         documentMeta.setTitle(title);
                         documentMeta.setDescription(description);
                     } catch (Exception e) {
