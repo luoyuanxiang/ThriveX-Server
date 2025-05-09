@@ -1,5 +1,5 @@
 # 设置第一阶段的go 编译镜像
-FROM openjdk:8-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
 # 设置工作目录
 WORKDIR /server
