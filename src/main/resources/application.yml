@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: service-system
+  profiles:
+    active: @profiles.active@
+  # 约束文件上传大小
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  mail:
+    default-encoding: UTF-8
+    host: ${lyy.email.host}
+    port: ${lyy.email.port}  # 使用 SSL 的端口
+    username: ${lyy.email.username}
+    password: ${lyy.email.password}
+    properties:
+      mail:
+        smtp: # 修正拼写错误
+          auth: true
+          ssl:
+            enable: true
+
+
+jwt:
+  # 设置jwt签名加密时使用的秘钥
+  secret-key: luoyuanxiang
+  # 设置jwt过期时间
+  ttl: 259200000
+  # 设置前端传递过来的令牌名称
+  token-name: Authorization
