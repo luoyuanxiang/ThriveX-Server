@@ -2,7 +2,7 @@ name: Build and Deploy Spring Boot Docker
 
 on:
   push:
-    branches: [ "master" ] # 触发分支
+    branches: [ "main" ] # 触发分支
 
 jobs:
   build-and-deploy:
