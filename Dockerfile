@@ -7,7 +7,7 @@ WORKDIR /server
 # 暴露应用程序的端口
 EXPOSE 80
 
-COPY blog/target/blog-1.0-SNAPSHOT.jar /server/blog.jar
+COPY target/ThriveX-Server-0.0.1-SNAPSHOT.jar /server/blog.jar
 
 # 设置启动命令
 CMD ["java", "-Xms128m", "-Xmx256m", "-jar", "blog.jar"]
