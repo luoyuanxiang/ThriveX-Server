@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import top.luoyuanxiang.api.entity.*;
 import top.luoyuanxiang.api.execption.CustomException;
 import top.luoyuanxiang.api.mapper.ArticleMapper;
+import top.luoyuanxiang.api.mapper.ArticleTagMapper;
 import top.luoyuanxiang.api.service.*;
 import top.luoyuanxiang.api.utils.ThreadUserUtil;
 import top.luoyuanxiang.api.vo.article.ArticleFillterVo;
@@ -45,6 +46,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private ITagService tagService;
     @Resource
     private ICommentService commentService;
+    @Resource
+    private ArticleTagMapper articleTagMapper;
 
     @Override
     @Transactional
@@ -234,7 +237,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void paging(Page<Article> page, ArticleFillterVo filterVo) {
-        baseMapper.paging(page, filterVo, ThreadUserUtil.isAdmin());
+        List<Integer> articleIds = new ArrayList<>();
+        // 获取数据
+        if (Objects.nonNull(filterVo.getTagId())) {
+            // 通过标签获取文章信息
+            List<ArticleTag> articleTags = articleTagService.lambdaQuery()
+                    .eq(ArticleTag::getTagId, filterVo.getTagId())
+                    .list();
+            articleIds.addAll(articleTags.parallelStream().map(ArticleTag::getArticleId).toList());
+        }
+        if (Objects.nonNull(filterVo.getCateId())) {
+            // 通过分类获取文章信息
+            List<ArticleCate> articleCates = articleCateService.lambdaQuery()
+                    .eq(ArticleCate::getCateId, filterVo.getCateId())
+                    .list();
+            articleIds.addAll(articleCates.parallelStream().map(ArticleCate::getArticleId).toList());
+        }
+        filterVo.setArticleIds(articleIds);
+        baseMapper.paging(page, filterVo);
         // 处理加密文章
         for (Article article : page.getRecords()) {
             ArticleConfig config = article.getConfig();
@@ -574,14 +594,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      */
     private void saveArticleConfig(Article article) {
         ArticleConfig config = article.getConfig();
-        ArticleConfig articleConfig = new ArticleConfig();
-        articleConfig.setArticleId(article.getId());
-        articleConfig.setStatus(config.getStatus());
-        articleConfig.setPassword(config.getPassword());
-        articleConfig.setIsDraft(article.getConfig().getIsDraft());
-        articleConfig.setIsEncrypt(article.getConfig().getIsEncrypt());
-        articleConfig.setIsDel(0);
-        articleConfig.setComment(article.getConfig().getComment());
-        articleConfig.insert();
+        config.setArticleId(article.getId());
+        config.setIsDel(0);
+        config.insert();
     }
 }

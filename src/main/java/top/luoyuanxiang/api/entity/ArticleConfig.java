@@ -60,4 +60,8 @@ public class ArticleConfig extends Model<ArticleConfig> {
      * 是否开启评论
      */
     private Boolean comment;
+    /**
+     * 是否置顶
+     */
+    private Boolean top;
 }

@@ -24,8 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 拦截指定请求
         registry.addInterceptor(jwtTokenAdminInterceptor)
-                .addPathPatterns("/api/admin/**")
-                .excludePathPatterns("/api/admin/user/login");
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/admin/user/login", "/api/web/**");
     }
 
     @Autowired

@@ -3,6 +3,8 @@ package top.luoyuanxiang.api.vo.article;
 import lombok.Data;
 import top.luoyuanxiang.api.vo.FilterVo;
 
+import java.util.List;
+
 @Data
 public class ArticleFillterVo extends FilterVo {
     /**
@@ -21,4 +23,11 @@ public class ArticleFillterVo extends FilterVo {
      * 是否为严格删除, 默认：0 | 严格删除：1
      */
     private Integer isDel = 0;
+
+    /**
+     * 文章 ID
+     */
+    private List<Integer> articleIds;
+
+    private boolean isWeb;
 }

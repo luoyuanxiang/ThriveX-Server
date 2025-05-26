@@ -11,6 +11,8 @@
         <result column="view" property="view" />
         <result column="comment" property="comment" />
         <result column="create_time" property="createTime" />
+        <result column="cateNames" property="cateNames" />
+        <result column="tagNames" property="tagNames" />
         <association property="config" javaType="top.luoyuanxiang.api.entity.ArticleConfig">
             <id column="acf_id" property="id" />
             <result column="status" property="status" />
@@ -20,6 +22,7 @@
             <result column="is_del" property="isDel" />
             <result column="article_id" property="articleId" />
             <result column="_comment" property="comment" />
+            <result column="top" property="top" />
         </association>
         <collection property="cateList" ofType="top.luoyuanxiang.api.entity.Cate">
             <id column="c_id" property="id" />
@@ -38,39 +41,38 @@
     </resultMap>
     <select id="paging" resultMap="BaseResultMap">
         select a.*,
-               acf.id      acf_id,
+               acf.id                       acf_id,
                acf.status,
                acf.password,
                acf.is_encrypt,
                acf.is_draft,
                acf.is_del,
                acf.article_id,
-               acf.comment _comment,
-               c.id        c_id,
-               c.name,
-               c.icon,
-               c.url,
-               c.mark,
-               c.level,
-               c.order,
-               c.type,
-               t.id        t_id,
-               t.name
+               acf.comment                  _comment,
+               acf.top,
+               (select group_concat(c.name separator ',')
+                from cate c
+                         left join article_cate ac on c.id = ac.cate_id
+                where ac.article_id = a.id) cateNames,
+               (select group_concat(t.name separator ',')
+                from tag t
+                         left join article_tag at
+        on t.id = at.tag_id
+        where at.article_id = a.id) tagNames
         from article a
-                 left join article_cate ac on a.id = ac.article_id
-                 left join cate c on ac.cate_id = c.id
-                 left join article_tag at on a.id = at.article_id
-                 left join tag t on at.tag_id = t.id
-                 left join article_config acf on a.id = acf.article_id
+            left join article_config acf
+        on a.id = acf.article_id
         <where>
             <if test="vo.key != null and vo.key != ''">
-                a.title like concat('%', #{vo.key}, '%')
+                a.title like concat('%'
+                                   , #{vo.key}
+                                   , '%')
             </if>
-            <if test="vo.cateId != null">
-                and c.id = #{vo.cateId}
-            </if>
-            <if test="vo.tagId != null">
-                and t.id = #{vo.tagId}
+            <if test="vo.articleIds != null and vo.articleIds.size() != 0">
+                and a.id in
+                <foreach item="item" collection="vo.articleIds" separator="," close=")" open="(" index="">
+                    #{item}
+                </foreach>
             </if>
             <if test="vo.isDraft != null">
                 and acf.is_draft = #{vo.isDraft}
@@ -78,11 +80,12 @@
             <if test="vo.isDel != null">
                 and acf.is_del = #{vo.isDel}
             </if>
-            <include refid="top.luoyuanxiang.api.mapper.CommentMapper.commCreateTimeQuery" />
-            <if test="!isAdmin">
-                and acf.status = 'hide'
+            <include refid="top.luoyuanxiang.api.mapper.CommentMapper.commCreateTimeQuery"/>
+            <if test="vo.isWeb">
+                and acf.status = 'default'
             </if>
         </where>
+        order by acf.top desc, a.create_time desc
     </select>
 
     <select id="list" resultMap="BaseResultMap">
@@ -129,7 +132,7 @@
             </if>
             <include refid="top.luoyuanxiang.api.mapper.CommentMapper.commCreateTimeQuery" />
             <if test="!isAdmin">
-                and acf.status = 'hide'
+                and acf.status != 'hide'
             </if>
         </where>
     </select>

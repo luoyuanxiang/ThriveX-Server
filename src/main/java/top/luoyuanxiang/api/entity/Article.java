@@ -66,6 +66,12 @@ public class Article extends BaseEntity<Article> {
     private List<Cate> cateList = new ArrayList<>();
 
     /**
+     * 分类名称
+     */
+    @TableField(exist = false)
+    private String cateNames;
+
+    /**
      * 该文章所绑定的标签ID
      */
     @TableField(exist = false)
@@ -75,6 +81,11 @@ public class Article extends BaseEntity<Article> {
      */
     @TableField(exist = false)
     private List<Tag> tagList = new ArrayList<>();
+    /**
+     * 标签名称
+     */
+    @TableField(exist = false)
+    private String tagNames;
 
     /**
      * 文章配置项

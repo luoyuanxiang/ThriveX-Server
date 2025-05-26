@@ -26,7 +26,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param page     页
      * @param filterVo filter vo
      */
-    Page<Article> paging(Page<Article> page, @Param("vo") ArticleFillterVo filterVo, @Param("isAdmin") boolean isAdmin);
+    Page<Article> paging(Page<Article> page, @Param("vo") ArticleFillterVo filterVo);
 
     /**
      * 列表

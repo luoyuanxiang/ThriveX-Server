@@ -9,9 +9,9 @@ import top.luoyuanxiang.api.entity.User;
  */
 public class ThreadUserUtil {
 
-    private static final ThreadLocal<User> userThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<User> userThreadLocal = ThreadLocal.withInitial(User::new);
 
-    private static final ThreadLocal<Boolean> isAdminThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<Boolean> isAdminThreadLocal = ThreadLocal.withInitial(() -> false);
 
     /**
      * 设置用户

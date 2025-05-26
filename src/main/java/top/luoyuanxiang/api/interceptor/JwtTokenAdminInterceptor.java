@@ -50,6 +50,10 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        if (Objects.isNull(token)) {
+            throw new CustomException(401, "无效或过期的token" + request.getRequestURI());
+        }
+
         // 校验令牌
         try {
             // 处理Authorization的Bearer
