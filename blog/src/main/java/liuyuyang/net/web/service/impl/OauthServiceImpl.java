@@ -1,13 +1,15 @@
 package liuyuyang.net.web.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import liuyuyang.net.common.config.WebClientConfig;
 import liuyuyang.net.common.execption.CustomException;
 import liuyuyang.net.common.properties.OAuthProperties;
+import liuyuyang.net.model.User;
+import liuyuyang.net.web.mapper.UserMapper;
 import liuyuyang.net.web.service.OauthService;
-import lombok.Data;
+import liuyuyang.net.web.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,10 +27,23 @@ public class OauthServiceImpl implements OauthService {
     private OAuthProperties oAuthProperties;
     @Resource
     private WebClientConfig webClientConfig;
+    @Resource
+    private UserMapper userMapper;
+    @Resource
+    private UserService userService;
 
-    public void githubLogin(String code) {
+    public Map<String, Object> githubLogin(String code) {
         String token = getGithubAuthToken(code);
-        getGithubUserInfo(token);
+        String userId = getGithubUserId(token);
+        System.out.println(1111);
+        System.out.println(userId);
+
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getGithubId, userId);
+        User user = userMapper.selectOne(lambdaQueryWrapper);
+        if (user == null) throw new CustomException("该用户未绑定 GitHub 登录");
+
+        return userService.loginLogic(user);
     }
 
     // 拿到 Token
@@ -72,8 +88,8 @@ public class OauthServiceImpl implements OauthService {
         return null;
     }
 
-    // 获取用户信息
-    public void getGithubUserInfo(String token) {
+    // 通过 Token 拿到用户 Id
+    public String getGithubUserId(String token) {
         try {
             String accept = webClientConfig.webClient().get()
                     .uri("https://api.github.com/user")
@@ -83,9 +99,10 @@ public class OauthServiceImpl implements OauthService {
                     .bodyToMono(String.class)
                     .block();
 
-            System.out.println(accept);
-            System.out.println(4444);
-        } catch (WebClientResponseException e) {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> res = mapper.readValue(accept, Map.class);
+            return res.get("id").toString();
+        } catch (WebClientResponseException | JsonProcessingException e) {
             throw new CustomException(e.getMessage());
         }
     }

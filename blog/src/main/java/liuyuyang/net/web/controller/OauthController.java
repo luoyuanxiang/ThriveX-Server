@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Api(tags = "第三方登录")
 @RestController
@@ -18,7 +19,7 @@ public class OauthController {
 
     @GetMapping("/github/{code}")
     public Result githubLogin(@PathVariable String code) {
-        oauthService.githubLogin(code);
-        return Result.success("GitHub 登录成功");
+        Map<String, Object> result = oauthService.githubLogin(code);
+        return Result.success(result);
     }
 }

@@ -1,6 +1,8 @@
 package liuyuyang.net.web.service;
 
+import java.util.Map;
+
 public interface OauthService {
-    void githubLogin(String code);
+    Map<String, Object> githubLogin(String code);
     String getGithubAuthToken(String code);
 }
