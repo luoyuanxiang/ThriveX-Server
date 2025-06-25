@@ -18,7 +18,7 @@ public class OauthController {
 
     @GetMapping("/github/{code}")
     public Result githubLogin(@PathVariable String code) {
-        String s = oauthService.githubLogin(code);
+        oauthService.githubLogin(code);
         return Result.success("GitHub 登录成功");
     }
 }
