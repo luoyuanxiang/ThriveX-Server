@@ -1,5 +1,6 @@
 package liuyuyang.net.web.service;
 
 public interface OauthService {
-    String githubLogin(String code);
+    void githubLogin(String code);
+    String getGithubAuthToken(String code);
 }
