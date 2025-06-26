@@ -2,6 +2,7 @@ package liuyuyang.net.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.common.annotation.NoTokenRequired;
 import liuyuyang.net.common.utils.Result;
 import liuyuyang.net.web.service.OauthService;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 @Api(tags = "第三方登录")
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping("/auth")
 @Transactional
 public class OauthController {
     @Resource
@@ -20,6 +21,7 @@ public class OauthController {
 
     @ApiOperation("授权登录")
     @PostMapping("/github/login")
+    @NoTokenRequired
     public Result authGithubLogin(@RequestParam String code) {
         Map<String, Object> result = oauthService.authGithubLogin(code);
         return Result.success(result);
