@@ -37,7 +37,7 @@ public class RssController {
     @PostMapping("/paging")
     @ApiOperation("分页查询订阅内容")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-    public Result paging(@RequestParam PageVo pageVo) {
+    public Result paging(PageVo pageVo) {
         Page<Rss> data = rssService.paging(pageVo);
         Map<String, Object> result = Paging.filter(data);
         return Result.success(result);
