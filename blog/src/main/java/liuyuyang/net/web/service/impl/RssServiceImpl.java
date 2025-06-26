@@ -1,13 +1,16 @@
 package liuyuyang.net.web.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import liuyuyang.net.common.utils.YuYangUtils;
 import liuyuyang.net.web.mapper.LinkMapper;
 import liuyuyang.net.web.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
 import liuyuyang.net.model.Rss;
+import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.web.service.RssService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -35,6 +38,8 @@ public class RssServiceImpl implements RssService {
     private LinkMapper linkMapper;
     @Resource
     private LinkTypeMapper linkTypeMapper;
+    @Resource
+    private YuYangUtils yuYangUtils;
 
     // 线程池，用于并发获取RSS内容
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
@@ -81,7 +86,8 @@ public class RssServiceImpl implements RssService {
     // 定时任务更新缓存
     @Scheduled(fixedRate = 3600000) // 每小时更新一次
     @CacheEvict(value = "rssCache", key = "'allFeeds'")
-    public void evictCache() {}
+    public void evictCache() {
+    }
 
     /**
      * 处理单个RSS源，带有超时控制
@@ -123,6 +129,12 @@ public class RssServiceImpl implements RssService {
         } catch (Exception e) {
             System.err.println("解析失败: " + link.getRss());
         }
+    }
+
+    @Override
+    public Page<Rss> paging(PageVo pageVo) {
+        // 使用工具类进行分页
+        return yuYangUtils.getPageData(pageVo, list());
     }
 
     /**
