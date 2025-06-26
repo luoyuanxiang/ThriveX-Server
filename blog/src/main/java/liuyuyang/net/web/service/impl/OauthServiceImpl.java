@@ -17,8 +17,8 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -32,18 +32,31 @@ public class OauthServiceImpl implements OauthService {
     @Resource
     private UserService userService;
 
-    public Map<String, Object> githubLogin(String code) {
+    @Override
+    public Map<String, Object> authGithubLogin(String code) {
         String token = getGithubAuthToken(code);
-        String userId = getGithubUserId(token);
-        System.out.println(1111);
-        System.out.println(userId);
+        String github_user_id = getGithubUserId(token);
 
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(User::getGithubId, userId);
+        lambdaQueryWrapper.eq(User::getGithubId, github_user_id);
         User user = userMapper.selectOne(lambdaQueryWrapper);
-        if (user == null) throw new CustomException("该用户未绑定 GitHub 登录");
+        if (user == null) throw new CustomException("登录失败：该用户未绑定 GitHub 登录");
 
         return userService.loginLogic(user);
+    }
+
+    @Override
+    public void bindGithubLogin(String code, String userId) {
+        String token = getGithubAuthToken(code);
+        String github_user_id = getGithubUserId(token);
+
+        User user = userMapper.selectById(userId);
+
+        if (!Objects.equals(user.getGithubId(), "0")) throw new CustomException("绑定失败：该用户已绑定其他账号");
+        if (user == null) throw new CustomException("用户不存在");
+
+        user.setGithubId(github_user_id);
+        userMapper.updateById(user);
     }
 
     // 拿到 Token

@@ -133,7 +133,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         User user = userMapper.selectOne(queryWrapper);
         if (user == null) throw new CustomException(400, "用户名或密码错误");
-        user.setPassword("只有聪明的人才能看到密码");
 
         // Role role = roleMapper.selectById(user.getRoleId());
         //
@@ -161,6 +160,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     // 封装登录逻辑，方便代码复用
     @Override
     public Map<String, Object> loginLogic(User user) {
+        user.setPassword("只有聪明的人才能看到密码");
+
         Role role = roleMapper.selectById(user.getRoleId());
 
         Map<String, Object> result = new HashMap<>();

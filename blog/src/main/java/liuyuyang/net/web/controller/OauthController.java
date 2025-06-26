@@ -21,14 +21,14 @@ public class OauthController {
     @ApiOperation("授权登录")
     @PostMapping("/github/login")
     public Result authGithubLogin(@RequestParam String code) {
-        Map<String, Object> result = oauthService.githubLogin(code);
+        Map<String, Object> result = oauthService.authGithubLogin(code);
         return Result.success(result);
     }
 
     @ApiOperation("绑定第三方登录")
-    @GetMapping("/github/bind/{code}")
-    public Result bindGithubLogin(@PathVariable String code) {
-        Map<String, Object> result = oauthService.githubLogin(code);
-        return Result.success(result);
+    @PostMapping("/github/bind")
+    public Result bindGithubLogin(@RequestParam String code, @RequestParam String userId) {
+        oauthService.bindGithubLogin(code, userId);
+        return Result.success("绑定成功");
     }
 }
