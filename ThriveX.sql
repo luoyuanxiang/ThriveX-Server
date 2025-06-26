@@ -229,7 +229,7 @@ CREATE TABLE `cate` (
                         PRIMARY KEY (`id`) USING BTREE,
                         UNIQUE KEY `name` (`name`) USING BTREE,
                         UNIQUE KEY `cate_pk` (`mark`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +238,7 @@ CREATE TABLE `cate` (
 
 LOCK TABLES `cate` WRITE;
 /*!40000 ALTER TABLE `cate` DISABLE KEYS */;
-INSERT INTO `cate` VALUES (1,'默认分类','💻','/','kfbj',0,1,'cate'),(67,'首页','💎','/','home',0,0,'nav'),(68,'足迹','⛳️','/footprint','zj',0,9,'nav'),(69,'关于我','👋','/my','my',0,16,'nav'),(70,'朋友圈','😇','/friend','pyq',0,10,'nav'),(71,'留言墙','💌','/wall/all','wall',0,11,'nav'),(72,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav'),(73,'统计','📊','/data','data',0,8,'nav'),(74,'闪念','🏕️','/record','record',0,9,'nav'),(77,'我的设备','🔭','/equipment','wdsb',0,14,'nav'),(78,'标签墙','🏷️','/tags','bqy',0,12,'nav'),(79,'我的履历','💪','/resume','wdll',0,15,'nav'),(80,'照片墙','📷︎','/album','zpq',0,13,'nav');
+INSERT INTO `cate` VALUES (1,'默认分类','💻','/','kfbj',0,1,'cate'),(67,'首页','💎','/','home',0,0,'nav'),(68,'足迹','⛳️','/footprint','zj',0,9,'nav'),(69,'关于我','👋','/my','my',0,16,'nav'),(70,'朋友圈','😇','/friend','pyq',0,11,'nav'),(71,'留言墙','💌','/wall/all','wall',0,12,'nav'),(72,'GitHub','🔥','https://github.com/LiuYuYang01/ThriveX-Blog','github',0,999,'nav'),(73,'统计','📊','/data','data',0,8,'nav'),(74,'闪念','🏕️','/record','record',0,9,'nav'),(77,'我的设备','🔭','/equipment','wdsb',0,15,'nav'),(78,'标签墙','🏷️','/tags','bqy',0,13,'nav'),(79,'我的履历','💪','/resume','wdll',0,16,'nav'),(80,'照片墙','📷︎','/album','zpq',0,14,'nav'),(81,'鱼塘','🐟','/fishpond','yt',0,10,'nav');
 /*!40000 ALTER TABLE `cate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -694,7 +694,6 @@ CREATE TABLE `user` (
                         `avatar` varchar(255) DEFAULT NULL COMMENT '用户头像',
                         `info` varchar(255) DEFAULT NULL COMMENT '用户介绍',
                         `role_id` varchar(50) NOT NULL COMMENT '用户角色ID',
-                        `github_id` int NOT NULL DEFAULT '0' COMMENT '第三方平台登录',
                         `create_time` varchar(255) NOT NULL COMMENT '用户创建时间',
                         PRIMARY KEY (`id`) USING BTREE,
                         UNIQUE KEY `user_pk` (`username`)
@@ -707,7 +706,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','e10adc3949ba59abbe56e057f20f883e','宇阳','3311118881@qq.com','https://bu.dusays.com/2024/11/17/6739adf188f64.png','ThriveX 博客管理系统作者','1',103110550,'1723533206613');
+INSERT INTO `user` VALUES (1,'admin','e10adc3949ba59abbe56e057f20f883e','宇阳','3311118881@qq.com','https://bu.dusays.com/2024/11/17/6739adf188f64.png','ThriveX 博客管理系统作者','1','1723533206613');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -806,4 +805,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-26 18:26:35
+-- Dump completed on 2025-06-26 20:46:15
