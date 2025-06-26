@@ -1,6 +1,5 @@
 package liuyuyang.net.web.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
@@ -8,18 +7,25 @@ import com.rometools.rome.io.XmlReader;
 import liuyuyang.net.web.mapper.LinkMapper;
 import liuyuyang.net.web.mapper.LinkTypeMapper;
 import liuyuyang.net.model.Link;
-import liuyuyang.net.model.LinkType;
 import liuyuyang.net.model.Rss;
 import liuyuyang.net.web.service.RssService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,67 +36,101 @@ public class RssServiceImpl implements RssService {
     @Resource
     private LinkTypeMapper linkTypeMapper;
 
+    // 线程池，用于并发获取RSS内容
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+    // 类型缓存，避免重复查询数据库
+    private final Map<Long, String> typeCache = new ConcurrentHashMap<>();
+
+    /**
+     * 初始化方法，在Bean创建后自动执行
+     * 预加载所有链接类型数据到内存缓存中
+     */
+    @PostConstruct
+    public void init() {
+        // 从数据库加载所有链接类型，并存入缓存
+        linkTypeMapper.selectList(null).forEach(lt ->
+                typeCache.put(Long.valueOf(lt.getId()), lt.getName()));
+    }
+
+    @Cacheable(value = "rssCache", key = "'allFeeds'")
     @Override
     public List<Rss> list() {
-        List<Rss> rssList = new ArrayList<>();
+        // 线程安全的列表，用于收集所有RSS条目
+        List<Rss> rssList = Collections.synchronizedList(new ArrayList<>());
 
-        // 目标网站列表
+        // 从数据库获取所有链接
         List<Link> linkList = linkMapper.selectList(null);
-        List<String> feedUrls = linkList.stream().map(Link::getRss).collect(Collectors.toList());
 
-        for (String feedUrl : feedUrls) {
-            if (feedUrl == null) continue;
+        // 为每个有RSS地址的链接创建异步任务
+        List<CompletableFuture<Void>> futures = linkList.stream()
+                .filter(link -> link.getRss() != null)  // 过滤掉没有RSS地址的链接
+                .map(link -> CompletableFuture.runAsync(() ->
+                        processFeedWithTimeout(link, rssList), executorService))  // 异步处理每个RSS源
+                .collect(Collectors.toList());
 
-            QueryWrapper<Link> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("rss", feedUrl);
-            Link link = linkMapper.selectOne(queryWrapper);
+        // 等待所有异步任务完成
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
-            try {
-                // 创建一个URL对象
-                URL url = new URL(feedUrl);
-                // 为URL创建一个XmlReader
-                XmlReader xmlReader = new XmlReader(url);
-                // 创建一个SyndFeedInput对象
-                SyndFeedInput input = new SyndFeedInput();
-                // 从XmlReader构建SyndFeed对象
-                SyndFeed feed = input.build(xmlReader);
+        // 按发布时间降序排序后返回
+        return rssList.stream()
+                .sorted(Comparator.comparingLong(r -> -Long.parseLong(r.getCreateTime())))
+                .collect(Collectors.toList());
+    }
 
-                // 遍历提要中的条目
+    // 定时任务更新缓存
+    @Scheduled(fixedRate = 3600000) // 每小时更新一次
+    @CacheEvict(value = "rssCache", key = "'allFeeds'")
+    public void evictCache() {}
+
+    /**
+     * 处理单个RSS源，带有超时控制
+     *
+     * @param link    包含RSS地址的链接对象
+     * @param rssList 用于收集结果的列表
+     */
+    private void processFeedWithTimeout(Link link, List<Rss> rssList) {
+        try {
+            // 创建HTTP连接并设置超时
+            HttpURLConnection connection = (HttpURLConnection)
+                    new URL(link.getRss()).openConnection();
+            connection.setConnectTimeout(5000);  // 5秒连接超时
+            connection.setReadTimeout(10000);    // 10秒读取超时
+
+            // 读取并解析RSS内容
+            try (InputStream input = connection.getInputStream()) {
+                SyndFeed feed = new SyndFeedInput().build(new XmlReader(input));
+
+                // 处理RSS中的每个条目
                 for (SyndEntry data : feed.getEntries()) {
-                    LinkType lt = linkTypeMapper.selectById(link.getTypeId());
-
                     Rss rss = new Rss();
+                    // 设置RSS条目信息
                     rss.setImage(link.getImage());
                     rss.setEmail(link.getEmail());
-                    rss.setType(lt.getName());
+                    rss.setType(typeCache.get(link.getTypeId()));  // 从缓存获取类型名称
                     rss.setAuthor(data.getAuthor());
                     rss.setTitle(data.getTitle());
-                    if (data.getDescription() != null) {
-                        rss.setDescription(data.getDescription().getValue());
-                    } else {
-                        rss.setDescription("");
-                    }
-
+                    rss.setDescription(data.getDescription() != null ?
+                            data.getDescription().getValue() : "");
                     rss.setUrl(data.getLink());
                     rss.setCreateTime(String.valueOf(data.getPublishedDate().getTime()));
+
+                    // 将条目添加到结果列表
                     rssList.add(rss);
                 }
-            } catch (Exception e) {
-                System.err.println("解析失败: " + feedUrl);
             }
+        } catch (Exception e) {
+            // 记录解析失败的RSS地址
+            System.err.println("解析失败: " + link.getRss());
         }
+    }
 
-        // 对rssList进行排序，根据createTime降序排序
-        Collections.sort(rssList, new Comparator<Rss>() {
-            @Override
-            public int compare(Rss o1, Rss o2) {
-                long time1 = Long.parseLong(o1.getCreateTime());
-                long time2 = Long.parseLong(o2.getCreateTime());
-                // 降序排序
-                return Long.compare(time2, time1);
-            }
-        });
-
-        return rssList;
+    /**
+     * Bean销毁前的清理方法
+     * 关闭线程池，释放资源
+     */
+    @PreDestroy
+    public void shutdown() {
+        executorService.shutdown();
     }
 }
