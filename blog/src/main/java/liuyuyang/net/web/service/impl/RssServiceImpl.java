@@ -40,7 +40,7 @@ public class RssServiceImpl implements RssService {
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     // 类型缓存，避免重复查询数据库
-    private final Map<Long, String> typeCache = new ConcurrentHashMap<>();
+    private final Map<Integer, String> typeCache = new ConcurrentHashMap<>();
 
     /**
      * 初始化方法，在Bean创建后自动执行
@@ -50,7 +50,7 @@ public class RssServiceImpl implements RssService {
     public void init() {
         // 从数据库加载所有链接类型，并存入缓存
         linkTypeMapper.selectList(null).forEach(lt ->
-                typeCache.put(Long.valueOf(lt.getId()), lt.getName()));
+                typeCache.put(lt.getId(), lt.getName()));
     }
 
     @Cacheable(value = "rssCache", key = "'allFeeds'")
