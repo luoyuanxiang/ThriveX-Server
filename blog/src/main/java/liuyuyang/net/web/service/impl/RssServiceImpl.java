@@ -91,36 +91,36 @@ public class RssServiceImpl implements RssService {
      */
     private void processFeedWithTimeout(Link link, List<Rss> rssList) {
         try {
-            // 创建HTTP连接并设置超时
             HttpURLConnection connection = (HttpURLConnection)
                     new URL(link.getRss()).openConnection();
-            connection.setConnectTimeout(5000);  // 5秒连接超时
-            connection.setReadTimeout(10000);    // 10秒读取超时
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(10000);
 
-            // 读取并解析RSS内容
             try (InputStream input = connection.getInputStream()) {
                 SyndFeed feed = new SyndFeedInput().build(new XmlReader(input));
 
-                // 处理RSS中的每个条目
-                for (SyndEntry data : feed.getEntries()) {
-                    Rss rss = new Rss();
-                    // 设置RSS条目信息
-                    rss.setImage(link.getImage());
-                    rss.setEmail(link.getEmail());
-                    rss.setType(typeCache.get(link.getTypeId()));  // 从缓存获取类型名称
-                    rss.setAuthor(data.getAuthor());
-                    rss.setTitle(data.getTitle());
-                    rss.setDescription(data.getDescription() != null ?
-                            data.getDescription().getValue() : "");
-                    rss.setUrl(data.getLink());
-                    rss.setCreateTime(String.valueOf(data.getPublishedDate().getTime()));
+                // 使用Stream处理并限制数量
+                List<Rss> limitedItems = feed.getEntries().stream()
+                        .sorted(Comparator.comparing(SyndEntry::getPublishedDate).reversed())
+                        .limit(5)
+                        .map(data -> {
+                            Rss rss = new Rss();
+                            rss.setImage(link.getImage());
+                            rss.setEmail(link.getEmail());
+                            rss.setType(typeCache.get(link.getTypeId()));
+                            rss.setAuthor(data.getAuthor());
+                            rss.setTitle(data.getTitle());
+                            rss.setDescription(data.getDescription() != null ?
+                                    data.getDescription().getValue() : "");
+                            rss.setUrl(data.getLink());
+                            rss.setCreateTime(String.valueOf(data.getPublishedDate().getTime()));
+                            return rss;
+                        })
+                        .collect(Collectors.toList());
 
-                    // 将条目添加到结果列表
-                    rssList.add(rss);
-                }
+                rssList.addAll(limitedItems);
             }
         } catch (Exception e) {
-            // 记录解析失败的RSS地址
             System.err.println("解析失败: " + link.getRss());
         }
     }
