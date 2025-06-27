@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "lyy.baidu")
 public class BaiduProperties {
+    private Boolean isOpen;
     private String clientKey;
     private String clientSecret;
     private String refreshToken;
