@@ -24,10 +24,9 @@ public interface BaiduService {
     
     /**
      * 获取百度统计数据
-     * @param siteId 网站ID
      * @param startDate 开始日期 (格式: 20240101)，可选
      * @param endDate 结束日期 (格式: 20240131)，可选
      * @return 统计数据的JsonNode对象
      */
-    JsonNode getStatisData(String siteId, String startDate, String endDate);
+    JsonNode getStatisData(String startDate, String endDate);
 } 

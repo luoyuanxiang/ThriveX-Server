@@ -11,4 +11,5 @@ public class BaiduProperties {
     private String clientKey;
     private String clientSecret;
     private String refreshToken;
+    private String siteId;
 }

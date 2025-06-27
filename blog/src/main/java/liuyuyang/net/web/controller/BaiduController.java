@@ -65,7 +65,7 @@ public class BaiduController {
             @ApiParam(value = "开始日期，格式: 20240101，可选，默认为当天") @RequestParam(required = false) String startDate,
             @ApiParam(value = "结束日期，格式: 20240131，可选，默认为当天") @RequestParam(required = false) String endDate
     ) {
-        JsonNode data = baiduService.getStatisData(siteId, startDate, endDate);
+        JsonNode data = baiduService.getStatisData(startDate, endDate);
         if (data == null) return Result.error("获取数据失败");
         return Result.success("获取数据成功", data);
     }

@@ -167,7 +167,7 @@ public class BaiduServiceImpl implements BaiduService {
 
     // 获取百度统计数据
     @Override
-    public JsonNode getStatisData(String siteId, String startDate, String endDate) {
+    public JsonNode getStatisData(String startDate, String endDate) {
         String accessToken = getValidAccessToken();
 
         if (accessToken == null) throw new CustomException("无有效的access token");
@@ -184,7 +184,7 @@ public class BaiduServiceImpl implements BaiduService {
         try {
             String url = String.format(
                     "https://openapi.baidu.com/rest/2.0/tongji/report/getData?access_token=%s&site_id=%s&start_date=%s&end_date=%s&metrics=pv_count,ip_count&method=overview/getTimeTrendRpt",
-                    accessToken, siteId, startDate, endDate
+                    accessToken, baiduProperties.getSiteId(), startDate, endDate
             );
 
             String response = webClient.get()
