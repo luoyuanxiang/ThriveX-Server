@@ -134,34 +134,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.selectOne(queryWrapper);
         if (user == null) throw new CustomException(400, "用户名或密码错误");
 
-        // Role role = roleMapper.selectById(user.getRoleId());
-        //
-        // Map<String, Object> result = new HashMap<>();
-        // result.put("user", user);
-        // result.put("role", role);
-        // String token = JwtUtils.createJWT(result);
-        // result.put("token", token);
-        //
-        // // 先删除用户的token
-        // LambdaQueryWrapper<UserToken> userLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        // userLambdaQueryWrapper.eq(UserToken::getUid, user.getId());
-        // userTokenMapper.delete(userLambdaQueryWrapper);
-        // // 再存储用户的token
-        // UserToken userToken = new UserToken();
-        // userToken.setUid(user.getId());
-        // userToken.setToken(token);
-        // userTokenMapper.insert(userToken);
-
-        // return result;
-
-        return loginLogic(user);
-    }
-
-    // 封装登录逻辑，方便代码复用
-    @Override
-    public Map<String, Object> loginLogic(User user) {
-        user.setPassword("只有聪明的人才能看到密码");
-
         Role role = roleMapper.selectById(user.getRoleId());
 
         Map<String, Object> result = new HashMap<>();

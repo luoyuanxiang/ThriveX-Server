@@ -33,7 +33,4 @@ public class User extends BaseModel {
     @TableField(exist = false)
     @ApiModelProperty(value = "用户角色信息", example = "...")
     private Role role;
-
-    @ApiModelProperty(value = "第三方登录", example = "0表示未绑定，其他表示绑定")
-    private String githubId;
 }
