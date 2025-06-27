@@ -211,6 +211,32 @@ LOCK TABLES `assistant` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `baidu`
+--
+
+DROP TABLE IF EXISTS `baidu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `baidu` (
+                         `id` int NOT NULL AUTO_INCREMENT,
+                         `access_token` varchar(255) NOT NULL COMMENT '访问令牌',
+                         `refresh_token` varchar(255) NOT NULL COMMENT '刷新令牌',
+                         `expires_time` datetime NOT NULL COMMENT '过期时间',
+                         `create_time` datetime NOT NULL COMMENT '创建时间',
+                         PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='百度统计token管理';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `baidu`
+--
+
+LOCK TABLES `baidu` WRITE;
+/*!40000 ALTER TABLE `baidu` DISABLE KEYS */;
+/*!40000 ALTER TABLE `baidu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `cate`
 --
 
