@@ -15,7 +15,7 @@ lyy:
     username: ${EMAIL_USERNAME}
     password: ${EMAIL_PASSWORD}
   baidu:
-    isOpen: ${BAIDU_IS_OPEN}
+    isOpen: ${BAIDU_IS_OPEN:false}
     clientKey: ${BAIDU_CLIENT_KEY}
     clientSecret: ${BAIDU_CLIENT_SECRET}
     refreshToken: ${BAIDU_REFRESH_TOKEN}
