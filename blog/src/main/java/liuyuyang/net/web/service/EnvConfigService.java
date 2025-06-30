@@ -1,6 +1,7 @@
 package liuyuyang.net.web.service;
 
 import liuyuyang.net.model.EnvConfig;
+import java.util.List;
 import java.util.Map;
 
 public interface EnvConfigService {
@@ -13,6 +14,11 @@ public interface EnvConfigService {
      * 根据名称获取环境配置
      */
     EnvConfig getByName(String name);
+    
+    /**
+     * 获取全部环境配置列表
+     */
+    List<EnvConfig> list();
     
     /**
      * 更新 JSON 配置值

@@ -11,6 +11,7 @@ import liuyuyang.net.web.service.EnvConfigService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 @Api(tags = "环境配置管理")
@@ -21,8 +22,16 @@ public class EnvConfigController {
     @Resource
     private EnvConfigService envConfigService;
 
-    @ApiOperation("根据ID获取环境配置")
+    @ApiOperation("获取全部环境配置列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
+    @GetMapping("/list")
+    public Result<List<EnvConfig>> list() {
+        List<EnvConfig> data = envConfigService.list();
+        return Result.success("获取成功", data);
+    }
+
+    @ApiOperation("根据ID获取环境配置")
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     @GetMapping("/{id}")
     public Result<EnvConfig> getById(@ApiParam(value = "环境配置ID", required = true, example = "1") @PathVariable Integer id) {
         EnvConfig envConfig = envConfigService.getById(id);
@@ -30,7 +39,7 @@ public class EnvConfigController {
     }
 
     @ApiOperation("根据名称获取环境配置")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     @GetMapping("/name/{name}")
     public Result<EnvConfig> getByName(@ApiParam(value = "配置名称", required = true, example = "database_config") @PathVariable String name) {
         EnvConfig envConfig = envConfigService.getByName(name);
@@ -38,7 +47,7 @@ public class EnvConfigController {
     }
 
     @ApiOperation("更新JSON配置值")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     @PatchMapping("/{id}/json")
     public Result<String> updateJsonValue(@ApiParam(value = "环境配置ID", required = true, example = "1") @PathVariable Integer id, 
                                           @ApiParam(value = "JSON配置值", required = true) @RequestBody Map<String, Object> jsonValue) {
@@ -47,7 +56,7 @@ public class EnvConfigController {
     }
 
     @ApiOperation("获取JSON配置中的特定字段值")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     @GetMapping("/{id}/field/{fieldName}")
     public Result<Object> getJsonFieldValue(@ApiParam(value = "环境配置ID", required = true, example = "1") @PathVariable Integer id, 
                                             @ApiParam(value = "字段名称", required = true, example = "host") @PathVariable String fieldName) {
@@ -56,7 +65,7 @@ public class EnvConfigController {
     }
 
     @ApiOperation("更新JSON配置中的特定字段值")
-    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
+    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     @PatchMapping("/{id}/field/{fieldName}")
     public Result<String> updateJsonFieldValue(@ApiParam(value = "环境配置ID", required = true, example = "1") @PathVariable Integer id, 
                                                @ApiParam(value = "字段名称", required = true, example = "host") @PathVariable String fieldName, 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -30,6 +31,11 @@ public class EnvConfigServiceImpl extends ServiceImpl<EnvConfigMapper, EnvConfig
         } catch (Exception e) {
             throw new CustomException(String.format("获取%s配置失败：%s", name, e.getMessage()));
         }
+    }
+
+    @Override
+    public List<EnvConfig> list() {
+        return super.list();
     }
 
     @Override
