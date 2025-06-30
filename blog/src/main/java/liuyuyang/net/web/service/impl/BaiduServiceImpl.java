@@ -27,6 +27,7 @@ public class BaiduServiceImpl implements BaiduService {
     private WebClient webClient;
     @Resource
     private EnvConfigMapper envConfigMapper;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final String BASE_API_URL = "https://openapi.baidu.com/rest/2.0/tongji/report/getData";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
