@@ -23,17 +23,6 @@ public class MailConfig {
     private Map<String, Object> getEmailConfig() {
         EnvConfig envConfig = envConfigService.getByName("email");
         return envConfig.getValue();
-
-        // try {
-        //     EnvConfig envConfig = envConfigService.getByName("email");
-        //     if (envConfig == null || envConfig.getValue() == null) {
-        //         throw new RuntimeException("邮箱配置未找到，请检查数据库中的 email 配置项");
-        //     }
-        //     return envConfig.getValue();
-        // } catch (Exception e) {
-        //     System.err.println("获取邮箱配置失败: " + e.getMessage());
-        //     throw new RuntimeException("无法获取邮箱配置", e);
-        // }
     }
 
     /**

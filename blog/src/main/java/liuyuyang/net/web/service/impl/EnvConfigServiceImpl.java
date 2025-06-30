@@ -2,6 +2,7 @@ package liuyuyang.net.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import liuyuyang.net.common.execption.CustomException;
 import liuyuyang.net.model.EnvConfig;
 import liuyuyang.net.web.mapper.EnvConfigMapper;
 import liuyuyang.net.web.service.EnvConfigService;
@@ -22,9 +23,13 @@ public class EnvConfigServiceImpl extends ServiceImpl<EnvConfigMapper, EnvConfig
 
     @Override
     public EnvConfig getByName(String name) {
-        LambdaQueryWrapper<EnvConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(EnvConfig::getName, name);
-        return this.getOne(wrapper);
+        try {
+            LambdaQueryWrapper<EnvConfig> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(EnvConfig::getName, name);
+            return this.getOne(wrapper);
+        } catch (Exception e) {
+            throw new CustomException(String.format("获取%s配置失败：%s", name, e.getMessage()));
+        }
     }
 
     @Override

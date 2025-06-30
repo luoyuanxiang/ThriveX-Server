@@ -8,6 +8,7 @@ import liuyuyang.net.common.utils.SpringUtils;
 import liuyuyang.net.model.EnvConfig;
 import liuyuyang.net.web.mapper.EnvConfigMapper;
 import liuyuyang.net.web.service.BaiduService;
+import liuyuyang.net.web.service.EnvConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,14 @@ public class BaiduServiceImpl implements BaiduService {
     @Resource
     private WebClient webClient;
     @Resource
-    private EnvConfigMapper envConfigMapper;
+    private EnvConfigService envConfigService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final String BASE_API_URL = "https://openapi.baidu.com/rest/2.0/tongji/report/getData";
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     private Map<String, Object> getBaiduConfig() {
-        EnvConfig envConfig = envConfigMapper.selectOne(new QueryWrapper<EnvConfig>().eq("name", "baidu"));
+        EnvConfig envConfig = envConfigService.getByName("baidu");
         return envConfig.getValue();
     }
 
