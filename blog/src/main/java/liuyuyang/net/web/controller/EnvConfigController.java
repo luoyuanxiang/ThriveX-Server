@@ -2,6 +2,7 @@ package liuyuyang.net.web.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liuyuyang.net.common.annotation.CheckRole;
 import liuyuyang.net.common.utils.Result;
 import liuyuyang.net.model.EnvConfig;
 import liuyuyang.net.web.service.EnvConfigService;
@@ -13,6 +14,7 @@ import java.util.Map;
 @Api(tags = "环境配置管理")
 @RestController
 @RequestMapping("/env-config")
+@CheckRole
 public class EnvConfigController {
 
     @Resource

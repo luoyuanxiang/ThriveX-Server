@@ -6,11 +6,13 @@ import liuyuyang.net.model.EnvConfig;
 import liuyuyang.net.web.mapper.EnvConfigMapper;
 import liuyuyang.net.web.service.EnvConfigService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Transactional
 public class EnvConfigServiceImpl extends ServiceImpl<EnvConfigMapper, EnvConfig> implements EnvConfigService {
 
     @Override
