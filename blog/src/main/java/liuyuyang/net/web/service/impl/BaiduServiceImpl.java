@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import liuyuyang.net.common.execption.CustomException;
+import liuyuyang.net.common.utils.SpringUtils;
 import liuyuyang.net.model.EnvConfig;
 import liuyuyang.net.web.mapper.EnvConfigMapper;
 import liuyuyang.net.web.service.BaiduService;
@@ -37,8 +38,9 @@ public class BaiduServiceImpl implements BaiduService {
 
     private JsonNode callBaiduStatisticsApi(String metrics, String method, String additionalParams,
                                             String startDate, String endDate, String apiName) {
-        Object accessToken = getBaiduConfig().get("access_token");
-        if (accessToken == null) {
+        String accessToken = (String) getBaiduConfig().get("access_token");
+
+        if (!StringUtils.hasText(accessToken)) {
             throw new CustomException("无有效的access token");
         }
 
