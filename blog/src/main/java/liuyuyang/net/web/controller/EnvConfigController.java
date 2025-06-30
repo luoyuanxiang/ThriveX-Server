@@ -34,13 +34,6 @@ public class EnvConfigController {
         return envConfig != null ? Result.success("获取成功", envConfig) : Result.error("配置不存在");
     }
 
-    @ApiOperation("保存或更新环境配置")
-    @PostMapping
-    public Result<String> saveOrUpdate(@RequestBody EnvConfig envConfig) {
-        boolean success = envConfigService.saveOrUpdate(envConfig);
-        return Result.status(success);
-    }
-
     @ApiOperation("更新JSON配置值")
     @PutMapping("/{id}/json")
     public Result<String> updateJsonValue(@PathVariable Integer id, @RequestBody Map<String, Object> jsonValue) {

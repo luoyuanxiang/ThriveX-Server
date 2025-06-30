@@ -15,11 +15,6 @@ public interface EnvConfigService {
     EnvConfig getByName(String name);
     
     /**
-     * 保存或更新环境配置
-     */
-    boolean saveOrUpdate(EnvConfig envConfig);
-    
-    /**
      * 更新 JSON 配置值
      */
     boolean updateJsonValue(Integer id, Map<String, Object> jsonValue);

@@ -33,11 +33,6 @@ public class EnvConfigServiceImpl extends ServiceImpl<EnvConfigMapper, EnvConfig
     }
 
     @Override
-    public boolean saveOrUpdate(EnvConfig envConfig) {
-        return super.saveOrUpdate(envConfig);
-    }
-
-    @Override
     public boolean updateJsonValue(Integer id, Map<String, Object> jsonValue) {
         EnvConfig envConfig = this.getById(id);
         if (envConfig != null) {
