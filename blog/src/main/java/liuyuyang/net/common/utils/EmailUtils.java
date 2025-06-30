@@ -21,9 +21,6 @@ public class EmailUtils {
     @Resource
     private JavaMailSender mailSender;
 
-    // @Value("${spring.mail.username}")
-    // private String from;
-
     private Map<String, Object> getEmailConfig() {
         try {
             EnvConfig envConfig = envConfigMapper.selectOne(new QueryWrapper<EnvConfig>().eq("name", "email"));
