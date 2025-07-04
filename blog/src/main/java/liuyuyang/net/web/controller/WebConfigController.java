@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.Map;
 
-@Api(tags = "项目配置")
+@Api(tags = "网站配置")
 @RestController
-@RequestMapping("/config")
+@RequestMapping("/web_config")
 @Transactional
 public class WebConfigController {
     @Resource
