@@ -21,7 +21,7 @@ public class EnvConfigController {
     @Resource
     private EnvConfigService envConfigService;
 
-    @PremName("env_config")
+    @PremName("config")
     @ApiOperation("获取环境配置列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
     @GetMapping("/list")
@@ -30,7 +30,7 @@ public class EnvConfigController {
         return Result.success("获取成功", data);
     }
 
-    @PremName("env_config")
+    @PremName("config")
     @ApiOperation("根据ID获取环境配置")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
     @GetMapping("/{id}")
@@ -39,7 +39,7 @@ public class EnvConfigController {
         return envConfig != null ? Result.success("获取成功", envConfig) : Result.error("配置不存在");
     }
 
-    @PremName("env_config")
+    @PremName("config")
     @ApiOperation("根据名称获取环境配置")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
     @GetMapping("/name/{name}")
@@ -48,7 +48,7 @@ public class EnvConfigController {
         return envConfig != null ? Result.success("获取成功", envConfig) : Result.error("配置不存在");
     }
 
-    @PremName("env_config")
+    @PremName("config")
     @ApiOperation("更新JSON配置值")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
     @PatchMapping("/{id}/json")
@@ -58,7 +58,7 @@ public class EnvConfigController {
         return success ? Result.success("JSON配置更新成功") : Result.error("更新失败");
     }
 
-    @PremName("env_config")
+    @PremName("config")
     @ApiOperation("获取JSON配置中的特定字段值")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
     @GetMapping("/{id}/field/{fieldName}")
@@ -68,7 +68,7 @@ public class EnvConfigController {
         return value != null ? Result.success("获取成功", value) : Result.error("字段不存在或配置为空");
     }
 
-    @PremName("env_config")
+    @PremName("config")
     @ApiOperation("更新JSON配置中的特定字段值")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
     @PatchMapping("/{id}/field/{fieldName}")

@@ -34,7 +34,7 @@ public class WebConfigController {
         return Result.success(webConfigService.list(group));
     }
 
-    @PremName("config:edit")
+    @PremName("config")
     @PatchMapping("/{group}")
     @ApiOperation("修改项目配置")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
