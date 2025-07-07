@@ -56,9 +56,7 @@
 
 ## 项目部署
 
-前端：[https://docs.liuyuyang.net/docs/项目部署/前端.html](https://docs.liuyuyang.net/docs/项目部署/前端.html)
-控制端：[https://docs.liuyuyang.net/docs/项目部署/控制端.html](https://docs.liuyuyang.net/docs/项目部署/控制端.html)
-后端：[https://docs.liuyuyang.net/docs/项目部署/后端.html](https://docs.liuyuyang.net/docs/项目部署/后端.html)
+官方文档：[[https://docs.liuyuyang.net/docs/项目部署/前端.html](https://docs.liuyuyang.net/docs/项目部署/1Panel.html)](https://docs.liuyuyang.net/docs/项目部署/1Panel.html)
 
 
 
@@ -126,7 +124,7 @@
 
 如果对该项目进行二次开发，最终需将项目进行开源并保留版权 且 禁止任何商业行为
 
-最后希望大家能够请遵守开源协议：**AGPL-3.0 license**
+最后希望大家能够请遵守开源协议：**AGPL-3.0 license** 
 
 弘扬开源精神，从你我做起！
 
