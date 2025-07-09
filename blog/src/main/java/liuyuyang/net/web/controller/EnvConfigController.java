@@ -51,7 +51,7 @@ public class EnvConfigController {
     @PremName("config")
     @ApiOperation("更新JSON配置值")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-    @PatchMapping("/{id}/json")
+    @PatchMapping("/json/{id}")
     public Result<String> updateJsonValue(@ApiParam(value = "环境配置ID", required = true, example = "1") @PathVariable Integer id,
                                           @ApiParam(value = "JSON配置值", required = true) @RequestBody Map<String, Object> jsonValue) {
         boolean success = envConfigService.updateJsonValue(id, jsonValue);

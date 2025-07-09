@@ -34,4 +34,9 @@ public class PageConfigServiceImpl extends ServiceImpl<PageConfigMapper, PageCon
 
         return false;
     }
+
+    @Override
+    public PageConfig getByName(String name) {
+        return this.lambdaQuery().eq(PageConfig::getName, name).one();
+    }
 } 

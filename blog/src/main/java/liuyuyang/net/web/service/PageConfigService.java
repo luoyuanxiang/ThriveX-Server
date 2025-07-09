@@ -19,4 +19,9 @@ public interface PageConfigService {
      * 更新 JSON 配置值
      */
     boolean updateJsonValue(Integer id, Map<String, Object> jsonValue);
+
+    /**
+     * 根据名称获取页面配置
+     */
+    PageConfig getByName(String name);
 } 
