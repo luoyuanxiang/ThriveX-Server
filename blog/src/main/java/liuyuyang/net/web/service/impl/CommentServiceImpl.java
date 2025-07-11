@@ -73,7 +73,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         context.setVariable("content", content.toString());
 
         // 获取url
-        String url = (String) configService.get("url");
+        String url = (String) configService.getByName("web").getValue().get("url");
         String path = String.format("%s/article/%d", url, comment.getArticleId());
         context.setVariable("url", path);
 
