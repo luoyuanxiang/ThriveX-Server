@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.common.execption.CustomException;
-import liuyuyang.net.dto.albumCate.AlbumCateDTO;
+import liuyuyang.net.dto.album.AlbumCateDTO;
 import liuyuyang.net.model.AlbumCate;
 import liuyuyang.net.model.AlbumImage;
 import liuyuyang.net.web.mapper.AlbumCateMapper;
@@ -41,6 +41,7 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
 
     @Override
     public void batchDel(List<Integer> ids) {
+        isExist(ids);
         albumCateMapper.deleteBatchIds(ids);
     }
 
@@ -110,9 +111,15 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
     }
 
     // 判断是否存在
-    @Override
     public void isExist(Integer id) {
         AlbumCate albumCate = this.get(id);
         if (albumCate == null) throw new CustomException(400, "该相册不存在");
+    }
+
+    public void isExist(List<Integer> ids) {
+        for (Integer id : ids) {
+            AlbumCate albumCate = this.get(id);
+            if (albumCate == null) throw new CustomException(400, "ID为" + id + "的相册不存在");
+        }
     }
 }

@@ -6,7 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.common.annotation.NoTokenRequired;
 import liuyuyang.net.common.annotation.PremName;
-import liuyuyang.net.dto.albumCate.AlbumCateDTO;
+import liuyuyang.net.dto.album.AlbumCateDTO;
 import liuyuyang.net.model.AlbumCate;
 import liuyuyang.net.common.utils.Result;
 import liuyuyang.net.model.AlbumImage;

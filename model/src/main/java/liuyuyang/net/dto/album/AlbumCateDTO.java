@@ -1,4 +1,4 @@
-package liuyuyang.net.dto.albumCate;
+package liuyuyang.net.dto.album;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;

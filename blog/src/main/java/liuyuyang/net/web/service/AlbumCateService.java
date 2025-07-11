@@ -2,7 +2,7 @@ package liuyuyang.net.web.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import liuyuyang.net.dto.albumCate.AlbumCateDTO;
+import liuyuyang.net.dto.album.AlbumCateDTO;
 import liuyuyang.net.model.AlbumCate;
 import liuyuyang.net.model.AlbumImage;
 
@@ -24,6 +24,4 @@ public interface AlbumCateService extends IService<AlbumCate> {
     Page<AlbumCate> paging(Integer page, Integer size);
 
     Page<AlbumImage> getImagesByAlbumId(Integer id, Integer page, Integer size);
-
-    void isExist(Integer id);
 }
