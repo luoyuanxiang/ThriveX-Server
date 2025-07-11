@@ -3,7 +3,7 @@ package liuyuyang.net.model;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
-import liuyuyang.net.dto.article.ArticleEditFormDTO;
+import liuyuyang.net.dto.article.ArticleFormDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("article")
-public class Article extends ArticleEditFormDTO {
+public class Article extends ArticleFormDTO {
     @ApiModelProperty(value = "文章浏览量", example = "100")
     private Integer view;
 

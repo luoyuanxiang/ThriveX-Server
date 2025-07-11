@@ -1,6 +1,8 @@
 package liuyuyang.net.dto.article;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import liuyuyang.net.model.ArticleConfig;
 import lombok.Data;
@@ -8,7 +10,10 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ArticleAddFormDTO {
+public class ArticleFormDTO {
+    @TableId(type = IdType.AUTO)
+    private Integer id;
+
     @ApiModelProperty(value = "文章标题", example = "示例文章标题", required = true)
     private String title;
 

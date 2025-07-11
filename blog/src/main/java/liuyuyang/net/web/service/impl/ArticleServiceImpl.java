@@ -7,8 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.common.execption.CustomException;
 import liuyuyang.net.common.utils.YuYangUtils;
-import liuyuyang.net.dto.article.ArticleAddFormDTO;
-import liuyuyang.net.dto.article.ArticleEditFormDTO;
+import liuyuyang.net.dto.article.ArticleFormDTO;
 import liuyuyang.net.model.*;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
@@ -84,8 +83,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public void add(ArticleAddFormDTO articleAddFormDTO) {
-        Article article = BeanUtil.copyProperties(articleAddFormDTO, Article.class);
+    public void add(ArticleFormDTO articleFormDTO) {
+        Article article = BeanUtil.copyProperties(articleFormDTO, Article.class);
         articleMapper.insert(article);
 
         // 新增分类
@@ -178,36 +177,36 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public void edit(ArticleEditFormDTO articleEditFormDTO) {
-        if (articleEditFormDTO.getCateIds() == null || articleEditFormDTO.getCateIds().isEmpty())
+    public void edit(ArticleFormDTO articleFormDTO) {
+        if (articleFormDTO.getCateIds() == null || articleFormDTO.getCateIds().isEmpty())
             throw new CustomException(400, "编辑失败：请绑定分类");
 
         // 删除文章关联的数据
-        delArticleCorrelationData(articleEditFormDTO.getId());
+        delArticleCorrelationData(articleFormDTO.getId());
         // 重新绑定分类
-        if (articleEditFormDTO.getCateIds() != null && !articleEditFormDTO.getCateIds().isEmpty()) {
-            for (Integer id : articleEditFormDTO.getCateIds()) {
+        if (articleFormDTO.getCateIds() != null && !articleFormDTO.getCateIds().isEmpty()) {
+            for (Integer id : articleFormDTO.getCateIds()) {
                 ArticleCate articleCate = new ArticleCate();
-                articleCate.setArticleId(articleEditFormDTO.getId());
+                articleCate.setArticleId(articleFormDTO.getId());
                 articleCate.setCateId(id);
                 articleCateMapper.insert(articleCate);
             }
         }
 
         // 重新绑定标签
-        if (articleEditFormDTO.getTagIds() != null && !articleEditFormDTO.getTagIds().isEmpty()) {
-            for (Integer id : articleEditFormDTO.getTagIds()) {
+        if (articleFormDTO.getTagIds() != null && !articleFormDTO.getTagIds().isEmpty()) {
+            for (Integer id : articleFormDTO.getTagIds()) {
                 ArticleTag articleTag = new ArticleTag();
-                articleTag.setArticleId(articleEditFormDTO.getId());
+                articleTag.setArticleId(articleFormDTO.getId());
                 articleTag.setTagId(id);
                 articleTagMapper.insert(articleTag);
             }
         }
 
         // 重新绑定文章配置
-        ArticleConfig config = articleEditFormDTO.getConfig();
+        ArticleConfig config = articleFormDTO.getConfig();
         ArticleConfig articleConfig = new ArticleConfig();
-        articleConfig.setArticleId(articleEditFormDTO.getId());
+        articleConfig.setArticleId(articleFormDTO.getId());
         articleConfig.setStatus(config.getStatus());
         articleConfig.setPassword(config.getPassword());
         articleConfig.setIsDraft(config.getIsDraft());
@@ -215,7 +214,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleConfig.setIsDel(0);
         articleConfigMapper.insert(articleConfig);
 
-        Article article = BeanUtil.copyProperties(articleEditFormDTO, Article.class);
+        Article article = BeanUtil.copyProperties(articleFormDTO, Article.class);
 
         // 修改文章
         articleMapper.updateById(article);
@@ -688,7 +687,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
 
             // 创建文章对象
-            ArticleAddFormDTO article = new ArticleAddFormDTO();
+            ArticleFormDTO article = new ArticleFormDTO();
             article.setTitle(title);
             article.setDescription(description);
             article.setContent(articleContent.toString().trim());
