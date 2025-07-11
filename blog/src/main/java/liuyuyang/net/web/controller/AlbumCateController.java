@@ -6,7 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import liuyuyang.net.common.annotation.NoTokenRequired;
 import liuyuyang.net.common.annotation.PremName;
-import liuyuyang.net.dto.album.AlbumCateDTO;
+import liuyuyang.net.dto.album.AlbumCateAddFormDTO;
 import liuyuyang.net.model.AlbumCate;
 import liuyuyang.net.common.utils.Result;
 import liuyuyang.net.model.AlbumImage;
@@ -31,8 +31,8 @@ public class AlbumCateController {
     @PostMapping
     @ApiOperation("新增相册")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-    public Result<String> add(@RequestBody AlbumCateDTO albumCateDTO) {
-        albumCateService.add(albumCateDTO);
+    public Result<String> add(@RequestBody AlbumCateAddFormDTO albumCateAddFormDTO) {
+        albumCateService.add(albumCateAddFormDTO);
         return Result.success();
     }
 

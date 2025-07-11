@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class AlbumCateDTO {
+public class AlbumCateAddFormDTO {
     @ApiModelProperty(value = "相册名称", example = "旅行", required = true)
     private String name;
 

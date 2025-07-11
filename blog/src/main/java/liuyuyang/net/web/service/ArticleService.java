@@ -3,6 +3,8 @@ package liuyuyang.net.web.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import liuyuyang.net.dto.article.ArticleAddFormDTO;
+import liuyuyang.net.dto.article.ArticleEditFormDTO;
 import liuyuyang.net.model.Article;
 import liuyuyang.net.vo.PageVo;
 import liuyuyang.net.vo.article.ArticleFillterVo;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ArticleService extends IService<Article> {
-    void add(Article article);
+    void add(ArticleAddFormDTO articleAddFormDTO);
 
     void del(Integer id, Integer is_del);
 
@@ -21,7 +23,7 @@ public interface ArticleService extends IService<Article> {
 
     void delBatch(List<Integer> ids);
 
-    void edit(Article article);
+    void edit(ArticleEditFormDTO articleEditFormDTO);
 
     Article get(Integer id, String password);
 

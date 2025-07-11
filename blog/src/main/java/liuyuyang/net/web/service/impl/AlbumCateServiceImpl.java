@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import liuyuyang.net.common.execption.CustomException;
-import liuyuyang.net.dto.album.AlbumCateDTO;
+import liuyuyang.net.dto.album.AlbumCateAddFormDTO;
 import liuyuyang.net.model.AlbumCate;
 import liuyuyang.net.model.AlbumImage;
 import liuyuyang.net.web.mapper.AlbumCateMapper;
@@ -28,8 +28,8 @@ public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate
     private AlbumImageMapper albumImageMapper;
 
     @Override
-    public void add(AlbumCateDTO albumCateDTO) {
-        AlbumCate albumCate = BeanUtil.copyProperties(albumCateDTO, AlbumCate.class);
+    public void add(AlbumCateAddFormDTO albumCateAddFormDTO) {
+        AlbumCate albumCate = BeanUtil.copyProperties(albumCateAddFormDTO, AlbumCate.class);
         albumCateMapper.insert(albumCate);
     }
 
