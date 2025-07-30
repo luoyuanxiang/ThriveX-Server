@@ -65,6 +65,7 @@ public class AssistantController {
         return Result.success();
     }
 
+    @PremName("assistant:list")
     @GetMapping("/{id}")
     @ApiOperation("获取助手")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
@@ -73,7 +74,7 @@ public class AssistantController {
         return Result.success(data);
     }
 
-    @NoTokenRequired
+    @PremName("assistant:list")
     @PostMapping("/list")
     @ApiOperation("获取助手列表")
     @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
