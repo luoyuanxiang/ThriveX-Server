@@ -33,7 +33,6 @@ jobs:
           DOCKER_VERSION: latest
           IMAGE_NAME: thrive-blog  # 镜像名称
         run: |
-          cd ThriveX-Server
           # 构建镜像
           docker build -t $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION .
           
