@@ -48,10 +48,6 @@ jobs:
         env:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          ACR_REGISTRY: ${{ secrets.ALIYUN_ACR_REGISTRY }}
-          ACR_NAMESPACE: ${{ secrets.ALIYUN_ACR_NAMESPACE }}  # 你的命名空间
-          DOCKER_VERSION: latest
-          IMAGE_NAME: thrive-blog  # 镜像名称
         run: |
           # 验证SSH连接（可选）
           ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo 连接成功"
@@ -59,13 +55,13 @@ jobs:
           # 执行服务器命令示例
           ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
             # 这里放置要在服务器上执行的命令
-            echo "开始执行服务器命令 $IMAGE_NAME  $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION"
+            echo "开始执行服务器命令"
           
-            docker stop $IMAGE_NAME
-            docker rm $IMAGE_NAME
+            docker stop thrive-blog
+            docker rm thrive-blog
             // 更新镜像
-            docker rmi $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION
-            docker pull $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION
+            docker rmi registry.cn-chengdu.aliyuncs.com/thrivex-blog/thrive-blog:latest
+            docker pull registry.cn-chengdu.aliyuncs.com/thrivex-blog/thrive-blog:latest
             cd /root/thrive-blog
             docker-compose up -d
             echo "服务器命令执行完成"
