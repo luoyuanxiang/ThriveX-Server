@@ -39,30 +39,24 @@ jobs:
           # 推送版本标签镜像
           docker push $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION
 
-      - name: 设置SSH密钥
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: 连接服务器并执行命令
+        uses: appleboy/ssh-action@v1
         env:
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        run: |
-          # 验证SSH连接（可选）
-          ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo 连接成功"
-          
-          # 执行服务器命令示例
-          ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
-            # 这里放置要在服务器上执行的命令
+          ACR_REGISTRY: ${{ secrets.ALIYUN_ACR_REGISTRY }}
+          ACR_NAMESPACE: ${{ secrets.ALIYUN_ACR_NAMESPACE }}  # 你的命名空间
+          DOCKER_VERSION: latest
+          IMAGE_NAME: thrive-blog  # 镜像名称
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
             echo "开始执行服务器命令"
-          
-            docker stop thrive-blog
-            docker rm thrive-blog
-            // 更新镜像
-            docker rmi registry.cn-chengdu.aliyuncs.com/thrivex-blog/thrive-blog:latest
-            docker pull registry.cn-chengdu.aliyuncs.com/thrivex-blog/thrive-blog:latest
+            docker stop $IMAGE_NAME
+            docker rm $IMAGE_NAME
+            docker rmi $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION
+            docker pull $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION
             cd /root/thrive-blog
             docker-compose up -d
             echo "服务器命令执行完成"
-          EOF
