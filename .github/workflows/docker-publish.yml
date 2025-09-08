@@ -59,13 +59,13 @@ jobs:
           # 执行服务器命令示例
           ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
             # 这里放置要在服务器上执行的命令
-            echo "开始执行服务器命令"
+            echo "开始执行服务器命令 $IMAGE_NAME  $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION"
           
-            docker stop ${{IMAGE_NAME}}
-            docker rm ${{IMAGE_NAME}}
+            docker stop $IMAGE_NAME
+            docker rm $IMAGE_NAME
             // 更新镜像
-            docker rmi ${{ACR_REGISTRY}}/${{ACR_NAMESPACE}}/${{IMAGE_NAME}}:${{DOCKER_VERSION}}
-            docker pull ${{ACR_REGISTRY}}/${{ACR_NAMESPACE}}/${{IMAGE_NAME}}:${{DOCKER_VERSION}}
+            docker rmi $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION
+            docker pull $ACR_REGISTRY/$ACR_NAMESPACE/$IMAGE_NAME:$DOCKER_VERSION
             cd /root/thrive-blog
             docker-compose up -d
             echo "服务器命令执行完成"
