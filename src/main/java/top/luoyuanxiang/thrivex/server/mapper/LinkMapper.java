@@ -1,8 +1,13 @@
 package top.luoyuanxiang.thrivex.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import top.luoyuanxiang.thrivex.server.entity.Link;
+import top.luoyuanxiang.thrivex.server.vo.LinkQueryVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +20,20 @@ import top.luoyuanxiang.thrivex.server.entity.Link;
 @Mapper
 public interface LinkMapper extends BaseMapper<Link> {
 
+    /**
+     * 列表
+     *
+     * @param linkQueryVO 链接查询 vo
+     * @return {@link List }<{@link Link }>
+     */
+    List<Link> list(@Param("vo") LinkQueryVO linkQueryVO);
+
+    /**
+     * 分页
+     *
+     * @param page     页
+     * @param filterVo 过滤 VO
+     * @return {@link Page }<{@link Link }>
+     */
+    Page<Link> paging(Page<Link> page, @Param("vo") LinkQueryVO filterVo);
 }

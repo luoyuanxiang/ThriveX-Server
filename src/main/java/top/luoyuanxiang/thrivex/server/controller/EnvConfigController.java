@@ -1,12 +1,17 @@
 package top.luoyuanxiang.thrivex.server.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.entity.EnvConfig;
+import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.service.IEnvConfigService;
+import top.luoyuanxiang.thrivex.server.vo.Result;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 环境配置管理
  *
  * @author luoyuanxiang
  * @since 2025-09-12
@@ -15,4 +20,87 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/env-config")
 public class EnvConfigController {
 
+    @Resource
+    private IEnvConfigService envConfigService;
+
+    /**
+     * 获取环境配置列表
+     *
+     * @return {@link Result }<{@link List }<{@link EnvConfig }>>
+     */
+    @HasPermission("config")
+    @GetMapping("/list")
+    public Result<List<EnvConfig>> list() {
+        List<EnvConfig> data = envConfigService.list();
+        return Result.success("获取成功", data);
+    }
+
+    /**
+     * 根据ID获取环境配置
+     *
+     * @param id id
+     * @return {@link Result }<{@link EnvConfig }>
+     */
+    @HasPermission("config")
+    @GetMapping("/{id}")
+    public Result<EnvConfig> getById(@PathVariable Integer id) {
+        EnvConfig envConfig = envConfigService.getById(id);
+        return envConfig != null ? Result.success("获取成功", envConfig) : Result.error("配置不存在");
+    }
+
+    /**
+     * 根据名称获取环境配置
+     *
+     * @param name 名字
+     * @return {@link Result }<{@link EnvConfig }>
+     */
+    @HasPermission("config")
+    @GetMapping("/name/{name}")
+    public Result<EnvConfig> getByName(@PathVariable String name) {
+        EnvConfig envConfig = envConfigService.getByName(name);
+        return envConfig != null ? Result.success("获取成功", envConfig) : Result.error("配置不存在");
+    }
+
+    /**
+     * 更新 JSON 值
+     *
+     * @param id        id
+     * @param jsonValue json 值
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("config")
+    @PatchMapping("/json/{id}")
+    public Result<String> updateJsonValue(@PathVariable Integer id,
+                                          @RequestBody Map<String, Object> jsonValue) {
+        boolean success = envConfigService.updateJsonValue(id, jsonValue);
+        return success ? Result.success("JSON配置更新成功") : Result.error("更新失败");
+    }
+
+    /**
+     * 根据ID更新配置
+     *
+     * @param id        id
+     * @param fieldName 字段名称
+     * @param value     价值
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("config")
+    @PatchMapping("/{id}/field/{fieldName}")
+    public Result<String> updateJsonFieldValue(@PathVariable Integer id,
+                                               @PathVariable String fieldName,
+                                               @RequestBody Object value) {
+        boolean success = envConfigService.updateJsonFieldValue(id, fieldName, value);
+        return success ? Result.success() : Result.error();
+    }
+
+    /**
+     * 获取高德地图配置
+     *
+     * @return {@link Result }<{@link Map }<{@link String }, {@link Object }>>
+     */
+    @GetMapping("/gaode_map")
+    public Result<Map<String, Object>> getGaodeMapConfig() {
+        EnvConfig envConfig = envConfigService.getByName("gaode_map");
+        return Result.success(envConfig.getValue());
+    }
 }

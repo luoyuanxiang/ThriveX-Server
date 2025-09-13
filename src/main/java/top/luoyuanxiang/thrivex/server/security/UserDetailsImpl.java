@@ -1,5 +1,6 @@
 package top.luoyuanxiang.thrivex.server.security;
 
+import cn.hutool.core.util.StrUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,24 +12,15 @@ import java.util.Collection;
 /**
  * 实现 UserDetails 接口的用户详情类
  */
-public class UserDetailsImpl implements UserDetails {
-
-    private final User user;
-
-    public UserDetailsImpl(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
+public record UserDetailsImpl(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 这里简化处理，实际项目中应该从数据库中获取用户的角色和权限
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        if (user.getRoleId() != null) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRoleId()));
+        if (StrUtil.isNotBlank(user.getPermissionsCode())) {
+            for (String code : user.getPermissionsCode().split(",")) {
+                authorities.add(new SimpleGrantedAuthority(code));
+            }
         }
         return authorities;
     }
@@ -41,25 +33,5 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return user.getUsername();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

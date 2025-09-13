@@ -2,14 +2,15 @@ package top.luoyuanxiang.thrivex.server.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authorization.method.PrePostTemplateDefaults;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.annotation.AnnotationTemplateExpressionDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,11 +26,22 @@ public class SecurityConfig {
 
     /**
      * 鉴权具体的实现逻辑
+     *
      * @return （#pms.xxx）
      */
     @Bean("pms")
     public PermissionService permissionService() {
         return new PermissionService();
+    }
+
+    /**
+     * 支持自定义权限表达式
+     *
+     * @return {@link PrePostTemplateDefaults }
+     */
+    @Bean
+    public AnnotationTemplateExpressionDefaults prePostTemplateDefaults() {
+        return new AnnotationTemplateExpressionDefaults();
     }
 
     @Bean
@@ -46,8 +58,7 @@ public class SecurityConfig {
                 // 设置会话管理为无状态
                 .sessionManagement(se -> se.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-                    auth.requestMatchers("/api/**", "/login").permitAll();
+                    auth.requestMatchers("/error", "/login").permitAll();
                     auth.anyRequest().authenticated();
                 });
         // 添加 JWT 过滤器

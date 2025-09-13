@@ -24,11 +24,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 WORKDIR /app
 
 # 从构建阶段复制打包好的jar文件
-COPY --from=builder /app/blog/target/*.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 # 添加环境变量
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 # 暴露应用端口
-EXPOSE 9003
+EXPOSE 8080
 
 # 启动命令，使用exec形式以确保应用接收信号
 # 修改启动命令

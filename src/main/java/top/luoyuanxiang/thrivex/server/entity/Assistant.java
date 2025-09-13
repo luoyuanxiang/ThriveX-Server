@@ -56,7 +56,7 @@ public class Assistant extends Model<Assistant> {
      * 是否被启用
      */
     @TableField("is_default")
-    private Byte isDefault;
+    private Integer isDefault;
 
     @Override
     public Serializable pkVal() {

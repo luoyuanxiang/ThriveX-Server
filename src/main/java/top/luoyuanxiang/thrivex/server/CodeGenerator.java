@@ -25,8 +25,13 @@ public class CodeGenerator {
         byte[] keyBytes = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256).getEncoded();
         String base64Key = Base64.getEncoder().encodeToString(keyBytes);
         System.out.println("Generated JWT Secret: " + base64Key);
+//        codeGenerator();
     }
 
+    /**
+     * 代码生成器
+     *
+     */
     public static void codeGenerator() {
         FastAutoGenerator.create("jdbc:mysql://localhost:3306/thrive?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false", "root", "123456")
                 .globalConfig(builder -> builder
@@ -46,6 +51,7 @@ public class CodeGenerator {
                         .xml("mapper")
                 )
                 .strategyConfig(builder -> builder
+                        .addInclude("email_logs")
                         .entityBuilder()
                         .enableLombok()
                         .enableTableFieldAnnotation()

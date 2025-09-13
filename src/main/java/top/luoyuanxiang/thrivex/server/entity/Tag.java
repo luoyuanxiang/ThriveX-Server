@@ -31,6 +31,12 @@ public class Tag extends Model<Tag> {
     @TableField("name")
     private String name;
 
+    /**
+     * 文章数量
+     */
+    @TableField(exist = false)
+    private Integer count;
+
     @Override
     public Serializable pkVal() {
         return this.id;

@@ -5,6 +5,9 @@ import top.luoyuanxiang.thrivex.server.mapper.FootprintMapper;
 import top.luoyuanxiang.thrivex.server.service.IFootprintService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import top.luoyuanxiang.thrivex.server.vo.QueryCommonVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -17,4 +20,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class FootprintServiceImpl extends ServiceImpl<FootprintMapper, Footprint> implements IFootprintService {
 
+    @Override
+    public List<Footprint> list(QueryCommonVO queryCommonVO) {
+        return list(queryCommonVO.buildQueryWrapper("address"));
+    }
 }

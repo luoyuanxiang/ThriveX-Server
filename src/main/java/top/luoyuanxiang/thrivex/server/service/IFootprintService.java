@@ -2,6 +2,9 @@ package top.luoyuanxiang.thrivex.server.service;
 
 import top.luoyuanxiang.thrivex.server.entity.Footprint;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.luoyuanxiang.thrivex.server.vo.QueryCommonVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IFootprintService extends IService<Footprint> {
 
+    /**
+     * 列表
+     *
+     * @param queryCommonVO 查询通用VO
+     * @return {@link List }<{@link Footprint }>
+     */
+    List<Footprint> list(QueryCommonVO queryCommonVO);
 }

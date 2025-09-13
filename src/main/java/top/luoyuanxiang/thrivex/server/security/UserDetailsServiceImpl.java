@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 根据用户名查询用户信息
-        User user = userService.lambdaQuery().eq(User::getUsername, username).one();
+        User user = userService.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在：" + username);
         }

@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -61,14 +63,17 @@ public class Cate extends Model<Cate> {
     /**
      * 分类顺序
      */
-    @TableField("order")
+    @TableField("`order`")
     private Integer order;
 
     /**
-     * 导航还是分类
+     * 导航还是分类 cate | nav
      */
     @TableField("type")
     private String type;
+
+    @TableField(exist = false)
+    private List<Cate> children = new ArrayList<>();
 
     @Override
     public Serializable pkVal() {

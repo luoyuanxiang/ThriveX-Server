@@ -2,6 +2,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.web.bind.annotation.*;
 import top.luoyuanxiang.thrivex.server.entity.AlbumCate;
 import top.luoyuanxiang.thrivex.server.entity.AlbumImage;
@@ -84,6 +85,7 @@ public class AlbumCateController {
      * @param id id
      * @return {@link Result }<{@link AlbumCate }>
      */
+    @PermitAll
     @GetMapping("/{id}")
     public Result<AlbumCate> get(@PathVariable Integer id) {
         AlbumCate albumCate = albumCateService.getById(id);
@@ -96,6 +98,7 @@ public class AlbumCateController {
      *
      * @return {@link Result }<{@link List }<{@link AlbumCate }>>
      */
+    @HasPermission("album_cate:edit")
     @PostMapping("/list")
     public Result<List<AlbumCate>> list() {
         List<AlbumCate> albumCates = albumCateService.list();

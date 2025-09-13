@@ -85,6 +85,9 @@ public class Link extends Model<Link> {
     @TableField("create_time")
     private String createTime;
 
+    @TableField(exist = false)
+    private LinkType linkType;
+
     @Override
     public Serializable pkVal() {
         return this.id;
