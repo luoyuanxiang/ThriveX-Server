@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.WallMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.Wall">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.WallEntity">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="content" property="content" />
@@ -13,6 +13,42 @@
         <result column="audit_status" property="auditStatus" />
         <result column="is_choice" property="isChoice" />
         <result column="create_time" property="createTime" />
+        <association property="cate" javaType="top.luoyuanxiang.thrivex.server.entity.WallCateEntity">
+            <id column="wc_id" property="id" />
+            <result column="wc_name" property="name" />
+            <result column="mark" property="mark" />
+            <result column="order" property="order" />
+        </association>
     </resultMap>
+    <select id="list" resultType="top.luoyuanxiang.thrivex.server.entity.WallEntity">
+        select w.id, w.name, content, color, email, cate_id, audit_status, is_choice, create_time,
+               wc.id wc_id, wc.name wc_name, mark, `order`
+               from wall w left join wall_cate wc on w.cate_id = wc.id
+        <where>
+            <if test="vo.cateId != null">
+                and w.cate_id = #{vo.cateId}
+            </if>
+            <if test="vo.status != null">
+                and w.audit_status = #{vo.status}
+            </if>
+            <if test="vo.id != null">
+                and w.id = #{vo.id}
+            </if>
+            <if test="vo.key != null and vo.key != ''">
+                and (w.name like concat('%',#{vo.key},'%') or w.content like concat('%',#{vo.key},'%'))
+            </if>
+            <if test="vo.startDate != null and vo.startDate != ''">
+                and w.create_time >= #{vo.startDate}
+            </if>
+            <if test="vo.endDate != null and vo.endDate != ''">
+                and w.create_time <![CDATA[
+                <=
+                ]]> #{vo.endDate}
+            </if>
+            <if test="vo.startDate != null and vo.startDate != '' and vo.endDate != null and vo.endDate != ''">
+                and w.create_time between #{vo.startDate} and #{vo.endDate}
+            </if>
+        </where>
+    </select>
 
 </mapper>

@@ -3,12 +3,12 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.AlbumCateMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.AlbumCate">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="cover" property="cover" />
     </resultMap>
-    <select id="paging" resultType="top.luoyuanxiang.thrivex.server.entity.AlbumCate">
+    <select id="paging" resultType="top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity">
          select id, name, cover, (select count(*) from album_image ai where ai.cate_id = ac.id) count from album_cate ac order by id desc
     </select>
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.luoyuanxiang.thrivex.server.mapper.EmailLogsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.EmailLogsEntity">
+        <id column="id" property="id" />
+        <result column="recipient" property="recipient" />
+        <result column="subject" property="subject" />
+        <result column="content" property="content" />
+        <result column="status" property="status" />
+        <result column="error_message" property="errorMessage" />
+        <result column="email_config_id" property="emailConfigId" />
+        <result column="email_template_id" property="emailTemplateId" />
+        <result column="sent_at" property="sentAt" />
+        <result column="created_at" property="createdAt" />
+    </resultMap>
+
+</mapper>

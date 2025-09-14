@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.RoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.Role">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.RoleEntity">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="mark" property="mark" />

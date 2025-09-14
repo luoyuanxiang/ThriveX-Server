@@ -1,7 +1,7 @@
 package top.luoyuanxiang.thrivex.server.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import top.luoyuanxiang.thrivex.server.entity.Link;
+import top.luoyuanxiang.thrivex.server.entity.LinkEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.luoyuanxiang.thrivex.server.vo.LinkQueryVO;
 
@@ -15,37 +15,37 @@ import java.util.List;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface ILinkService extends IService<Link> {
+public interface ILinkService extends IService<LinkEntity> {
 
     /**
      * 网站添加
      *
-     * @param link 链接
+     * @param linkEntity 链接
      */
-    void add(Link link);
+    void add(LinkEntity linkEntity);
 
     /**
      * 列表
      *
      * @param linkQueryVO 链接查询 vo
-     * @return {@link List }<{@link Link }>
+     * @return {@link List }<{@link LinkEntity }>
      */
-    List<Link> list(LinkQueryVO linkQueryVO);
+    List<LinkEntity> list(LinkQueryVO linkQueryVO);
 
     /**
      * 分页
      *
      * @param page     页
      * @param filterVo 过滤 VO
-     * @return {@link Page }<{@link Link }>
+     * @return {@link Page }<{@link LinkEntity }>
      */
-    Page<Link> paging(Page<Link> page, LinkQueryVO filterVo);
+    Page<LinkEntity> paging(Page<LinkEntity> page, LinkQueryVO filterVo);
 
     /**
      * 获取网站信息
      *
      * @param url 网址
-     * @return {@link Link }
+     * @return {@link LinkEntity }
      */
-    Link fetchWebsiteInfo(String url) throws Exception;
+    LinkEntity fetchWebsiteInfo(String url) throws Exception;
 }

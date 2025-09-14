@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.RouteRoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.RouteRole">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.RouteRoleEntity">
         <id column="id" property="id" />
         <result column="route_id" property="routeId" />
         <result column="role_id" property="roleId" />

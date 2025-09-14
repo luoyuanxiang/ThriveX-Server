@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.luoyuanxiang.thrivex.server.entity.ArticleConfig;
+import top.luoyuanxiang.thrivex.server.entity.ArticleConfigEntity;
 
 /**
  * <p>
@@ -13,6 +13,6 @@ import top.luoyuanxiang.thrivex.server.entity.ArticleConfig;
  * @since 2025-09-12
  */
 @Mapper
-public interface ArticleConfigMapper extends BaseMapper<ArticleConfig> {
+public interface ArticleConfigMapper extends BaseMapper<ArticleConfigEntity> {
 
 }

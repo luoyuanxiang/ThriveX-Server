@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.Swiper;
+import top.luoyuanxiang.thrivex.server.entity.SwiperEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface ISwiperService extends IService<Swiper> {
+public interface ISwiperService extends IService<SwiperEntity> {
 
 }

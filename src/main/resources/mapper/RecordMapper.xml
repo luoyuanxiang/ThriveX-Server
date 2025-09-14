@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.RecordMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.Record">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.RecordEntity">
         <id column="id" property="id" />
         <result column="content" property="content" />
         <result column="images" property="images" />

@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.TagMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.Tag">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.TagEntity">
         <id column="id" property="id" />
         <result column="name" property="name" />
     </resultMap>

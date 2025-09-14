@@ -3,8 +3,8 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.Link;
-import top.luoyuanxiang.thrivex.server.entity.LinkType;
+import top.luoyuanxiang.thrivex.server.entity.LinkEntity;
+import top.luoyuanxiang.thrivex.server.entity.LinkTypeEntity;
 import top.luoyuanxiang.thrivex.server.mapper.LinkTypeMapper;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ILinkService;
@@ -13,7 +13,6 @@ import top.luoyuanxiang.thrivex.server.vo.Paging;
 import top.luoyuanxiang.thrivex.server.vo.Result;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 网站管理
@@ -33,13 +32,13 @@ public class LinkController {
     /**
      * 新增网站
      *
-     * @param link 链接
+     * @param linkEntity 链接
      * @return {@link Result }<{@link String }>
      * @throws Exception 例外
      */
     @PostMapping
-    public Result<String> add(@RequestBody Link link) throws Exception {
-        linkService.add(link);
+    public Result<String> add(@RequestBody LinkEntity linkEntity) throws Exception {
+        linkService.add(linkEntity);
         return Result.success();
     }
 
@@ -52,7 +51,7 @@ public class LinkController {
     @HasPermission("link:del")
     @DeleteMapping("/{id}")
     public Result<String> del(@PathVariable Integer id) {
-        Link data = linkService.getById(id);
+        LinkEntity data = linkService.getById(id);
         if (data == null) return Result.error("该数据不存在");
         linkService.removeById(id);
         return Result.success();
@@ -74,13 +73,13 @@ public class LinkController {
     /**
      * 编辑网站
      *
-     * @param link 链接
+     * @param linkEntity 链接
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("link:edit")
     @PatchMapping
-    public Result<String> edit(@RequestBody Link link) {
-        linkService.updateById(link);
+    public Result<String> edit(@RequestBody LinkEntity linkEntity) {
+        linkService.updateById(linkEntity);
         return Result.success();
     }
 
@@ -88,11 +87,11 @@ public class LinkController {
      * 获取网站
      *
      * @param id id
-     * @return {@link Result }<{@link Link }>
+     * @return {@link Result }<{@link LinkEntity }>
      */
     @GetMapping("/{id}")
-    public Result<Link> get(@PathVariable Integer id) {
-        Link data = linkService.getById(id);
+    public Result<LinkEntity> get(@PathVariable Integer id) {
+        LinkEntity data = linkService.getById(id);
         return Result.success(data);
     }
 
@@ -100,11 +99,11 @@ public class LinkController {
      * 获取网站列表
      *
      * @param linkQueryVO 过滤 VO
-     * @return {@link Result }<{@link List }<{@link Link }>>
+     * @return {@link Result }<{@link List }<{@link LinkEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<Link>> list(@RequestBody LinkQueryVO linkQueryVO) {
-        List<Link> data = linkService.list(linkQueryVO);
+    public Result<List<LinkEntity>> list(@RequestBody LinkQueryVO linkQueryVO) {
+        List<LinkEntity> data = linkService.list(linkQueryVO);
         return Result.success(data);
     }
 
@@ -115,19 +114,19 @@ public class LinkController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<Link>> paging(@RequestBody LinkQueryVO filterVo, Integer page, Integer size) {
-        Page<Link> data = linkService.paging(new Page<>(page, size), filterVo);
+    public Result<Paging<LinkEntity>> paging(@RequestBody LinkQueryVO filterVo, Integer page, Integer size) {
+        Page<LinkEntity> data = linkService.paging(new Page<>(page, size), filterVo);
         return Result.page(data);
     }
 
     /**
      * 获取网站类型列表
      *
-     * @return {@link Result }<{@link List }<{@link LinkType }>>
+     * @return {@link Result }<{@link List }<{@link LinkTypeEntity }>>
      */
     @GetMapping("/type")
-    public Result<List<LinkType>> typeList() {
-        List<LinkType> data = linkTypeMapper.selectList(null);
+    public Result<List<LinkTypeEntity>> typeList() {
+        List<LinkTypeEntity> data = linkTypeMapper.selectList(null);
         return Result.success(data);
     }
 
@@ -140,7 +139,7 @@ public class LinkController {
     @HasPermission("link:audit")
     @PatchMapping("/audit/{id}")
     public Result<?> auditWeb(@PathVariable Integer id) {
-        Link data = linkService.getById(id);
+        LinkEntity data = linkService.getById(id);
 
         if (data == null) throw new RuntimeException("该网站不存在");
 
@@ -153,11 +152,11 @@ public class LinkController {
      * 获取网站信息
      *
      * @param url 网址
-     * @return {@link Result }<{@link Link }>
+     * @return {@link Result }<{@link LinkEntity }>
      */
     @GetMapping("/website-info")
-    public Result<Link> getWebsiteInfo(@RequestParam String url) throws Exception {
-        Link info = linkService.fetchWebsiteInfo(url);
+    public Result<LinkEntity> getWebsiteInfo(@RequestParam String url) throws Exception {
+        LinkEntity info = linkService.fetchWebsiteInfo(url);
         return Result.success(info);
     }
 

@@ -3,7 +3,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.Cate;
+import top.luoyuanxiang.thrivex.server.entity.CateEntity;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ICateService;
 import top.luoyuanxiang.thrivex.server.vo.CateArticleCount;
@@ -30,13 +30,13 @@ public class CateController {
     /**
      * 新增分类
      *
-     * @param cate cate form dto
+     * @param cateEntity cate form dto
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("cate:add")
     @PostMapping
-    public Result<String> add(@RequestBody Cate cate) {
-        cateService.save(cate);
+    public Result<String> add(@RequestBody CateEntity cateEntity) {
+        cateService.save(cateEntity);
         return Result.success();
     }
 
@@ -69,13 +69,13 @@ public class CateController {
     /**
      * 编辑分类
      *
-     * @param cate cate form dto
+     * @param cateEntity cate form dto
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("cate:edit")
     @PatchMapping
-    public Result<String> edit(@RequestBody Cate cate) {
-        cateService.updateById(cate);
+    public Result<String> edit(@RequestBody CateEntity cateEntity) {
+        cateService.updateById(cateEntity);
         return Result.success();
     }
 
@@ -83,11 +83,11 @@ public class CateController {
      * 获取分类
      *
      * @param id id
-     * @return {@link Result }<{@link Cate }>
+     * @return {@link Result }<{@link CateEntity }>
      */
     @GetMapping("/{id}")
-    public Result<Cate> get(@PathVariable Integer id) {
-        Cate data = cateService.getById(id);
+    public Result<CateEntity> get(@PathVariable Integer id) {
+        CateEntity data = cateService.getById(id);
         return Result.success(data);
     }
 
@@ -95,11 +95,11 @@ public class CateController {
      * 获取分类列表
      *
      * @param pattern 默认为tree树性结构，设置为list表示列表结构
-     * @return {@link Result }<{@link List }<{@link Cate }>>
+     * @return {@link Result }<{@link List }<{@link CateEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<Cate>> list(@RequestParam(defaultValue = "recursion") String pattern) {
-        List<Cate> data = cateService.list(pattern);
+    public Result<List<CateEntity>> list(@RequestParam(defaultValue = "recursion") String pattern) {
+        List<CateEntity> data = cateService.list(pattern);
         return Result.success(data);
     }
 
@@ -111,9 +111,9 @@ public class CateController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<Cate>> paging(@RequestParam(defaultValue = "1") Integer page,
-                                       @RequestParam(defaultValue = "5") Integer size) {
-        Page<Cate> data = cateService.paging(page, size);
+    public Result<Paging<CateEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
+                                             @RequestParam(defaultValue = "5") Integer size) {
+        Page<CateEntity> data = cateService.paging(page, size);
         return Result.page(data);
     }
 

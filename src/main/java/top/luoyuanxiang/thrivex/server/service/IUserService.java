@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.User;
+import top.luoyuanxiang.thrivex.server.entity.UserEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,13 +11,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface IUserService extends IService<User> {
+public interface IUserService extends IService<UserEntity> {
 
     /**
      * 按用户名查找
      *
      * @param username 用户名
-     * @return {@link User }
+     * @return {@link UserEntity }
      */
-    User findByUsername(String username);
+    UserEntity findByUsername(String username);
 }

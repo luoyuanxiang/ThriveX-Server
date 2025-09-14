@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
-import top.luoyuanxiang.thrivex.server.entity.EnvConfig;
+import top.luoyuanxiang.thrivex.server.entity.EnvConfigEntity;
 import top.luoyuanxiang.thrivex.server.mapper.EnvConfigMapper;
 import top.luoyuanxiang.thrivex.server.service.IEnvConfigService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,36 +18,36 @@ import java.util.Map;
  * @since 2025-09-12
  */
 @Service
-public class EnvConfigServiceImpl extends ServiceImpl<EnvConfigMapper, EnvConfig> implements IEnvConfigService {
+public class EnvConfigServiceImpl extends ServiceImpl<EnvConfigMapper, EnvConfigEntity> implements IEnvConfigService {
 
     @Override
-    public EnvConfig getByName(String name) {
+    public EnvConfigEntity getByName(String name) {
         return lambdaQuery()
-                .eq(EnvConfig::getName, name)
+                .eq(EnvConfigEntity::getName, name)
                 .one();
     }
 
     @Override
     public boolean updateJsonValue(Integer id, Map<String, Object> jsonValue) {
-        EnvConfig envConfig = this.getById(id);
-        if (envConfig != null) {
-            envConfig.setValue(jsonValue);
-            return this.updateById(envConfig);
+        EnvConfigEntity envConfigEntity = this.getById(id);
+        if (envConfigEntity != null) {
+            envConfigEntity.setValue(jsonValue);
+            return this.updateById(envConfigEntity);
         }
         return false;
     }
 
     @Override
     public boolean updateJsonFieldValue(Integer id, String fieldName, Object value) {
-        EnvConfig envConfig = this.getById(id);
-        if (envConfig != null) {
-            Map<String, Object> jsonValue = envConfig.getValue();
+        EnvConfigEntity envConfigEntity = this.getById(id);
+        if (envConfigEntity != null) {
+            Map<String, Object> jsonValue = envConfigEntity.getValue();
             if (jsonValue == null) {
                 jsonValue = new HashMap<>();
             }
             jsonValue.put(fieldName, value);
-            envConfig.setValue(jsonValue);
-            return this.updateById(envConfig);
+            envConfigEntity.setValue(jsonValue);
+            return this.updateById(envConfigEntity);
         }
         return false;
     }

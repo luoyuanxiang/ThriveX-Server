@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
-import top.luoyuanxiang.thrivex.server.entity.FileDetail;
+import top.luoyuanxiang.thrivex.server.entity.FileDetailEntity;
 import top.luoyuanxiang.thrivex.server.mapper.FileDetailMapper;
 import top.luoyuanxiang.thrivex.server.service.IFileDetailService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2025-09-12
  */
 @Service
-public class FileDetailServiceImpl extends ServiceImpl<FileDetailMapper, FileDetail> implements IFileDetailService {
+public class FileDetailServiceImpl extends ServiceImpl<FileDetailMapper, FileDetailEntity> implements IFileDetailService {
 
 }

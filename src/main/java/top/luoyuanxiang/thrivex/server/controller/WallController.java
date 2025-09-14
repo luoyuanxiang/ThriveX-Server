@@ -1,133 +1,184 @@
-//package top.luoyuanxiang.thrivex.server.controller;
-//
-//import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-//import jakarta.annotation.Resource;
-//import org.springframework.web.bind.annotation.*;
-//import top.luoyuanxiang.thrivex.server.entity.Wall;
-//import top.luoyuanxiang.thrivex.server.entity.WallCate;
-//import top.luoyuanxiang.thrivex.server.vo.Paging;
-//import top.luoyuanxiang.thrivex.server.vo.Result;
-//
-//import java.util.List;
-//import java.util.Map;
-//
-///**
-// * 留言管理
-// *
-// * @author luoyuanxiang
-// * @since 2025-09-12
-// */
-//@RestController
-//@RequestMapping("/wall")
-//public class WallController {
-//
-//    @Resource
-//    private WallService wallService;
-//
-//    @NoTokenRequired
-//    @PostMapping
-//    @ApiOperation("新增留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-//    public Result<String> add(@RequestBody Wall wall) throws Exception {
-//        wallService.add(wall);
-//        return Result.success();
-//    }
-//
-//    @PremName("wall:del")
-//    @DeleteMapping("/{id}")
-//    @ApiOperation("删除留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-//    public Result<String> del(@PathVariable Integer id) {
-//        Wall data = wallService.getById(id);
-//        if (data == null) return Result.error("删除留言失败：该留言不存在");
-//        wallService.removeById(id);
-//        return Result.success();
-//    }
-//
-//    @PremName("wall:del")
-//    @DeleteMapping("/batch")
-//    @ApiOperation("批量删除留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-//    public Result batchDel(@RequestBody List<Integer> ids) {
-//        wallService.removeByIds(ids);
-//        return Result.success();
-//    }
-//
-//    @PremName("wall:edit")
-//    @PatchMapping
-//    @ApiOperation("编辑留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-//    public Result<String> edit(@RequestBody Wall wall) {
-//        wallService.updateById(wall);
-//        return Result.success();
-//    }
-//
-//    @GetMapping("/{id}")
-//    @ApiOperation("获取留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-//    public Result<Wall> get(@PathVariable Integer id) {
-//        Wall data = wallService.get(id);
-//        return Result.success(data);
-//    }
-//
-//    @NoTokenRequired
-//    @PostMapping("/list")
-//    @ApiOperation("获取留言列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-//    public Result<List<Wall>> list(@RequestBody WallFilterVo filterVo) {
-//        List<Wall> list = wallService.list(filterVo);
-//        return Result.success(list);
-//    }
-//
-//    @NoTokenRequired
-//    @PostMapping("/paging")
-//    @ApiOperation("分页查询留言列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-//    public Result paging(@RequestBody WallFilterVo filterVo, PageVo pageVo) {
-//        Page<Wall> list = wallService.paging(filterVo, pageVo);
-//        Map<String, Object> result = Paging.filter(list);
-//        return Result.success(result);
-//    }
-//
-//    @NoTokenRequired
-//    @PostMapping("/cate/{cateId}")
-//    @ApiOperation("获取指定分类中所有留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-//    public Result getCateWallList(@PathVariable Integer cateId, PageVo pageVo) {
-//        Page<Wall> list = wallService.getCateWallList(cateId, pageVo);
-//        Map<String, Object> result = Paging.filter(list);
-//        return Result.success(result);
-//    }
-//
-//    @GetMapping("/cate")
-//    @ApiOperation("获取留言分类列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
-//    public Result getCateList() {
-//        List<WallCate> list = wallService.getCateList();
-//        return Result.success(list);
-//    }
-//
-//    @PremName("wall:audit")
-//    @PatchMapping("/audit/{id}")
-//    @ApiOperation("审核指定留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
-//    public Result auditWall(@PathVariable Integer id) {
-//        Wall data = wallService.getById(id);
-//
-//        if (data == null) throw new CustomException(400, "该留言不存在");
-//
-//        data.setAuditStatus(1);
-//        wallService.updateById(data);
-//        return Result.success();
-//    }
-//
-//    @PremName("wall:choice")
-//    @PatchMapping("/choice/{id}")
-//    @ApiOperation("设置与取消精选留言")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 11)
-//    public Result updateChoice(@PathVariable Integer id) {
-//        wallService.updateChoice(id);
-//        return Result.success();
-//    }
-//
-//}
+package top.luoyuanxiang.thrivex.server.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.entity.WallCateEntity;
+import top.luoyuanxiang.thrivex.server.entity.WallEntity;
+import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.service.IWallCateService;
+import top.luoyuanxiang.thrivex.server.service.IWallService;
+import top.luoyuanxiang.thrivex.server.vo.Paging;
+import top.luoyuanxiang.thrivex.server.vo.Result;
+import top.luoyuanxiang.thrivex.server.vo.WallQueryVO;
+
+import java.util.List;
+
+/**
+ * 留言管理
+ *
+ * @author luoyuanxiang
+ * @since 2025-09-12
+ */
+@RestController
+@RequestMapping("/wall")
+public class WallController {
+
+    @Resource
+    private IWallService wallService;
+    @Resource
+    private IWallCateService wallCateService;
+
+    /**
+     * 新增留言
+     *
+     * @param wall 墙
+     * @return {@link Result }<{@link String }>
+     * @throws Exception 例外
+     */
+    @PostMapping
+    public Result<String> add(@RequestBody WallEntity wall) throws Exception {
+        wallService.add(wall);
+        return Result.success();
+    }
+
+    /**
+     * 删除留言
+     *
+     * @param id id
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("wall:del")
+    @DeleteMapping("/{id}")
+    public Result<String> del(@PathVariable Integer id) {
+        WallEntity data = wallService.getById(id);
+        if (data == null) return Result.error("删除留言失败：该留言不存在");
+        wallService.removeById(id);
+        return Result.success();
+    }
+
+    /**
+     * 批量删除留言
+     *
+     * @param ids 身份证
+     * @return {@link Result }
+     */
+    @HasPermission("wall:del")
+    @DeleteMapping("/batch")
+    public Result<?> batchDel(@RequestBody List<Integer> ids) {
+        wallService.removeByIds(ids);
+        return Result.success();
+    }
+
+    /**
+     * 编辑留言
+     *
+     * @param wall 墙
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("wall:edit")
+    @PatchMapping
+    public Result<String> edit(@RequestBody WallEntity wall) {
+        wallService.updateById(wall);
+        return Result.success();
+    }
+
+    /**
+     * 获取留言
+     *
+     * @param id id
+     * @return {@link Result }<{@link WallEntity }>
+     */
+    @GetMapping("/{id}")
+    public Result<WallEntity> get(@PathVariable Integer id) {
+        WallQueryVO filterVo = new WallQueryVO();
+        filterVo.setId(id);
+        List<WallEntity> list = wallService.list(filterVo);
+        if (list.isEmpty()) return Result.success(null);
+        WallEntity data = list.get(0);
+        return Result.success(data);
+    }
+
+    /**
+     * 获取留言列表
+     *
+     * @param filterVo 过滤 VO
+     * @return {@link Result }<{@link List }<{@link WallEntity }>>
+     */
+    @PostMapping("/list")
+    public Result<List<WallEntity>> list(@RequestBody WallQueryVO filterVo) {
+        List<WallEntity> list = wallService.list(filterVo);
+        return Result.success(list);
+    }
+
+    /**
+     * 分页查询留言列表
+     *
+     * @param filterVo 过滤 VO
+     * @return {@link Result }
+     */
+    @PostMapping("/paging")
+    public Result<Paging<WallEntity>> paging(@RequestBody WallQueryVO filterVo, Integer page, Integer size) {
+        Page<WallEntity> list = wallService.paging(new Page<>(page, size), filterVo);
+        return Result.page(list);
+    }
+
+    /**
+     * 获取指定分类中所有留言
+     *
+     * @param cateId 分类编号
+     * @param page   页
+     * @param size   大小
+     * @return {@link Result }
+     */
+    @PostMapping("/cate/{cateId}")
+    public Result<Paging<WallEntity>> getCateWallList(@PathVariable Integer cateId, Integer page, Integer size) {
+        WallQueryVO wallQueryVO = new WallQueryVO();
+        wallQueryVO.setCateId(cateId);
+        Page<WallEntity> list = wallService.paging(new Page<>(page, size), wallQueryVO);
+        return Result.page(list);
+    }
+
+    /**
+     * 获取留言分类列表
+     *
+     * @return {@link Result }
+     */
+    @GetMapping("/cate")
+    public Result<List<WallCateEntity>> getCateList() {
+        List<WallCateEntity> list = wallCateService.list();
+        return Result.success(list);
+    }
+
+    /**
+     * 审核指定留言
+     *
+     * @param id id
+     * @return {@link Result }<{@link ? }>
+     */
+    @HasPermission("wall:audit")
+    @PatchMapping("/audit/{id}")
+    public Result<?> auditWall(@PathVariable Integer id) {
+        WallEntity data = wallService.getById(id);
+
+        if (data == null) throw new RuntimeException("该留言不存在");
+
+        data.setAuditStatus(1);
+        wallService.updateById(data);
+        return Result.success();
+    }
+
+    /**
+     * 设置与取消精选留言
+     *
+     * @param id id
+     * @return {@link Result }
+     */
+    @HasPermission("wall:choice")
+    @PatchMapping("/choice/{id}")
+    public Result<?> updateChoice(@PathVariable Integer id) {
+        wallService.updateChoice(id);
+        return Result.success();
+    }
+
+}

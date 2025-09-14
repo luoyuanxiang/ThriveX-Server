@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.RouteMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.Route">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.RouteEntity">
         <id column="id" property="id" />
         <result column="path" property="path" />
         <result column="description" property="description" />

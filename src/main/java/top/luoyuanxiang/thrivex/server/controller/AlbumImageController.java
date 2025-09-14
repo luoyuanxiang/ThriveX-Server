@@ -3,7 +3,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.AlbumImage;
+import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IAlbumImageService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -28,13 +28,13 @@ public class AlbumImageController {
     /**
      * 新增照片
      *
-     * @param albumImage 相册图片添加表单 DTO
+     * @param albumImageEntity 相册图片添加表单 DTO
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("album_image:add")
     @PostMapping
-    public Result<String> add(@RequestBody AlbumImage albumImage) {
-        albumImage.insert();
+    public Result<String> add(@RequestBody AlbumImageEntity albumImageEntity) {
+        albumImageEntity.insert();
         return Result.success();
     }
 
@@ -67,13 +67,13 @@ public class AlbumImageController {
     /**
      * 编辑照片
      *
-     * @param albumImage 相册图片
+     * @param albumImageEntity 相册图片
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("album_image:edit")
     @PatchMapping
-    public Result<String> edit(@RequestBody AlbumImage albumImage) {
-        albumImage.updateById();
+    public Result<String> edit(@RequestBody AlbumImageEntity albumImageEntity) {
+        albumImageEntity.updateById();
         return Result.success();
     }
 
@@ -81,23 +81,23 @@ public class AlbumImageController {
      * 获取照片
      *
      * @param id id
-     * @return {@link Result }<{@link AlbumImage }>
+     * @return {@link Result }<{@link AlbumImageEntity }>
      */
     @GetMapping("/{id}")
-    public Result<AlbumImage> get(@PathVariable Integer id) {
-        AlbumImage albumImage = albumImageService.getById(id);
-        return Result.success(albumImage);
+    public Result<AlbumImageEntity> get(@PathVariable Integer id) {
+        AlbumImageEntity albumImageEntity = albumImageService.getById(id);
+        return Result.success(albumImageEntity);
     }
 
     /**
      * 获取照片列表
      *
-     * @return {@link Result }<{@link List }<{@link AlbumImage }>>
+     * @return {@link Result }<{@link List }<{@link AlbumImageEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<AlbumImage>> list() {
-        List<AlbumImage> albumImages = albumImageService.list();
-        return Result.success(albumImages);
+    public Result<List<AlbumImageEntity>> list() {
+        List<AlbumImageEntity> albumImageEntities = albumImageService.list();
+        return Result.success(albumImageEntities);
     }
 
     /**
@@ -108,9 +108,9 @@ public class AlbumImageController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<AlbumImage>> paging(@RequestParam(defaultValue = "1") Integer page,
-                                             @RequestParam(defaultValue = "10") Integer size) {
-        Page<AlbumImage> albumImagePage = albumImageService.page(new Page<>(page, size));
+    public Result<Paging<AlbumImageEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
+                                                   @RequestParam(defaultValue = "10") Integer size) {
+        Page<AlbumImageEntity> albumImagePage = albumImageService.page(new Page<>(page, size));
         return Result.page(albumImagePage);
     }
 

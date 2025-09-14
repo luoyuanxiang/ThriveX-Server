@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.AlbumImageMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.AlbumImage">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="description" property="description" />

@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
-import top.luoyuanxiang.thrivex.server.entity.Permission;
+import top.luoyuanxiang.thrivex.server.entity.PermissionEntity;
 import top.luoyuanxiang.thrivex.server.mapper.PermissionMapper;
 import top.luoyuanxiang.thrivex.server.service.IPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2025-09-12
  */
 @Service
-public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements IPermissionService {
+public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PermissionEntity> implements IPermissionService {
 
 }

@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.FileDetail;
+import top.luoyuanxiang.thrivex.server.entity.FileDetailEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface IFileDetailService extends IService<FileDetail> {
+public interface IFileDetailService extends IService<FileDetailEntity> {
 
 }

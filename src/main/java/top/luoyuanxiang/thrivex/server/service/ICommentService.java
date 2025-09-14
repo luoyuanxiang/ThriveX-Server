@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.Comment;
+import top.luoyuanxiang.thrivex.server.entity.CommentEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface ICommentService extends IService<Comment> {
+public interface ICommentService extends IService<CommentEntity> {
 
 }

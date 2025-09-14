@@ -3,7 +3,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.Tag;
+import top.luoyuanxiang.thrivex.server.entity.TagEntity;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ITagService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -27,13 +27,13 @@ public class TagController {
     /**
      * 新增标签
      *
-     * @param tag 标记
+     * @param tagEntity 标记
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("tag:add")
     @PostMapping
-    public Result<String> add(@RequestBody Tag tag) {
-        tagService.save(tag);
+    public Result<String> add(@RequestBody TagEntity tagEntity) {
+        tagService.save(tagEntity);
         return Result.success();
     }
 
@@ -46,7 +46,7 @@ public class TagController {
     @HasPermission("tag:del")
     @DeleteMapping("/{id}")
     public Result<String> del(@PathVariable Integer id) {
-        Tag data = tagService.getById(id);
+        TagEntity data = tagService.getById(id);
         if (data == null) return Result.error("该数据不存在");
         tagService.removeById(id);
         return Result.success();
@@ -68,13 +68,13 @@ public class TagController {
     /**
      * 编辑标签
      *
-     * @param tag 标记
+     * @param tagEntity 标记
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("tag:edit")
     @PatchMapping
-    public Result<String> edit(@RequestBody Tag tag) {
-        tagService.updateById(tag);
+    public Result<String> edit(@RequestBody TagEntity tagEntity) {
+        tagService.updateById(tagEntity);
         return Result.success();
     }
 
@@ -83,22 +83,22 @@ public class TagController {
      * 获取标签
      *
      * @param id id
-     * @return {@link Result }<{@link Tag }>
+     * @return {@link Result }<{@link TagEntity }>
      */
     @GetMapping("/{id}")
-    public Result<Tag> get(@PathVariable Integer id) {
-        Tag data = tagService.getById(id);
+    public Result<TagEntity> get(@PathVariable Integer id) {
+        TagEntity data = tagService.getById(id);
         return Result.success(data);
     }
 
     /**
      * 获取标签列表
      *
-     * @return {@link Result }<{@link List }<{@link Tag }>>
+     * @return {@link Result }<{@link List }<{@link TagEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<Tag>> list() {
-        List<Tag> data = tagService.list();
+    public Result<List<TagEntity>> list() {
+        List<TagEntity> data = tagService.list();
         return Result.success(data);
     }
 
@@ -110,9 +110,9 @@ public class TagController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<Tag>> paging(@RequestParam(defaultValue = "1") Integer page,
-                         @RequestParam(defaultValue = "5") Integer size) {
-        Page<Tag> data = tagService.page(new Page<>(page, size));
+    public Result<Paging<TagEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
+                                            @RequestParam(defaultValue = "5") Integer size) {
+        Page<TagEntity> data = tagService.page(new Page<>(page, size));
         return Result.page(data);
     }
 
@@ -122,8 +122,8 @@ public class TagController {
      * @return {@link Result }
      */
     @GetMapping("/article/count")
-    public Result<List<Tag>> staticArticleCount() {
-        List<Tag> list = tagService.staticArticleCount();
+    public Result<List<TagEntity>> staticArticleCount() {
+        List<TagEntity> list = tagService.staticArticleCount();
         return Result.success(list);
     }
 

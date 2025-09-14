@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.AlbumCate;
-import top.luoyuanxiang.thrivex.server.entity.AlbumImage;
+import top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity;
+import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IAlbumCateService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -30,13 +30,13 @@ public class AlbumCateController {
      *
      * 新增相册
      *
-     * @param albumCate 相册
+     * @param albumCateEntity 相册
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("album_cate:add")
     @PostMapping
-    public Result<String> add(@RequestBody AlbumCate albumCate) {
-        albumCate.insert();
+    public Result<String> add(@RequestBody AlbumCateEntity albumCateEntity) {
+        albumCateEntity.insert();
         return Result.success();
     }
 
@@ -69,13 +69,13 @@ public class AlbumCateController {
     /**
      * 编辑相册
      *
-     * @param albumCate 专辑凯特
+     * @param albumCateEntity 专辑凯特
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("album_cate:edit")
     @PatchMapping
-    public Result<String> edit(@RequestBody AlbumCate albumCate) {
-        albumCateService.updateById(albumCate);
+    public Result<String> edit(@RequestBody AlbumCateEntity albumCateEntity) {
+        albumCateService.updateById(albumCateEntity);
         return Result.success();
     }
 
@@ -83,26 +83,26 @@ public class AlbumCateController {
      * 获取相册
      *
      * @param id id
-     * @return {@link Result }<{@link AlbumCate }>
+     * @return {@link Result }<{@link AlbumCateEntity }>
      */
     @PermitAll
     @GetMapping("/{id}")
-    public Result<AlbumCate> get(@PathVariable Integer id) {
-        AlbumCate albumCate = albumCateService.getById(id);
-        if (albumCate == null) return Result.error("该相册不存在");
-        return Result.success(albumCate);
+    public Result<AlbumCateEntity> get(@PathVariable Integer id) {
+        AlbumCateEntity albumCateEntity = albumCateService.getById(id);
+        if (albumCateEntity == null) return Result.error("该相册不存在");
+        return Result.success(albumCateEntity);
     }
 
     /**
      * 获取相册列表
      *
-     * @return {@link Result }<{@link List }<{@link AlbumCate }>>
+     * @return {@link Result }<{@link List }<{@link AlbumCateEntity }>>
      */
     @HasPermission("album_cate:edit")
     @PostMapping("/list")
-    public Result<List<AlbumCate>> list() {
-        List<AlbumCate> albumCates = albumCateService.list();
-        return Result.success(albumCates);
+    public Result<List<AlbumCateEntity>> list() {
+        List<AlbumCateEntity> albumCateEntities = albumCateService.list();
+        return Result.success(albumCateEntities);
     }
 
     /**
@@ -113,9 +113,9 @@ public class AlbumCateController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<AlbumCate>> paging(@RequestParam(defaultValue = "1") Integer page,
-                                            @RequestParam(defaultValue = "10") Integer size) {
-        Page<AlbumCate> result = albumCateService.paging(page, size);
+    public Result<Paging<AlbumCateEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
+                                                  @RequestParam(defaultValue = "10") Integer size) {
+        Page<AlbumCateEntity> result = albumCateService.paging(page, size);
         return Result.page(result);
     }
 
@@ -128,10 +128,10 @@ public class AlbumCateController {
      * @return {@link Result }
      */
     @GetMapping("/{id}/images")
-    public Result<Paging<AlbumImage>> getImagesByAlbumId(@PathVariable Integer id,
-                                                         @RequestParam(defaultValue = "1") Integer page,
-                                                         @RequestParam(defaultValue = "10") Integer size) {
-        Page<AlbumImage> data = albumCateService.getImagesByAlbumId(id, page, size);
+    public Result<Paging<AlbumImageEntity>> getImagesByAlbumId(@PathVariable Integer id,
+                                                               @RequestParam(defaultValue = "1") Integer page,
+                                                               @RequestParam(defaultValue = "10") Integer size) {
+        Page<AlbumImageEntity> data = albumCateService.getImagesByAlbumId(id, page, size);
         return Result.page(data);
     }
 }

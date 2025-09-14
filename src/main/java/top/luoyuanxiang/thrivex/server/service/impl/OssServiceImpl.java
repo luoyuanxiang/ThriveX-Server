@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
-import top.luoyuanxiang.thrivex.server.entity.Oss;
+import top.luoyuanxiang.thrivex.server.entity.OssEntity;
 import top.luoyuanxiang.thrivex.server.mapper.OssMapper;
 import top.luoyuanxiang.thrivex.server.service.IOssService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2025-09-12
  */
 @Service
-public class OssServiceImpl extends ServiceImpl<OssMapper, Oss> implements IOssService {
+public class OssServiceImpl extends ServiceImpl<OssMapper, OssEntity> implements IOssService {
 
 }

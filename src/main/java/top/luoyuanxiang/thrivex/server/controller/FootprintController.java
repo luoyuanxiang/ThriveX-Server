@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.Footprint;
+import top.luoyuanxiang.thrivex.server.entity.FootprintEntity;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IFootprintService;
 import top.luoyuanxiang.thrivex.server.vo.QueryCommonVO;
@@ -26,13 +26,13 @@ public class FootprintController {
     /**
      * 新增足迹
      *
-     * @param footprint 脚印
+     * @param footprintEntity 脚印
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("footprint:add")
     @PostMapping
-    public Result<String> add(@RequestBody Footprint footprint) {
-        footprintService.save(footprint);
+    public Result<String> add(@RequestBody FootprintEntity footprintEntity) {
+        footprintService.save(footprintEntity);
         return Result.success();
     }
 
@@ -65,13 +65,13 @@ public class FootprintController {
     /**
      * 编辑足迹
      *
-     * @param footprint 脚印
+     * @param footprintEntity 脚印
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("footprint:edit")
     @PatchMapping
-    public Result<String> edit(@RequestBody Footprint footprint) {
-        footprintService.updateById(footprint);
+    public Result<String> edit(@RequestBody FootprintEntity footprintEntity) {
+        footprintService.updateById(footprintEntity);
         return Result.success();
     }
 
@@ -79,11 +79,11 @@ public class FootprintController {
      * 获取足迹
      *
      * @param id id
-     * @return {@link Result }<{@link Footprint }>
+     * @return {@link Result }<{@link FootprintEntity }>
      */
     @GetMapping("/{id}")
-    public Result<Footprint> get(@PathVariable Integer id) {
-        Footprint data = footprintService.getById(id);
+    public Result<FootprintEntity> get(@PathVariable Integer id) {
+        FootprintEntity data = footprintService.getById(id);
         return Result.success(data);
     }
 
@@ -91,11 +91,11 @@ public class FootprintController {
      * 获取足迹列表
      *
      * @param queryCommonVO 查询VO
-     * @return {@link Result }<{@link List }<{@link Footprint }>>
+     * @return {@link Result }<{@link List }<{@link FootprintEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<Footprint>> list(@RequestBody QueryCommonVO queryCommonVO) {
-        List<Footprint> data = footprintService.list(queryCommonVO);
+    public Result<List<FootprintEntity>> list(@RequestBody QueryCommonVO queryCommonVO) {
+        List<FootprintEntity> data = footprintService.list(queryCommonVO);
         return Result.success(data);
     }
 

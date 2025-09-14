@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.luoyuanxiang.thrivex.server.entity.RouteRole;
+import top.luoyuanxiang.thrivex.server.entity.RouteRoleEntity;
 
 /**
  * <p>
@@ -13,6 +13,6 @@ import top.luoyuanxiang.thrivex.server.entity.RouteRole;
  * @since 2025-09-12
  */
 @Mapper
-public interface RouteRoleMapper extends BaseMapper<RouteRole> {
+public interface RouteRoleMapper extends BaseMapper<RouteRoleEntity> {
 
 }

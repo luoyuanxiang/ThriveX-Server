@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.ArticleConfig;
+import top.luoyuanxiang.thrivex.server.entity.ArticleConfigEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface IArticleConfigService extends IService<ArticleConfig> {
+public interface IArticleConfigService extends IService<ArticleConfigEntity> {
 
 }

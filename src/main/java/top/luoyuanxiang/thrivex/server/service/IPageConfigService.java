@@ -1,7 +1,9 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.PageConfig;
+import top.luoyuanxiang.thrivex.server.entity.PageConfigEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -11,6 +13,22 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface IPageConfigService extends IService<PageConfig> {
+public interface IPageConfigService extends IService<PageConfigEntity> {
 
+    /**
+     * 根据名称获取页面配置
+     *
+     * @param name 名字
+     * @return {@link PageConfigEntity }
+     */
+    PageConfigEntity getByName(String name);
+
+    /**
+     * 根据ID更新页面配置
+     *
+     * @param id        id
+     * @param jsonValue json 值
+     * @return boolean
+     */
+    boolean updateJsonValue(Integer id, Map<String, Object> jsonValue);
 }

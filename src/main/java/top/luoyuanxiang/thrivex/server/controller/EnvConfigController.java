@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.EnvConfig;
+import top.luoyuanxiang.thrivex.server.entity.EnvConfigEntity;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IEnvConfigService;
 import top.luoyuanxiang.thrivex.server.vo.Result;
@@ -26,12 +26,12 @@ public class EnvConfigController {
     /**
      * 获取环境配置列表
      *
-     * @return {@link Result }<{@link List }<{@link EnvConfig }>>
+     * @return {@link Result }<{@link List }<{@link EnvConfigEntity }>>
      */
     @HasPermission("config")
     @GetMapping("/list")
-    public Result<List<EnvConfig>> list() {
-        List<EnvConfig> data = envConfigService.list();
+    public Result<List<EnvConfigEntity>> list() {
+        List<EnvConfigEntity> data = envConfigService.list();
         return Result.success("获取成功", data);
     }
 
@@ -39,26 +39,26 @@ public class EnvConfigController {
      * 根据ID获取环境配置
      *
      * @param id id
-     * @return {@link Result }<{@link EnvConfig }>
+     * @return {@link Result }<{@link EnvConfigEntity }>
      */
     @HasPermission("config")
     @GetMapping("/{id}")
-    public Result<EnvConfig> getById(@PathVariable Integer id) {
-        EnvConfig envConfig = envConfigService.getById(id);
-        return envConfig != null ? Result.success("获取成功", envConfig) : Result.error("配置不存在");
+    public Result<EnvConfigEntity> getById(@PathVariable Integer id) {
+        EnvConfigEntity envConfigEntity = envConfigService.getById(id);
+        return envConfigEntity != null ? Result.success("获取成功", envConfigEntity) : Result.error("配置不存在");
     }
 
     /**
      * 根据名称获取环境配置
      *
      * @param name 名字
-     * @return {@link Result }<{@link EnvConfig }>
+     * @return {@link Result }<{@link EnvConfigEntity }>
      */
     @HasPermission("config")
     @GetMapping("/name/{name}")
-    public Result<EnvConfig> getByName(@PathVariable String name) {
-        EnvConfig envConfig = envConfigService.getByName(name);
-        return envConfig != null ? Result.success("获取成功", envConfig) : Result.error("配置不存在");
+    public Result<EnvConfigEntity> getByName(@PathVariable String name) {
+        EnvConfigEntity envConfigEntity = envConfigService.getByName(name);
+        return envConfigEntity != null ? Result.success("获取成功", envConfigEntity) : Result.error("配置不存在");
     }
 
     /**
@@ -100,7 +100,7 @@ public class EnvConfigController {
      */
     @GetMapping("/gaode_map")
     public Result<Map<String, Object>> getGaodeMapConfig() {
-        EnvConfig envConfig = envConfigService.getByName("gaode_map");
-        return Result.success(envConfig.getValue());
+        EnvConfigEntity envConfigEntity = envConfigService.getByName("gaode_map");
+        return Result.success(envConfigEntity.getValue());
     }
 }

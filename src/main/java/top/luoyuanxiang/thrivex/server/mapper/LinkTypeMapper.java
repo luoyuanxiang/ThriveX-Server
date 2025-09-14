@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.luoyuanxiang.thrivex.server.entity.LinkType;
+import top.luoyuanxiang.thrivex.server.entity.LinkTypeEntity;
 
 /**
  * <p>
@@ -13,6 +13,6 @@ import top.luoyuanxiang.thrivex.server.entity.LinkType;
  * @since 2025-09-12
  */
 @Mapper
-public interface LinkTypeMapper extends BaseMapper<LinkType> {
+public interface LinkTypeMapper extends BaseMapper<LinkTypeEntity> {
 
 }

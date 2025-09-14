@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
-import top.luoyuanxiang.thrivex.server.entity.Comment;
+import top.luoyuanxiang.thrivex.server.entity.CommentEntity;
 import top.luoyuanxiang.thrivex.server.mapper.CommentMapper;
 import top.luoyuanxiang.thrivex.server.service.ICommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2025-09-12
  */
 @Service
-public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements ICommentService {
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity> implements ICommentService {
 
 }

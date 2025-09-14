@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.luoyuanxiang.thrivex.server.entity.WallCate;
+import top.luoyuanxiang.thrivex.server.entity.WallCateEntity;
 
 /**
  * <p>
@@ -13,6 +13,6 @@ import top.luoyuanxiang.thrivex.server.entity.WallCate;
  * @since 2025-09-12
  */
 @Mapper
-public interface WallCateMapper extends BaseMapper<WallCate> {
+public interface WallCateMapper extends BaseMapper<WallCateEntity> {
 
 }

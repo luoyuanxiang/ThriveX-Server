@@ -10,8 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.luoyuanxiang.thrivex.server.entity.Link;
-import top.luoyuanxiang.thrivex.server.entity.LinkType;
+import top.luoyuanxiang.thrivex.server.entity.LinkEntity;
+import top.luoyuanxiang.thrivex.server.entity.LinkTypeEntity;
 import top.luoyuanxiang.thrivex.server.mapper.LinkMapper;
 import top.luoyuanxiang.thrivex.server.service.ILinkService;
 import top.luoyuanxiang.thrivex.server.service.ILinkTypeService;
@@ -31,62 +31,62 @@ import java.util.Objects;
  * @since 2025-09-12
  */
 @Service
-public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements ILinkService {
+public class LinkServiceImpl extends ServiceImpl<LinkMapper, LinkEntity> implements ILinkService {
 
     @Resource
     private ILinkTypeService linkTypeService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(Link link) {
+    public void add(LinkEntity linkEntity) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 标准化URL格式（移除尾部斜杠，统一协议等）
-        String normalizedUrl = normalizeUrl(link.getUrl());
-        link.setUrl(normalizedUrl);
+        String normalizedUrl = normalizeUrl(linkEntity.getUrl());
+        linkEntity.setUrl(normalizedUrl);
         long count = lambdaQuery()
-                .eq(Link::getUrl, normalizedUrl)
+                .eq(LinkEntity::getUrl, normalizedUrl)
                 .count();
         if (count > 0) throw new RuntimeException("该网站已存在");
         // 前端用户手动提交
         if (Objects.isNull(authentication)) {
             // 添加之前先判断所选的网站类型是否为当前用户可选的
-            LinkType linkType = linkTypeService.getById(link.getTypeId());
-            Integer isAdmin = linkType.getIsAdmin();
+            LinkTypeEntity linkTypeEntity = linkTypeService.getById(linkEntity.getTypeId());
+            Integer isAdmin = linkTypeEntity.getIsAdmin();
             if (isAdmin == 1) throw new RuntimeException("该类型需要管理员权限才能添加");
-            link.insert();
+            linkEntity.insert();
             // 邮件提醒
 //            emailUtils.send(null, "您有新的友联等待审核", link.toString());
             return;
         }
         // 如果没有设置 order 则放在最后
-        if (link.getOrder() == null) {
+        if (linkEntity.getOrder() == null) {
             // 查询当前类型下的网站数量
-            List<Link> links = lambdaQuery()
-                    .eq(Link::getTypeId, link.getTypeId())
+            List<LinkEntity> linkEntities = lambdaQuery()
+                    .eq(LinkEntity::getTypeId, linkEntity.getTypeId())
                     .list();
-            link.setOrder(links.size() + 1);
+            linkEntity.setOrder(linkEntities.size() + 1);
         }
         // 判断权限
         // 如果是超级管理员在添加时候不需要审核，直接显示
-        link.setAuditStatus(1);
-        link.insert();
+        linkEntity.setAuditStatus(1);
+        linkEntity.insert();
     }
 
     @Override
-    public List<Link> list(LinkQueryVO linkQueryVO) {
+    public List<LinkEntity> list(LinkQueryVO linkQueryVO) {
         return baseMapper.list(linkQueryVO);
     }
 
     @Override
-    public Page<Link> paging(Page<Link> page, LinkQueryVO filterVo) {
+    public Page<LinkEntity> paging(Page<LinkEntity> page, LinkQueryVO filterVo) {
         return baseMapper.paging(page, filterVo);
     }
 
     @Override
-    public Link fetchWebsiteInfo(String url) throws Exception {
-        Link link = new Link();
+    public LinkEntity fetchWebsiteInfo(String url) throws Exception {
+        LinkEntity linkEntity = new LinkEntity();
         url = normalizeUrl(url);
-        link.setUrl(url);
+        linkEntity.setUrl(url);
         // 使用Jsoup连接并解析网页
         Document document = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
@@ -95,20 +95,20 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements IL
                 .get();
         // 获取标题
         String title = document.title();
-        link.setTitle(title);
+        linkEntity.setTitle(title);
         // 获取描述
         Element metaDescription = document.select("meta[name=description]").first();
         if (metaDescription != null) {
-            link.setDescription(metaDescription.attr("content"));
+            linkEntity.setDescription(metaDescription.attr("content"));
         }
 
         // 获取域名
         URL urlObj = new URL(url);
         // 获取favicon
         String faviconUrl = getFaviconUrl(document, urlObj);
-        link.setImage(faviconUrl);
+        linkEntity.setImage(faviconUrl);
 
-        return link;
+        return linkEntity;
     }
 
     /**

@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.EnvConfig;
+import top.luoyuanxiang.thrivex.server.entity.EnvConfigEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
@@ -13,15 +13,15 @@ import java.util.Map;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface IEnvConfigService extends IService<EnvConfig> {
+public interface IEnvConfigService extends IService<EnvConfigEntity> {
 
     /**
      * 按名称获取
      *
      * @param name 名字
-     * @return {@link EnvConfig }
+     * @return {@link EnvConfigEntity }
      */
-    EnvConfig getByName(String name);
+    EnvConfigEntity getByName(String name);
 
     /**
      * 更新 JSON 值

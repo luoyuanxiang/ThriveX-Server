@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.ArticleConfigMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.ArticleConfig">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.ArticleConfigEntity">
         <id column="id" property="id" />
         <result column="status" property="status" />
         <result column="password" property="password" />

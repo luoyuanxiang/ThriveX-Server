@@ -3,7 +3,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.Swiper;
+import top.luoyuanxiang.thrivex.server.entity.SwiperEntity;
 import top.luoyuanxiang.thrivex.server.security.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ISwiperService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -27,13 +27,13 @@ public class SwiperController {
     /**
      * 新增轮播图
      *
-     * @param swiper 刷头
+     * @param swiperEntity 刷头
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("swiper:add")
     @PostMapping
-    public Result<String> add(@RequestBody Swiper swiper) {
-        boolean res = swiperService.save(swiper);
+    public Result<String> add(@RequestBody SwiperEntity swiperEntity) {
+        boolean res = swiperService.save(swiperEntity);
         return res ? Result.success() : Result.error();
     }
 
@@ -46,7 +46,7 @@ public class SwiperController {
     @HasPermission("swiper:del")
     @DeleteMapping("/{id}")
     public Result<String> del(@PathVariable Integer id) {
-        Swiper data = swiperService.getById(id);
+        SwiperEntity data = swiperService.getById(id);
         if (data == null) return Result.error("该数据不存在");
 
         boolean res = swiperService.removeById(id);
@@ -71,13 +71,13 @@ public class SwiperController {
     /**
      * 编辑轮播图
      *
-     * @param swiper 刷头
+     * @param swiperEntity 刷头
      * @return {@link Result }<{@link String }>
      */
     @HasPermission("swiper:edit")
     @PatchMapping
-    public Result<String> edit(@RequestBody Swiper swiper) {
-        boolean res = swiperService.updateById(swiper);
+    public Result<String> edit(@RequestBody SwiperEntity swiperEntity) {
+        boolean res = swiperService.updateById(swiperEntity);
 
         return res ? Result.success() : Result.error();
     }
@@ -86,22 +86,22 @@ public class SwiperController {
      * 获取轮播图
      *
      * @param id id
-     * @return {@link Result }<{@link Swiper }>
+     * @return {@link Result }<{@link SwiperEntity }>
      */
     @GetMapping("/{id}")
-    public Result<Swiper> get(@PathVariable Integer id) {
-        Swiper data = swiperService.getById(id);
+    public Result<SwiperEntity> get(@PathVariable Integer id) {
+        SwiperEntity data = swiperService.getById(id);
         return Result.success(data);
     }
 
     /**
      * 获取轮播图列表
      *
-     * @return {@link Result }<{@link List }<{@link Swiper }>>
+     * @return {@link Result }<{@link List }<{@link SwiperEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<Swiper>> list() {
-        List<Swiper> data = swiperService.list();
+    public Result<List<SwiperEntity>> list() {
+        List<SwiperEntity> data = swiperService.list();
         return Result.success(data);
     }
 
@@ -113,8 +113,8 @@ public class SwiperController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<Swiper>> paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
-        Page<Swiper> data = swiperService.page(new Page<>(page, size));
+    public Result<Paging<SwiperEntity>> paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
+        Page<SwiperEntity> data = swiperService.page(new Page<>(page, size));
         return Result.page(data);
     }
 

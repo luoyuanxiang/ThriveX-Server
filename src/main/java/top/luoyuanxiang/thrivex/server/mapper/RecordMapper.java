@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.luoyuanxiang.thrivex.server.entity.Record;
+import top.luoyuanxiang.thrivex.server.entity.RecordEntity;
 
 /**
  * <p>
@@ -13,6 +13,6 @@ import top.luoyuanxiang.thrivex.server.entity.Record;
  * @since 2025-09-12
  */
 @Mapper
-public interface RecordMapper extends BaseMapper<Record> {
+public interface RecordMapper extends BaseMapper<RecordEntity> {
 
 }

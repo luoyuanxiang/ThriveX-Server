@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
-import top.luoyuanxiang.thrivex.server.entity.Record;
+import top.luoyuanxiang.thrivex.server.entity.RecordEntity;
 import top.luoyuanxiang.thrivex.server.mapper.RecordMapper;
 import top.luoyuanxiang.thrivex.server.service.IRecordService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2025-09-12
  */
 @Service
-public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements IRecordService {
+public class RecordServiceImpl extends ServiceImpl<RecordMapper, RecordEntity> implements IRecordService {
 
 }

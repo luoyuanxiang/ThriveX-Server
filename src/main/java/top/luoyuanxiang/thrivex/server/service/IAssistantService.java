@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.Assistant;
+import top.luoyuanxiang.thrivex.server.entity.AssistantEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author luoyuanxiang
  * @since 2025-09-12
  */
-public interface IAssistantService extends IService<Assistant> {
+public interface IAssistantService extends IService<AssistantEntity> {
 
 }

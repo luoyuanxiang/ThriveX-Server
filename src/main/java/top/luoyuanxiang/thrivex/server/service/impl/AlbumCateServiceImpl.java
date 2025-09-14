@@ -2,8 +2,8 @@ package top.luoyuanxiang.thrivex.server.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
-import top.luoyuanxiang.thrivex.server.entity.AlbumCate;
-import top.luoyuanxiang.thrivex.server.entity.AlbumImage;
+import top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity;
+import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
 import top.luoyuanxiang.thrivex.server.mapper.AlbumCateMapper;
 import top.luoyuanxiang.thrivex.server.service.IAlbumCateService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,20 +19,20 @@ import top.luoyuanxiang.thrivex.server.service.IAlbumImageService;
  * @since 2025-09-12
  */
 @Service
-public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCate> implements IAlbumCateService {
+public class AlbumCateServiceImpl extends ServiceImpl<AlbumCateMapper, AlbumCateEntity> implements IAlbumCateService {
 
     @Resource
     private IAlbumImageService albumImageService;
 
     @Override
-    public Page<AlbumCate> paging(Integer page, Integer size) {
+    public Page<AlbumCateEntity> paging(Integer page, Integer size) {
         return baseMapper.paging(new Page<>(page, size));
     }
 
     @Override
-    public Page<AlbumImage> getImagesByAlbumId(Integer id, Integer page, Integer size) {
+    public Page<AlbumImageEntity> getImagesByAlbumId(Integer id, Integer page, Integer size) {
         return albumImageService.lambdaQuery()
-                .eq(AlbumImage::getCateId, id)
+                .eq(AlbumImageEntity::getCateId, id)
                 .page(new Page<>(page, size));
     }
 }

@@ -2,7 +2,7 @@ package top.luoyuanxiang.thrivex.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import top.luoyuanxiang.thrivex.server.entity.Comment;
+import top.luoyuanxiang.thrivex.server.entity.CommentEntity;
 
 /**
  * <p>
@@ -13,6 +13,6 @@ import top.luoyuanxiang.thrivex.server.entity.Comment;
  * @since 2025-09-12
  */
 @Mapper
-public interface CommentMapper extends BaseMapper<Comment> {
+public interface CommentMapper extends BaseMapper<CommentEntity> {
 
 }

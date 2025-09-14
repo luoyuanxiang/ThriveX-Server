@@ -3,7 +3,7 @@
 <mapper namespace="top.luoyuanxiang.thrivex.server.mapper.SwiperMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.Swiper">
+    <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.SwiperEntity">
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="description" property="description" />

@@ -8,8 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import top.luoyuanxiang.thrivex.server.entity.Role;
-import top.luoyuanxiang.thrivex.server.entity.User;
+import top.luoyuanxiang.thrivex.server.entity.RoleEntity;
+import top.luoyuanxiang.thrivex.server.entity.UserEntity;
 import top.luoyuanxiang.thrivex.server.security.JwtUtils;
 import top.luoyuanxiang.thrivex.server.security.UserDetailsImpl;
 import top.luoyuanxiang.thrivex.server.service.IUserService;
@@ -44,7 +44,7 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwt = jwtUtils.generateToken(userDetails);
 
-        return Result.success(new JwtResponse(userDetails.user(), userDetails.user().getRole(), jwt));
+        return Result.success(new JwtResponse(userDetails.userEntity(), userDetails.userEntity().getRoleEntity(), jwt));
     }
 
     /**
@@ -60,12 +60,12 @@ public class AuthController {
     /**
      * 登录响应体
      *
-     * @param user  用户信息
-     * @param role  角色信息
+     * @param userEntity  用户信息
+     * @param roleEntity  角色信息
      * @param token JWT令牌
      * @author luoyuanxiang
      */
-    public record JwtResponse(User user, Role role, String token) {
+    public record JwtResponse(UserEntity userEntity, RoleEntity roleEntity, String token) {
 
     }
 }

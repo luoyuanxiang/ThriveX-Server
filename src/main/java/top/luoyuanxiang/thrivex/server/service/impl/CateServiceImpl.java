@@ -1,7 +1,7 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import top.luoyuanxiang.thrivex.server.entity.Cate;
+import top.luoyuanxiang.thrivex.server.entity.CateEntity;
 import top.luoyuanxiang.thrivex.server.mapper.CateMapper;
 import top.luoyuanxiang.thrivex.server.service.ICateService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -21,11 +21,11 @@ import java.util.Objects;
  * @since 2025-09-12
  */
 @Service
-public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements ICateService {
+public class CateServiceImpl extends ServiceImpl<CateMapper, CateEntity> implements ICateService {
 
     @Override
-    public List<Cate> list(String pattern) {
-        List<Cate> list = list();
+    public List<CateEntity> list(String pattern) {
+        List<CateEntity> list = list();
         if (Objects.equals("list", pattern)) {
             return list;
         }
@@ -33,32 +33,32 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, Cate> implements IC
     }
 
     @Override
-    public List<Cate> buildCateTree(List<Cate> list, Integer lever) {
-        List<Cate> children = new ArrayList<>();
-        for (Cate cate : list) {
-            if (cate.getLevel().equals(lever)) {
-                cate.setChildren(buildCateTree(list, cate.getId()));
-                children.add(cate);
+    public List<CateEntity> buildCateTree(List<CateEntity> list, Integer lever) {
+        List<CateEntity> children = new ArrayList<>();
+        for (CateEntity cateEntity : list) {
+            if (cateEntity.getLevel().equals(lever)) {
+                cateEntity.setChildren(buildCateTree(list, cateEntity.getId()));
+                children.add(cateEntity);
             }
         }
         return children;
     }
 
     @Override
-    public Page<Cate> paging(Integer page, Integer size) {
-        List<Cate> list = lambdaQuery()
-                .orderByAsc(Cate::getOrder)
+    public Page<CateEntity> paging(Integer page, Integer size) {
+        List<CateEntity> list = lambdaQuery()
+                .orderByAsc(CateEntity::getOrder)
                 .list();
-        List<Cate> buildCateTree = buildCateTree(list, 0);
+        List<CateEntity> buildCateEntityTree = buildCateTree(list, 0);
         // 分页处理
         int start = (page - 1) * size;
-        int end = Math.min(start + size, buildCateTree.size());
-        List<Cate> pagedCates = buildCateTree.subList(start, end);
+        int end = Math.min(start + size, buildCateEntityTree.size());
+        List<CateEntity> pagedCateEntities = buildCateEntityTree.subList(start, end);
 
         // 返回分页结果
-        Page<Cate> result = new Page<>(page, size);
-        result.setRecords(pagedCates);
-        result.setTotal(buildCateTree.size());
+        Page<CateEntity> result = new Page<>(page, size);
+        result.setRecords(pagedCateEntities);
+        result.setTotal(buildCateEntityTree.size());
         return result;
     }
 

@@ -1,6 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
-import top.luoyuanxiang.thrivex.server.entity.Footprint;
+import top.luoyuanxiang.thrivex.server.entity.FootprintEntity;
 import top.luoyuanxiang.thrivex.server.mapper.FootprintMapper;
 import top.luoyuanxiang.thrivex.server.service.IFootprintService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,10 +18,10 @@ import java.util.List;
  * @since 2025-09-12
  */
 @Service
-public class FootprintServiceImpl extends ServiceImpl<FootprintMapper, Footprint> implements IFootprintService {
+public class FootprintServiceImpl extends ServiceImpl<FootprintMapper, FootprintEntity> implements IFootprintService {
 
     @Override
-    public List<Footprint> list(QueryCommonVO queryCommonVO) {
+    public List<FootprintEntity> list(QueryCommonVO queryCommonVO) {
         return list(queryCommonVO.buildQueryWrapper("address"));
     }
 }
