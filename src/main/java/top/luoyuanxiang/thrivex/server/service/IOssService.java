@@ -13,4 +13,31 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOssService extends IService<OssEntity> {
 
+    /**
+     * 新增 oss 配置
+     *
+     * @param oss OSS
+     */
+    void saveOss(OssEntity oss);
+
+    /**
+     * del oss
+     *
+     * @param id id
+     */
+    void delOss(Integer id);
+
+    /**
+     * 更新oss配置
+     *
+     * @param oss OSS
+     */
+    void updateOss(OssEntity oss);
+
+    /**
+     * 启用oss配置
+     *
+     * @param id id
+     */
+    void enable(Integer id);
 }

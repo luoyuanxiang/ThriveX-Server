@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class QueryCommonVO implements Serializable {
+public class QueryCommonVO<T> implements Serializable {
 
     /**
      * 关键字
@@ -33,7 +33,7 @@ public class QueryCommonVO implements Serializable {
      * @param column 列
      * @return {@link QueryWrapper }<{@link T }>
      */
-    public <T> QueryWrapper<T> buildQueryWrapper(String column) {
+    public QueryWrapper<T> buildQueryWrapper(String column) {
         return new QueryWrapper<T>()
                 .like(key != null, column, key)
                 .ge(StrUtil.isNotBlank(startDate), "create_time", startDate)

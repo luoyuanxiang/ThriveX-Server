@@ -43,6 +43,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwt = jwtUtils.generateToken(userDetails);
+        userDetails.userEntity().setPassword("只有聪明的人才能看到密码");
 
         return Result.success(new JwtResponse(userDetails.userEntity(), userDetails.userEntity().getRoleEntity(), jwt));
     }

@@ -1,125 +1,160 @@
-//package top.luoyuanxiang.thrivex.server.controller;
-//
-//import cn.hutool.core.bean.BeanUtil;
-//import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-//import jakarta.annotation.Resource;
-//import org.springframework.web.bind.annotation.*;
-//import top.luoyuanxiang.thrivex.server.entity.Comment;
-//import top.luoyuanxiang.thrivex.server.service.ICommentService;
-//import top.luoyuanxiang.thrivex.server.vo.Paging;
-//import top.luoyuanxiang.thrivex.server.vo.Result;
-//
-//import java.util.List;
-//import java.util.Map;
-//
-///**
-// * 评论管理
-// *
-// * @author luoyuanxiang
-// * @since 2025-09-12
-// */
-//@RestController
-//@RequestMapping("/comment")
-//public class CommentController {
-//
-//    @Resource
-//    private ICommentService commentService;
-//
-//    /**
-//     * 新增评论
-//     *
-//     * @param commentFormDTO 评论表 DTO
-//     * @return {@link Result }<{@link String }>
-//     * @throws Exception 例外
-//     */
-//    @PostMapping
-//    @ApiOperation("")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-//    public Result<String> add(@RequestBody CommentFormDTO commentFormDTO) throws Exception {
-//        Comment comment =  BeanUtil.copyProperties(commentFormDTO, Comment.class);
-//        commentService.add(comment);
-//        return Result.success();
-//    }
-//
-//    @PremName("comment:del")
-//    @DeleteMapping("/{id}")
-//    @ApiOperation("删除评论")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-//    public Result<String> del(@PathVariable Integer id) {
-//        Comment data = commentService.getById(id);
-//        if (data == null) return Result.error("删除评论失败：该评论不存在");
-//        commentService.removeById(id);
-//        return Result.success();
-//    }
-//
-//    @PremName("comment:del")
-//    @DeleteMapping("/batch")
-//    @ApiOperation("批量删除评论")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-//    public Result batchDel(@RequestBody List<Integer> ids) {
-//        commentService.removeByIds(ids);
-//        return Result.success();
-//    }
-//
-//    @PremName("comment:edit")
-//    @PatchMapping
-//    @ApiOperation("编辑评论")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-//    public Result<String> edit(@RequestBody CommentFormDTO commentFormDTO) {
-//        Comment comment =  BeanUtil.copyProperties(commentFormDTO, Comment.class);
-//        commentService.updateById(comment);
-//        return Result.success();
-//    }
-//
-//    @GetMapping("/{id}")
-//    @ApiOperation("获取评论")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-//    public Result<Comment> get(@PathVariable Integer id) {
-//        Comment data = commentService.get(id);
-//        return Result.success(data);
-//    }
-//
-//    @NoTokenRequired
-//    @PostMapping("/list")
-//    @ApiOperation("获取评论列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-//    public Result<List<Comment>> list(@RequestBody CommentFilterVo filterVo) {
-//        List<Comment> list = commentService.list(filterVo);
-//        return Result.success(list);
-//    }
-//
-//    @NoTokenRequired
-//    @PostMapping("/paging")
-//    @ApiOperation("分页查询评论列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-//    public Result paging(@RequestBody CommentFilterVo filterVo, PageVo pageVo) {
-//        Page<Comment> list = commentService.paging(filterVo, pageVo);
-//        Map<String, Object> result = Paging.filter(list);
-//        return Result.success(result);
-//    }
-//
-//    @NoTokenRequired
-//    @PostMapping("/article/{articleId}")
-//    @ApiOperation("获取指定文章中所有评论")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-//    public Result getArticleCommentList(@PathVariable Integer articleId, PageVo pageVo) {
-//        Page<Comment> list = commentService.getArticleCommentList(articleId, pageVo);
-//        Map<String, Object> result = Paging.filter(list);
-//        return Result.success(result);
-//    }
-//
-//    @PremName("comment:audit")
-//    @PatchMapping("/audit/{id}")
-//    @ApiOperation("审核指定评论")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
-//    public Result auditComment(@PathVariable Integer id) {
-//        Comment data = commentService.getById(id);
-//
-//        if (data == null) throw new CustomException(400, "该评论不存在");
-//
-//        data.setAuditStatus(1);
-//        commentService.updateById(data);
-//        return Result.success();
-//    }
-//
-//}
+package top.luoyuanxiang.thrivex.server.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.annotation.Resource;
+import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.entity.CommentEntity;
+import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.service.ICommentService;
+import top.luoyuanxiang.thrivex.server.vo.CommentQueryVO;
+import top.luoyuanxiang.thrivex.server.vo.Paging;
+import top.luoyuanxiang.thrivex.server.vo.Result;
+
+import java.util.List;
+
+/**
+ * 评论管理
+ *
+ * @author luoyuanxiang
+ * @since 2025-09-12
+ */
+@RestController
+@RequestMapping("/comment")
+public class CommentController {
+
+    @Resource
+    private ICommentService commentService;
+
+    /**
+     * 新增评论
+     *
+     * @param comment 评论表 DTO
+     * @return {@link Result }<{@link String }>
+     * @throws Exception 例外
+     */
+    @PostMapping
+    public Result<String> add(@RequestBody CommentEntity comment) throws Exception {
+        commentService.add(comment);
+        return Result.success();
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param id id
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("comment:del")
+    @DeleteMapping("/{id}")
+    public Result<String> del(@PathVariable Integer id) {
+        CommentEntity data = commentService.getById(id);
+        if (data == null) return Result.error("删除评论失败：该评论不存在");
+        commentService.removeById(id);
+        return Result.success();
+    }
+
+    /**
+     * 批量删除评论
+     *
+     * @param ids 身份证
+     * @return {@link Result }
+     */
+    @HasPermission("comment:del")
+    @DeleteMapping("/batch")
+    public Result<?> batchDel(@RequestBody List<Integer> ids) {
+        commentService.removeByIds(ids);
+        return Result.success();
+    }
+
+    /**
+     * 编辑评论
+     *
+     * @param comment 评论
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("comment:edit")
+    @PatchMapping
+    public Result<String> edit(@RequestBody CommentEntity comment) {
+        commentService.updateById(comment);
+        return Result.success();
+    }
+
+    /**
+     * 获取评论
+     *
+     * @param id id
+     * @return {@link Result }<{@link CommentEntity }>
+     */
+    @GetMapping("/{id}")
+    public Result<CommentEntity> get(@PathVariable Integer id) {
+        CommentQueryVO commentQueryVO = new CommentQueryVO();
+        commentQueryVO.setStatus(null);
+        commentQueryVO.setId(id);
+        List<CommentEntity> list = commentService.list(commentQueryVO);
+        if (list.isEmpty()) return Result.success("获取评论列表失败：没有评论");
+
+        CommentEntity data = list.get(0);
+        return Result.success(data);
+    }
+
+    /**
+     * 获取评论列表
+     *
+     * @param commentQueryVO 评论查询 vo
+     * @return {@link Result }<{@link List }<{@link CommentEntity }>>
+     */
+    @PostMapping("/list")
+    public Result<List<CommentEntity>> list(@RequestBody CommentQueryVO commentQueryVO) {
+        List<CommentEntity> list = commentService.list(commentQueryVO);
+        return Result.success(list);
+    }
+
+    /**
+     * 分页查询评论列表
+     *
+     * @param commentQueryVO 评论查询 vo
+     * @param page           页
+     * @param size           大小
+     * @return {@link Result }<{@link Paging }<{@link CommentEntity }>>
+     */
+    @PostMapping("/paging")
+    public Result<Paging<CommentEntity>> paging(@RequestBody CommentQueryVO commentQueryVO, Integer page, Integer size) {
+        Page<CommentEntity> list = commentService.paging(new Page<>(page, size), commentQueryVO);
+        return Result.page(list);
+    }
+
+    /**
+     * 获取指定文章中所有评论
+     *
+     * @param articleId 文章 ID
+     * @param page      页
+     * @param size      大小
+     * @return {@link Result }<{@link Paging }<{@link CommentEntity }>>
+     */
+    @PostMapping("/article/{articleId}")
+    public Result<Paging<CommentEntity>> getArticleCommentList(@PathVariable Integer articleId, Integer page, Integer size) {
+        CommentQueryVO commentQueryVO = new CommentQueryVO();
+        commentQueryVO.setArticleId(articleId);
+        Page<CommentEntity> list = commentService.paging(new Page<>(page, size), commentQueryVO);
+        return Result.page(list);
+    }
+
+    /**
+     * 审核指定评论
+     *
+     * @param id id
+     * @return {@link Result }<{@link ? }>
+     */
+    @HasPermission("comment:audit")
+    @PatchMapping("/audit/{id}")
+    public Result<?> auditComment(@PathVariable Integer id) {
+        CommentEntity data = commentService.getById(id);
+
+        if (data == null) throw new RuntimeException("该评论不存在");
+
+        data.setAuditStatus(1);
+        commentService.updateById(data);
+        return Result.success();
+    }
+
+}

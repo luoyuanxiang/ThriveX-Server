@@ -84,7 +84,7 @@ public class RecordController {
      * @return {@link Result }<{@link List }<{@link RecordEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<RecordEntity>> list(@RequestBody QueryCommonVO filterVo) {
+    public Result<List<RecordEntity>> list(@RequestBody QueryCommonVO<RecordEntity> filterVo) {
         QueryWrapper<RecordEntity> content = filterVo.buildQueryWrapper("content");
         List<RecordEntity> data = recordService.list(content);
         return Result.success(data);
@@ -97,7 +97,7 @@ public class RecordController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<RecordEntity>> paging(@RequestBody QueryCommonVO filterVo, Integer page, Integer size) {
+    public Result<Paging<RecordEntity>> paging(@RequestBody QueryCommonVO<RecordEntity> filterVo, Integer page, Integer size) {
         Page<RecordEntity> data = recordService.page(new Page<>(page, size), filterVo.buildQueryWrapper("content"));
         return Result.page(data);
     }

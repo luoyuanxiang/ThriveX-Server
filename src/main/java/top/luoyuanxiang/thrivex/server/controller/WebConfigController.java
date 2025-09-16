@@ -16,7 +16,7 @@ import java.util.Map;
  * @since 2025-09-12
  */
 @RestController
-@RequestMapping("/web-config")
+@RequestMapping("/web_config")
 public class WebConfigController {
 
     @Resource

@@ -5,11 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -78,6 +81,26 @@ public class CommentEntity extends Model<CommentEntity> {
 
     @TableField("create_time")
     private String createTime;
+
+    private String userAgent;
+
+    private String ip;
+
+    private String browser;
+
+    private String os;
+    private String province;
+    private String city;
+
+    /**
+     * 该评论所属的文章名称
+     */
+    @TableField(exist = false)
+    private String articleTitle;
+
+    @TableField(exist = false)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<CommentEntity> children = new ArrayList<>();
 
     @Override
     public Serializable pkVal() {

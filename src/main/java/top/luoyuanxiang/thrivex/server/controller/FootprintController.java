@@ -94,7 +94,7 @@ public class FootprintController {
      * @return {@link Result }<{@link List }<{@link FootprintEntity }>>
      */
     @PostMapping("/list")
-    public Result<List<FootprintEntity>> list(@RequestBody QueryCommonVO queryCommonVO) {
+    public Result<List<FootprintEntity>> list(@RequestBody QueryCommonVO<FootprintEntity> queryCommonVO) {
         List<FootprintEntity> data = footprintService.list(queryCommonVO);
         return Result.success(data);
     }

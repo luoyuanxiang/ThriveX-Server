@@ -2,6 +2,7 @@ package top.luoyuanxiang.thrivex.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
+import org.dromara.x.file.storage.spring.EnableFileStorage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,6 +22,7 @@ import java.util.Objects;
  *
  * @author luoyuanxiang
  */
+@EnableFileStorage
 @EnableScheduling
 @EnableCaching
 @SpringBootApplication

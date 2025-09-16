@@ -1,122 +1,166 @@
-//package top.luoyuanxiang.thrivex.server.controller;
-//
-//import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-//import jakarta.annotation.Resource;
-//import org.springframework.web.bind.annotation.*;
-//import top.luoyuanxiang.thrivex.server.vo.Paging;
-//import top.luoyuanxiang.thrivex.server.vo.Result;
-//
-//import java.util.List;
-//import java.util.Map;
-//
-///**
-// * 用户管理
-// *
-// * @author luoyuanxiang
-// * @since 2025-09-12
-// */
-//@RestController
-//@RequestMapping("/user")
-//public class UserController {
-//
-//    @Resource
-//    private UserService userService;
-//
-//    @PremName("user:add")
-//    @PostMapping
-//    @ApiOperation("新增用户")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 1)
-//    public Result<String> add(@RequestBody UserDTO user) {
-//        userService.add(user);
-//        return Result.success();
-//    }
-//
-//    @PremName("user:del")
-//    @DeleteMapping("/{id}")
-//    @ApiOperation("删除用户")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 2)
-//    public Result<String> del(@PathVariable Integer id) {
-//        userService.del(id);
-//        return Result.success();
-//    }
-//
-//    @PremName("user:del")
-//    @DeleteMapping("/batch")
-//    @ApiOperation("批量删除用户")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 3)
-//    public Result<String> batchDel(@RequestBody List<Integer> ids) {
-//        userService.delBatch(ids);
-//        return Result.success();
-//    }
-//
-//    @PremName("user:edit")
-//    @PatchMapping
-//    @ApiOperation("编辑用户")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 4)
-//    public Result<String> edit(@RequestBody UserInfoDTO user) {
-//        userService.edit(user);
-//        return Result.success();
-//    }
-//
-//    @PremName("user:info")
-//    @GetMapping("/{id}")
-//    @ApiOperation("获取用户")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 5)
-//    public Result<User> get(@PathVariable Integer id) {
-//        User data = userService.get(id);
-//        return Result.success(data);
-//    }
-//
-//    @PremName("user:list")
-//    @PostMapping("/list")
-//    @ApiOperation("获取用户列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 6)
-//    public Result<List<User>> list(@RequestBody UserFilterVo filterVo) {
-//        List<User> list = userService.list(filterVo);
-//        return Result.success(list);
-//    }
-//
-//    @PremName("user:list")
-//    @PostMapping("/paging")
-//    @ApiOperation("分页查询用户列表")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 7)
-//    public Result paging(UserFilterVo filterVo, PageVo pageVo) {
-//        Page<User> data = userService.paging(filterVo, pageVo);
-//        Map<String, Object> result = Paging.filter(data);
-//        return Result.success(result);
-//    }
-//
-//    @PostMapping("/login")
-//    @ApiOperation("用户登录")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 8)
-//    public Result<Map> login(@RequestBody UserLoginDTO user) {
-//        Map<String, Object> result = userService.login(user);
-//        return Result.success("登录成功", result);
-//    }
-//
-//    @PremName("user:pass")
-//    @PatchMapping("/pass")
-//    @ApiOperation("修改用户密码")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 9)
-//    public Result<String> editPass(@RequestBody EditPassDTO data) {
-//        userService.editPass(data);
-//        return Result.success("密码修改成功");
-//    }
-//
-//    @GetMapping("/check")
-//    @ApiOperation("校验当前用户Token是否有效")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 10)
-//    public Result checkPrem(String token) {
-//        userService.check(token);
-//        return Result.success();
-//    }
-//
-//    @GetMapping("/author")
-//    @ApiOperation("获取作者信息")
-//    @ApiOperationSupport(author = "刘宇阳 | liuyuyang1024@yeah.net", order = 11)
-//    public Result<User> getAuthor() {
-//        User data = userService.get(1);
-//        return Result.success(data);
-//    }
-//
-//}
+package top.luoyuanxiang.thrivex.server.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.annotation.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.entity.UserEntity;
+import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.service.IUserService;
+import top.luoyuanxiang.thrivex.server.vo.EditPassVO;
+import top.luoyuanxiang.thrivex.server.vo.Paging;
+import top.luoyuanxiang.thrivex.server.vo.Result;
+import top.luoyuanxiang.thrivex.server.vo.UserQueryVO;
+
+import java.util.List;
+
+/**
+ * 用户管理
+ *
+ * @author luoyuanxiang
+ * @since 2025-09-12
+ */
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @Resource
+    private IUserService userService;
+
+    @Resource
+    private PasswordEncoder passwordEncoder;
+
+    /**
+     * 新增用户
+     *
+     * @param user 用户
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("user:add")
+    @PostMapping
+    public Result<String> add(@RequestBody UserEntity user) {
+        boolean exists = userService.lambdaQuery()
+                .eq(UserEntity::getUsername, user.getUsername())
+                .exists();
+        if (exists) {
+            return Result.error("用户已存在: " + user.getUsername());
+        }
+        String password = passwordEncoder.encode(user.getPassword());
+        user.setPassword(password);
+        user.insert();
+        return Result.success();
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param id id
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("user:del")
+    @DeleteMapping("/{id}")
+    public Result<String> del(@PathVariable Integer id) {
+        userService.removeById(id);
+        return Result.success();
+    }
+
+    /**
+     * 批量删除用户
+     *
+     * @param ids 身份证
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("user:del")
+    @DeleteMapping("/batch")
+    public Result<String> batchDel(@RequestBody List<Integer> ids) {
+        userService.removeBatchByIds(ids);
+        return Result.success();
+    }
+
+    /**
+     * 编辑用户
+     *
+     * @param user 用户
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("user:edit")
+    @PatchMapping
+    public Result<String> edit(@RequestBody UserEntity user) {
+        user.updateById();
+        return Result.success();
+    }
+
+    /**
+     * 获取用户
+     *
+     * @param id id
+     * @return {@link Result }<{@link UserEntity }>
+     */
+    @HasPermission("user:info")
+    @GetMapping("/{id}")
+    public Result<UserEntity> get(@PathVariable Integer id) {
+        UserQueryVO userQueryVO = new UserQueryVO();
+        userQueryVO.setId(id);
+        List<UserEntity> list = userService.list(userQueryVO);
+        if (list.isEmpty()) return Result.success(null);
+        UserEntity data = list.get(0);
+        return Result.success(data);
+    }
+
+    /**
+     * 获取用户列表
+     *
+     * @param queryVO 过滤 VO
+     * @return {@link Result }<{@link List }<{@link UserEntity }>>
+     */
+    @HasPermission("user:list")
+    @PostMapping("/list")
+    public Result<List<UserEntity>> list(@RequestBody UserQueryVO queryVO) {
+        List<UserEntity> list = userService.list(queryVO);
+        return Result.success(list);
+    }
+
+    /**
+     * 分页查询用户列表
+     *
+     * @param filterVo 过滤 VO
+     * @param page     页
+     * @param size     大小
+     * @return {@link Result }<{@link Paging }<{@link UserEntity }>>
+     */
+    @HasPermission("user:list")
+    @PostMapping("/paging")
+    public Result<Paging<UserEntity>> paging(UserQueryVO filterVo, Integer page, Integer size) {
+        Page<UserEntity> data = userService.paging(new Page<>(page, size), filterVo);
+        return Result.page(data);
+    }
+
+    /**
+     * 修改用户密码
+     *
+     * @param data 数据
+     * @return {@link Result }<{@link String }>
+     */
+    @HasPermission("user:pass")
+    @PatchMapping("/pass")
+    public Result<String> editPass(@RequestBody EditPassVO data) {
+        userService.editPass(data);
+        return Result.success("密码修改成功");
+    }
+
+    /**
+     * 获取作者信息
+     *
+     * @return {@link Result }<{@link UserEntity }>
+     */
+    @GetMapping("/author")
+    public Result<UserEntity> getAuthor() {
+        UserQueryVO userQueryVO = new UserQueryVO();
+        userQueryVO.setId(1);
+        List<UserEntity> list = userService.list(userQueryVO);
+        if (list.isEmpty()) return Result.success(null);
+        UserEntity data = list.get(0);
+        return Result.success(data);
+    }
+
+}

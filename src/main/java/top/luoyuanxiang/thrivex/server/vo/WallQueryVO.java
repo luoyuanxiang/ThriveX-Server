@@ -2,6 +2,7 @@ package top.luoyuanxiang.thrivex.server.vo;
 
 import lombok.Getter;
 import lombok.Setter;
+import top.luoyuanxiang.thrivex.server.entity.WallEntity;
 
 /**
  * 留言查询
@@ -10,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class WallQueryVO extends QueryCommonVO {
+public class WallQueryVO extends QueryCommonVO<WallEntity> {
 
     /**
      * 根据分类进行筛选

@@ -44,19 +44,19 @@ public class ArticleConfigEntity extends Model<ArticleConfigEntity> {
      * 是否加密
      */
     @TableField("is_encrypt")
-    private Byte isEncrypt;
+    private Integer isEncrypt;
 
     /**
      * 是否为草稿
      */
     @TableField("is_draft")
-    private Byte isDraft;
+    private Integer isDraft;
 
     /**
      * 是否删除
      */
     @TableField("is_del")
-    private Byte isDel;
+    private Integer isDel;
 
     /**
      * 对应的文章id

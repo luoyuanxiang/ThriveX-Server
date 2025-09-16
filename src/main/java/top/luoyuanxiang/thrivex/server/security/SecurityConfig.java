@@ -58,7 +58,11 @@ public class SecurityConfig {
                 // 设置会话管理为无状态
                 .sessionManagement(se -> se.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/error", "/login").permitAll();
+                    auth.requestMatchers(
+                            "/error",
+                            "/login",
+                            "/web_config/**"
+                    ).permitAll();
                     auth.anyRequest().authenticated();
                 });
         // 添加 JWT 过滤器

@@ -67,6 +67,12 @@ public class OssEntity extends Model<OssEntity> {
     @TableField("is_enable")
     private Integer isEnable;
 
+    /**
+     * 项目路径
+     */
+    @TableField(exist = false)
+    private String projectPath;
+
     @Override
     public Serializable pkVal() {
         return this.id;

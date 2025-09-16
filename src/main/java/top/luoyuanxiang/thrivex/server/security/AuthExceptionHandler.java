@@ -4,8 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import top.luoyuanxiang.thrivex.server.exception.CustomException;
 import top.luoyuanxiang.thrivex.server.vo.Result;
 
 import java.util.Date;
@@ -17,6 +19,11 @@ import java.util.Map;
  */
 @RestControllerAdvice
 public class AuthExceptionHandler {
+
+    @ExceptionHandler(CustomException.class)
+    public Result<Object> customException(CustomException e) {
+        return Result.error(e.getCode(), e.getMessage());
+    }
 
     /**
      * 处理用户名或密码错误异常
