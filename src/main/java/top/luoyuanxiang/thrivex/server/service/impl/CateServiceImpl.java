@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import top.luoyuanxiang.thrivex.server.vo.CateArticleCount;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +27,7 @@ public class CateServiceImpl extends ServiceImpl<CateMapper, CateEntity> impleme
     @Override
     public List<CateEntity> list(String pattern) {
         List<CateEntity> list = list();
+        list.sort(Comparator.comparingInt(CateEntity::getOrder));
         if (Objects.equals("list", pattern)) {
             return list;
         }
