@@ -11,7 +11,7 @@ COPY . .
 RUN mvn install -Dmaven.test.skip=true
 
 # 运行阶段使用精简的JRE 21镜像
-FROM openjdk:21-jre-alpine
+FROM eclipse-temurin:21-jdk-alpine
 
 # 维护者信息
 LABEL maintainer="1141306760@qq.com"
