@@ -48,4 +48,12 @@ public interface ILinkService extends IService<LinkEntity> {
      * @return {@link LinkEntity }
      */
     LinkEntity fetchWebsiteInfo(String url) throws Exception;
+
+    /**
+     * 审核指定网站
+     *
+     * @param data 数据
+     * @return boolean
+     */
+    boolean auditWeb(LinkEntity data);
 }

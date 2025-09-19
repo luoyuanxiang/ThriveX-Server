@@ -144,8 +144,8 @@ public class LinkController {
         if (data == null) throw new RuntimeException("该网站不存在");
 
         data.setAuditStatus(1);
-        linkService.updateById(data);
-        return Result.success();
+        boolean b = linkService.auditWeb(data);
+        return b ? Result.success() : Result.error();
     }
 
     /**

@@ -6,6 +6,7 @@ import org.dromara.x.file.storage.spring.EnableFileStorage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.reactive.function.client.WebClient;
 import top.luoyuanxiang.thrivex.server.entity.EnvConfigEntity;
@@ -21,6 +22,7 @@ import java.util.Objects;
  *
  * @author luoyuanxiang
  */
+@EnableAsync
 @EnableFileStorage
 @EnableScheduling
 @EnableCaching

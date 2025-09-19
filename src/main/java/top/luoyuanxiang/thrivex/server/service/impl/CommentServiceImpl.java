@@ -12,23 +12,15 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.luoyuanxiang.thrivex.server.entity.ArticleEntity;
-import top.luoyuanxiang.thrivex.server.entity.CommentEntity;
-import top.luoyuanxiang.thrivex.server.entity.EnvConfigEntity;
+import top.luoyuanxiang.thrivex.server.entity.*;
 import top.luoyuanxiang.thrivex.server.mapper.CommentMapper;
-import top.luoyuanxiang.thrivex.server.service.IArticleService;
-import top.luoyuanxiang.thrivex.server.service.ICommentService;
-import top.luoyuanxiang.thrivex.server.service.IEnvConfigService;
-import top.luoyuanxiang.thrivex.server.service.IWebConfigService;
+import top.luoyuanxiang.thrivex.server.service.*;
 import top.luoyuanxiang.thrivex.server.utils.AmapLocationUtil;
 import top.luoyuanxiang.thrivex.server.vo.CommentQueryVO;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <p>
@@ -49,6 +41,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     private IEnvConfigService envConfigService;
     @Resource
     private IArticleService articleService;
+    @Resource
+    private IEmailService emailService;
+    @Resource
+    private IUserService userService;
 
 
     @Override
@@ -75,44 +71,35 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
 
         // 文章标题
         String title = articleService.getById(comment.getArticleId()).getTitle();
+        WebConfigEntity web = configService.getByName("web");
+        Map<String, Object> webValue = web.getValue();
+        // 获取url
+        String url = (String) webValue.get("url");
+        String path = String.format("%s/article/%d", url, comment.getArticleId());
+        Map<String, Object> params = new HashMap<>();
+        params.put("postTitle", title);
+        params.put("postUrl", path);
+        params.put("postOwner", webValue.get("title"));
+        params.put("commenter", comment.getName());
+        params.put("content", comment.getContent());
+        UserEntity user = userService.getById(1);
+        emailService.sendDualFormatEmail(StrUtil.isNotBlank(user.getEmail()) ? user.getEmail() : "admin@luoyuanxiang.top", "我的文章收到新评论", params);
+//        CompletableFuture.runAsync(() -> emailService.sendDualFormatEmail("admin@luoyuanxiang.top", "我的文章收到新评论", params));
 
-        // 评论记录
-        StringBuilder content = new StringBuilder();
         // 判断是否还有上一条评论
-        CommentEntity prev_comment = null;
+        CommentEntity prev_comment;
         if (comment.getCommentId() != 0) {
             prev_comment = getById(comment.getCommentId());
-            content.append(prev_comment.getName()).append("：").append(prev_comment.getContent()).append("<br>");
+            params.put("replier", comment.getName());
+            params.put("commentSubjectUrl", path);
+            params.put("commentSubjectTitle", title);
+            params.put("isQuoteReply", false);
+            params.put("commentContent", prev_comment.getCommentId());
+            if (StrUtil.isNotBlank(prev_comment.getEmail())) {
+                emailService.sendDualFormatEmail(prev_comment.getEmail(), "有人回复了我", params);
+//                CompletableFuture.runAsync(() -> emailService.sendDualFormatEmail(prev_comment.getEmail(), "有人回复了我", params));
+            }
         }
-        content.append(comment.getName()).append("：").append(comment.getContent());
-
-        // 处理邮件模板
-//        Context context = new Context();
-//        context.setVariable("title", title);
-//        context.setVariable("recipient", comment.getName());
-//
-//        // 获取当前时间
-//        LocalDateTime now = LocalDateTime.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss");
-//        String time = now.format(formatter);
-//        context.setVariable("time", time);
-//
-//        context.setVariable("content", content.toString());
-//
-//        // 获取url
-//        String url = (String) configService.getByName("web").getValue().get("url");
-//        String path = String.format("%s/article/%d", url, comment.getArticleId());
-//        context.setVariable("url", path);
-//
-//        String template = templateEngine.process("comment_email", context);
-//
-//        // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
-//        String email = (prev_comment != null && !prev_comment.getEmail().isEmpty()) ? prev_comment.getEmail() : null;
-//
-//        // 如果是一级评论则邮件提醒管理员，否则邮件提醒被回复人和管理员
-//        String emailTitle = (email != null) ? "您有最新回复~" : title;
-//        emailUtils.send(email, emailTitle, template);
-
     }
 
     @Override

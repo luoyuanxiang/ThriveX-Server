@@ -1,5 +1,6 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -12,19 +13,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.luoyuanxiang.thrivex.server.entity.LinkEntity;
 import top.luoyuanxiang.thrivex.server.entity.LinkTypeEntity;
+import top.luoyuanxiang.thrivex.server.entity.UserEntity;
+import top.luoyuanxiang.thrivex.server.entity.WebConfigEntity;
 import top.luoyuanxiang.thrivex.server.mapper.LinkMapper;
-import top.luoyuanxiang.thrivex.server.service.ILinkService;
-import top.luoyuanxiang.thrivex.server.service.ILinkTypeService;
+import top.luoyuanxiang.thrivex.server.service.*;
 import top.luoyuanxiang.thrivex.server.vo.LinkQueryVO;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang
@@ -35,6 +39,12 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, LinkEntity> impleme
 
     @Resource
     private ILinkTypeService linkTypeService;
+    @Resource
+    private IEmailService emailService;
+    @Resource
+    private IUserService userService;
+    @Resource
+    private IWebConfigService webConfigService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,8 +64,21 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, LinkEntity> impleme
             Integer isAdmin = linkTypeEntity.getIsAdmin();
             if (isAdmin == 1) throw new RuntimeException("该类型需要管理员权限才能添加");
             linkEntity.insert();
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("displayName", linkEntity.getTitle());
             // 邮件提醒
-//            emailUtils.send(null, "您有新的友联等待审核", link.toString());
+            if (StrUtil.isNotBlank(linkEntity.getEmail())) {
+                emailService.sendDualFormatEmail(linkEntity.getEmail(), "友链自助提交审核通知", variables);
+            }
+            UserEntity user = userService.getById(1);
+            WebConfigEntity web = webConfigService.getByName("web");
+            Object o = web.getValue().get("url");
+            variables.put("url", linkEntity.getUrl());
+            variables.put("description", linkEntity.getDescription());
+            variables.put("logo", linkEntity.getImage());
+            variables.put("email", linkEntity.getEmail());
+            variables.put("reviewUrl", o);
+            emailService.sendDualFormatEmail(StrUtil.isNotBlank(user.getEmail()) ? user.getEmail() : "admin@luoyuanxiang.top", "友链自助提交通知管理员", variables);
             return;
         }
         // 如果没有设置 order 则放在最后
@@ -109,6 +132,19 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, LinkEntity> impleme
         linkEntity.setImage(faviconUrl);
 
         return linkEntity;
+    }
+
+    @Override
+    public boolean auditWeb(LinkEntity data) {
+        data.setAuditStatus(1);
+        data.updateById();
+        if (StrUtil.isNotBlank(data.getEmail())) {
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("displayName", data.getTitle());
+            variables.put("review", true);
+            emailService.sendDualFormatEmail(data.getEmail(), "友链自助提交成功通知", variables);
+        }
+        return true;
     }
 
     /**

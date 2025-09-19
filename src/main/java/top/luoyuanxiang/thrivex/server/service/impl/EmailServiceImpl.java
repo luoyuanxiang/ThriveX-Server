@@ -11,25 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import top.luoyuanxiang.thrivex.server.entity.EmailLogsEntity;
-import top.luoyuanxiang.thrivex.server.entity.EmailServerConfigEntity;
-import top.luoyuanxiang.thrivex.server.entity.EmailTemplateEntity;
-import top.luoyuanxiang.thrivex.server.entity.WebConfigEntity;
-import top.luoyuanxiang.thrivex.server.security.UserDetailsImpl;
-import top.luoyuanxiang.thrivex.server.service.IEmailServerConfigService;
-import top.luoyuanxiang.thrivex.server.service.IEmailService;
-import top.luoyuanxiang.thrivex.server.service.IEmailTemplateService;
-import top.luoyuanxiang.thrivex.server.service.IWebConfigService;
+import top.luoyuanxiang.thrivex.server.entity.*;
+import top.luoyuanxiang.thrivex.server.service.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * 邮件服务
@@ -48,7 +39,10 @@ public class EmailServiceImpl implements IEmailService {
     private Configuration freemarkerConfiguration;
     @Resource
     private IEmailTemplateService emailTemplateService;
+    @Resource
+    private IUserService userService;
 
+    @Async
     @Override
     public void sendDualFormatEmail(String to, String templateName, Map<String, Object> variables) {
         Optional<EmailServerConfigEntity> emailServerConfigEntityOptional = emailServerConfigService.lambdaQuery()
@@ -107,15 +101,14 @@ public class EmailServiceImpl implements IEmailService {
      * @param variables           变量
      */
     private void sendDualFormatEmail(String to, EmailTemplateEntity emailTemplateEntity, EmailServerConfigEntity config, Map<String, Object> variables) {
+        log.info("发送邮件：{}", to);
         WebConfigEntity web = webConfigService.getByName("web");
         Map<String, Object> value = web.getValue();
-        // 设置系统变量
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Map<String, Object> site = new HashMap<>();
+        UserEntity user = userService.getById(1);
         site.put("title", value.get("title"));
         site.put("subtitle", value.get("subhead"));
-        site.put("logo", userDetails.user().getAvatar());
+        site.put("logo", user.getAvatar());
         site.put("url", value.get("url"));
         variables.put("site", site);
         variables.put("createTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
@@ -153,24 +146,10 @@ public class EmailServiceImpl implements IEmailService {
             helper.setText(content, Objects.equals(emailTemplateEntity.getType(), "HTML"));
             // 发送邮件
             javaMailSender.send(mimeMessage);
-            // 异步记录邮件发送日志
-            CompletableFuture.runAsync(() -> {
-                try {
-                    logEmailSend(config.getId(), emailTemplateEntity.getId(), to, finalSubject, content, true, null);
-                } catch (Exception e) {
-                    log.error("记录邮件发送日志失败", e);
-                }
-            });
+            logEmailSend(config.getId(), emailTemplateEntity.getId(), to, finalSubject, content, true, null);
         } catch (Exception e) {
             e.printStackTrace();
-            // 异步记录邮件发送失败日志
-            CompletableFuture.runAsync(() -> {
-                try {
-                    logEmailSend(config.getId(), emailTemplateEntity.getId(), to, finalSubject, null, false, e.getMessage());
-                } catch (Exception logEx) {
-                    log.error("记录邮件发送失败日志失败", logEx);
-                }
-            });
+            logEmailSend(config.getId(), emailTemplateEntity.getId(), to, finalSubject, null, false, e.getMessage());
             throw new RuntimeException("发送邮件失败", e);
         }
     }
