@@ -24,4 +24,8 @@ public class DismissEmailVO {
      * 评论内容
      */
     private String content;
+    /**
+     * 类型
+     */
+    private String type;
 }

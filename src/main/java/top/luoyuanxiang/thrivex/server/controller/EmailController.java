@@ -13,6 +13,7 @@ import top.luoyuanxiang.thrivex.server.vo.WallEmailVO;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 邮件管理
@@ -35,11 +36,13 @@ public class EmailController {
     @HasPermission("email:dismiss")
     @PostMapping("/dismiss")
     public Result<String> dismiss(@RequestBody DismissEmailVO email) {
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("displayName", email.getRecipient());
-        variables.put("review", false);
-        variables.put("reviewReason", email.getContent());
-        emailService.sendDualFormatEmail(email.getTo(), "友链自助提交成功通知", variables);
+        if (Objects.equals("友链", email.getType())) {
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("displayName", email.getRecipient());
+            variables.put("review", false);
+            variables.put("reviewReason", email.getContent());
+            emailService.sendDualFormatEmail(email.getTo(), "友链自助提交成功通知", variables);
+        }
         return Result.success();
     }
 
