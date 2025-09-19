@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # 构建应用，跳过测试以加快构建速度
-RUN mvn install -Dmaven.test.skip=true -P pro
+RUN mvn install -Dmaven.test.skip=true
 
 # 运行阶段使用精简的JRE 1.8镜像
 FROM openjdk:8-jre-alpine
