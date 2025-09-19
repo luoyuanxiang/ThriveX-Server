@@ -86,7 +86,23 @@ public class SecurityConfig {
                             "/login",
                             "/check",
                             "/web_config/**",
-                            "/role/permission/**"
+                            "/role/permission/**",
+                            "/user/author",
+                            "/cate/list",
+                            "/record/paging",
+                            "/album/cate/**",
+                            "/article/**",
+                            "/cate/list",
+                            "/cate/article/count",
+                            "/comment/**",
+                            "/page_config/**",
+                            "/env_config/**",
+                            "/footprint/list",
+                            "/rss/list",
+                            "/swiper/list",
+                            "/tag/**",
+                            "/wall/**",
+                            "/link/**"
                     ).permitAll();
                     auth.anyRequest().authenticated();
                 });
