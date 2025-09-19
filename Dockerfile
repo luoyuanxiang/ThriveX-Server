@@ -1,5 +1,5 @@
 # 基于官方JDK 1.8镜像作为构建环境
-FROM maven:3.6.3-openjdk-8 AS builder
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
 
 # 设置工作目录
 WORKDIR /app
