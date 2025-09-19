@@ -37,7 +37,7 @@ public class AssistantEntity extends Model<AssistantEntity> {
     /**
      * 密钥
      */
-    @TableField("key")
+    @TableField("`key`")
     private String key;
 
     /**

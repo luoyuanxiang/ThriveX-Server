@@ -15,7 +15,7 @@
         <result column="type_id" property="typeId" />
         <result column="audit_status" property="auditStatus" />
         <result column="create_time" property="createTime" />
-        <association property="linkTypeEntity" javaType="top.luoyuanxiang.thrivex.server.entity.LinkTypeEntity">
+        <association property="type" javaType="top.luoyuanxiang.thrivex.server.entity.LinkTypeEntity">
             <id column="lt_id" property="id" />
             <result column="name" property="name" />
             <result column="is_admin" property="isAdmin" />
@@ -24,7 +24,7 @@
     </resultMap>
 
     <select id="list" resultMap="BaseResultMap">
-        select l.*, lt.id lt_id, lt.name, lt.is_admin, lt.`order` from linkEntity l
+        select l.*, lt.id lt_id, lt.name, lt.is_admin, lt.`order` from link l
         left join link_type lt on l.type_id = lt.id
         <where>
             <if test="vo.status != null">

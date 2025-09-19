@@ -27,19 +27,13 @@ import java.time.LocalDateTime;
 public class EmailTemplateEntity extends Model<EmailTemplateEntity> {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * 模板名称
      */
     @TableField("name")
     private String name;
-
-    /**
-     * 模板编码
-     */
-    @TableField("code")
-    private String code;
 
     /**
      * 邮件主题
@@ -60,12 +54,6 @@ public class EmailTemplateEntity extends Model<EmailTemplateEntity> {
     private String type;
 
     /**
-     * 描述
-     */
-    @TableField("description")
-    private String description;
-
-    /**
      * 创建时间
      */
     @TableField("create_time")
@@ -76,12 +64,6 @@ public class EmailTemplateEntity extends Model<EmailTemplateEntity> {
      */
     @TableField("update_time")
     private LocalDateTime updateTime;
-
-    /**
-     * 状态：1-启用，0-禁用
-     */
-    @TableField("enabled")
-    private Boolean enabled;
 
     @Override
     public Serializable pkVal() {

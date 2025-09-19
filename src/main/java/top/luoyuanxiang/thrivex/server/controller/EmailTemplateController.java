@@ -1,13 +1,15 @@
 package top.luoyuanxiang.thrivex.server.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import top.luoyuanxiang.thrivex.server.entity.EmailTemplateEntity;
+import top.luoyuanxiang.thrivex.server.service.IEmailService;
 import top.luoyuanxiang.thrivex.server.service.IEmailTemplateService;
-import top.luoyuanxiang.thrivex.server.vo.Paging;
 import top.luoyuanxiang.thrivex.server.vo.Result;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 邮件模板管理
@@ -21,14 +23,16 @@ public class EmailTemplateController {
 
     @Resource
     private IEmailTemplateService emailTemplateService;
+    @Resource
+    private IEmailService emailService;
 
     /**
-     * 分页获取邮件模板
+     * 获取邮件模板
      */
-    @GetMapping("/paging")
-    public Result<Paging<EmailTemplateEntity>> paging(Integer page, Integer size) {
-        Page<EmailTemplateEntity> templates = emailTemplateService.page(new Page<>(page, size));
-        return Result.page(templates);
+    @GetMapping("/list")
+    public Result<List<EmailTemplateEntity>> list() {
+        List<EmailTemplateEntity> templates = emailTemplateService.list();
+        return Result.success(templates);
     }
 
     /**
@@ -67,4 +71,15 @@ public class EmailTemplateController {
         return Result.success();
     }
 
+    /**
+     * 发送邮件
+     *
+     * @param params 参数
+     * @return {@link Result }<{@link String }>
+     */
+    @PostMapping("/send")
+    public Result<String> sendMail(@RequestBody Map<String, Object> params) {
+        boolean b = emailService.sendMail(params);
+        return b ? Result.success() : Result.error();
+    }
 }

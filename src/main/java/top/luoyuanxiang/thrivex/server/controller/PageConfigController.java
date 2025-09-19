@@ -16,7 +16,7 @@ import java.util.Map;
  * @since 2025-09-12
  */
 @RestController
-@RequestMapping("/page-config")
+@RequestMapping("/page_config")
 public class PageConfigController {
 
     @Resource

@@ -17,7 +17,7 @@ import java.util.Map;
  * @since 2025-09-12
  */
 @RestController
-@RequestMapping("/env-config")
+@RequestMapping("/env_config")
 public class EnvConfigController {
 
     @Resource

@@ -15,6 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * Spring Security 配置类
@@ -49,10 +54,28 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter();
     }
 
+    /**
+     * CORS 配置源
+     *
+     * @return {@link CorsConfigurationSource}
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // 禁用 CSRF 保护，因为是前后端分离项目
                 .csrf(AbstractHttpConfigurer::disable)
                 // 设置会话管理为无状态
@@ -61,7 +84,9 @@ public class SecurityConfig {
                     auth.requestMatchers(
                             "/error",
                             "/login",
-                            "/web_config/**"
+                            "/check",
+                            "/web_config/**",
+                            "/role/permission/**"
                     ).permitAll();
                     auth.anyRequest().authenticated();
                 });

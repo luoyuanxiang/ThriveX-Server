@@ -1,10 +1,12 @@
 package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,9 @@ public class AuthController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private HttpServletRequest request;
+
     /**
      * 用户登录接口
      */
@@ -43,9 +48,25 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         String jwt = jwtUtils.generateToken(userDetails);
-        userDetails.userEntity().setPassword("只有聪明的人才能看到密码");
+        userDetails.user().setPassword("只有聪明的人才能看到密码");
 
-        return Result.success(new JwtResponse(userDetails.userEntity(), userDetails.userEntity().getRoleEntity(), jwt));
+        return Result.success(new JwtResponse(userDetails.user(), userDetails.user().getRole(), jwt));
+    }
+
+    /**
+     * 检查
+     *
+     */
+    @GetMapping("/check")
+    public Result<String> check() {
+        try {
+            String token = jwtUtils.parseJwt(request);
+            boolean tokenExpired = jwtUtils.isTokenExpired(token);
+            return tokenExpired ? Result.error(424, "token已过期") : Result.success();
+        } catch (Exception e) {
+
+        }
+        return Result.error(424, "token 无效");
     }
 
     /**
@@ -61,12 +82,12 @@ public class AuthController {
     /**
      * 登录响应体
      *
-     * @param userEntity  用户信息
-     * @param roleEntity  角色信息
+     * @param user  用户信息
+     * @param role  角色信息
      * @param token JWT令牌
      * @author luoyuanxiang
      */
-    public record JwtResponse(UserEntity userEntity, RoleEntity roleEntity, String token) {
+    public record JwtResponse(UserEntity user, RoleEntity role, String token) {
 
     }
 }

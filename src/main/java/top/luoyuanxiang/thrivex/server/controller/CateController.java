@@ -13,9 +13,7 @@ import top.luoyuanxiang.thrivex.server.vo.Result;
 import java.util.List;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 分类管理
  *
  * @author luoyuanxiang
  * @since 2025-09-12

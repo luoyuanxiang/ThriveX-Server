@@ -77,7 +77,7 @@ public class UserEntity extends Model<UserEntity> {
     private String createTime;
 
     @TableField(exist = false)
-    private RoleEntity roleEntity;
+    private RoleEntity role;
 
     @TableField(exist = false)
     private String permissionsCode;

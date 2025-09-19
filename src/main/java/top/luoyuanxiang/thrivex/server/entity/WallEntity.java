@@ -77,7 +77,7 @@ public class WallEntity extends Model<WallEntity> {
      * 留言分类
      */
     @TableField(exist = false)
-    private WallCateEntity cate;
+    private WallCateEntity cate  = new WallCateEntity();
 
     @Override
     public Serializable pkVal() {

@@ -12,12 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2025-09-13
  */
 public interface IEmailServerConfigService extends IService<EmailServerConfigEntity> {
-
-    /**
-     * 测试配置
-     *
-     * @param id id
-     * @return boolean
-     */
-    boolean testConfig(Integer id);
 }

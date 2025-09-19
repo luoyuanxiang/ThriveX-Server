@@ -43,7 +43,7 @@ public class PermissionEntity extends Model<PermissionEntity> {
     /**
      * 权限分组
      */
-    @TableField("group")
+    @TableField("`group`")
     private String group;
 
     @Override

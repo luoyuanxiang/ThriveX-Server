@@ -52,14 +52,33 @@ public class OssEntity extends Model<OssEntity> {
     @TableField("end_point")
     private String endPoint;
 
+    /**
+     * 存储桶名称
+     */
     @TableField("bucket_name")
     private String bucketName;
 
+    /**
+     * 域
+     */
     @TableField("domain")
     private String domain;
 
+    /**
+     * 基本路径
+     */
     @TableField("base_path")
     private String basePath;
+
+    /**
+     * 地区
+     */
+    private String region;
+
+    /**
+     * 路径样式访问
+     */
+    private Boolean pathStyle;
 
     /**
      * 是否启用

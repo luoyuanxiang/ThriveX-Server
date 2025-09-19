@@ -12,13 +12,13 @@ import java.util.Collection;
 /**
  * 实现 UserDetails 接口的用户详情类
  */
-public record UserDetailsImpl(UserEntity userEntity) implements UserDetails {
+public record UserDetailsImpl(UserEntity user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        if (StrUtil.isNotBlank(userEntity.getPermissionsCode())) {
-            for (String code : userEntity.getPermissionsCode().split(",")) {
+        if (StrUtil.isNotBlank(user.getPermissionsCode())) {
+            for (String code : user.getPermissionsCode().split(",")) {
                 authorities.add(new SimpleGrantedAuthority(code));
             }
         }
@@ -27,11 +27,11 @@ public record UserDetailsImpl(UserEntity userEntity) implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userEntity.getUsername();
+        return user.getUsername();
     }
 }

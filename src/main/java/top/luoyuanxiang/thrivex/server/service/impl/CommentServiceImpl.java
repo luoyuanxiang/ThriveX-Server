@@ -161,7 +161,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     private QueryWrapper<CommentEntity> buildQuery(CommentQueryVO commentQueryVO) {
         return commentQueryVO.buildQueryWrapper("name")
                 .eq(commentQueryVO.getId() != null, "id", commentQueryVO.getId())
-                .eq(commentQueryVO.getStatus() != null, "status", commentQueryVO.getStatus())
+                .eq(commentQueryVO.getStatus() != null, "audit_status", commentQueryVO.getStatus())
                 .like(StrUtil.isNotBlank(commentQueryVO.getContent()), "content", commentQueryVO.getContent())
                 .eq(commentQueryVO.getArticleId() != null, "article_id", commentQueryVO.getArticleId());
     }

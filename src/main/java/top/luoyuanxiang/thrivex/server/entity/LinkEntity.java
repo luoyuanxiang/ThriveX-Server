@@ -86,7 +86,7 @@ public class LinkEntity extends Model<LinkEntity> {
     private String createTime;
 
     @TableField(exist = false)
-    private LinkTypeEntity linkTypeEntity;
+    private LinkTypeEntity type;
 
     @Override
     public Serializable pkVal() {

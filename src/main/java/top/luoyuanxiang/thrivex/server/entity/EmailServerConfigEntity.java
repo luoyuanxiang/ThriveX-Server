@@ -28,19 +28,13 @@ import java.util.Map;
 public class EmailServerConfigEntity extends Model<EmailServerConfigEntity> {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * 配置名称
      */
     @TableField("name")
     private String name;
-
-    /**
-     * 邮件服务类型
-     */
-    @TableField("type")
-    private String type;
 
     /**
      * 发送者邮箱地址
@@ -83,12 +77,6 @@ public class EmailServerConfigEntity extends Model<EmailServerConfigEntity> {
      */
     @TableField("is_default")
     private Boolean isDefault;
-
-    /**
-     * 配置描述
-     */
-    @TableField("description")
-    private String description;
 
     /**
      * 状态：1-启用，0-禁用
