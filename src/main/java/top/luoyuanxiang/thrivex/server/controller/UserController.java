@@ -131,7 +131,9 @@ public class UserController {
      */
     @HasPermission("user:list")
     @PostMapping("/paging")
-    public Result<Paging<UserEntity>> paging(UserQueryVO filterVo, Integer page, Integer size) {
+    public Result<Paging<UserEntity>> paging(UserQueryVO filterVo,
+                                             @RequestParam(defaultValue = "1") Integer page,
+                                             @RequestParam(defaultValue = "10") Integer size) {
         Page<UserEntity> data = userService.paging(new Page<>(page, size), filterVo);
         return Result.page(data);
     }

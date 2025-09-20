@@ -115,7 +115,8 @@ public class SwiperController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<SwiperEntity>> paging(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer size) {
+    public Result<Paging<SwiperEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
+                                               @RequestParam(defaultValue = "5") Integer size) {
         Page<SwiperEntity> data = swiperService.page(new Page<>(page, size));
         return Result.page(data);
     }

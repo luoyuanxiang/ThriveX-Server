@@ -133,7 +133,9 @@ public class ArticleController {
      */
     @NoAuth
     @PostMapping("/paging")
-    public Result<Paging<ArticleEntity>> paging(@RequestBody ArticleQueryVO articleQueryVO, Integer page, Integer size) {
+    public Result<Paging<ArticleEntity>> paging(@RequestBody ArticleQueryVO articleQueryVO,
+                                                @RequestParam(defaultValue = "1") Integer page,
+                                                @RequestParam(defaultValue = "10") Integer size) {
         Page<ArticleEntity> list = articleService.paging(new Page<>(page, size), articleQueryVO);
         return Result.page(list);
     }
@@ -148,7 +150,9 @@ public class ArticleController {
      */
     @NoAuth
     @GetMapping("/cate/{cateId}")
-    public Result<Paging<ArticleEntity>> getCateArticleList(@PathVariable Integer cateId, Integer page, Integer size) {
+    public Result<Paging<ArticleEntity>> getCateArticleList(@PathVariable Integer cateId,
+                                                            @RequestParam(defaultValue = "1") Integer page,
+                                                            @RequestParam(defaultValue = "10") Integer size) {
         ArticleQueryVO articleQueryVO = new ArticleQueryVO();
         articleQueryVO.setCateId(cateId);
         Page<ArticleEntity> list = articleService.paging(new Page<>(page, size), articleQueryVO);
@@ -165,7 +169,9 @@ public class ArticleController {
      */
     @NoAuth
     @GetMapping("/tag/{tagId}")
-    public Result<Paging<ArticleEntity>> getTagArticleList(@PathVariable Integer tagId, Integer page, Integer size) {
+    public Result<Paging<ArticleEntity>> getTagArticleList(@PathVariable Integer tagId,
+                                                           @RequestParam(defaultValue = "1") Integer page,
+                                                           @RequestParam(defaultValue = "10") Integer size) {
         ArticleQueryVO articleQueryVO = new ArticleQueryVO();
         articleQueryVO.setTagId(tagId);
         Page<ArticleEntity> list = articleService.paging(new Page<>(page, size), articleQueryVO);

@@ -2,10 +2,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.RssEntity;
 import top.luoyuanxiang.thrivex.server.service.IRssService;
@@ -46,7 +43,8 @@ public class RssController {
      * @return {@link Result }<{@link Paging }<{@link RssEntity }>>
      */
     @PostMapping("/paging")
-    public Result<Paging<RssEntity>> paging(Integer page, Integer size) {
+    public Result<Paging<RssEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
+                                            @RequestParam(defaultValue = "10") Integer size) {
         Page<RssEntity> data = rssService.paging(page, size);
         return Result.page(data);
     }

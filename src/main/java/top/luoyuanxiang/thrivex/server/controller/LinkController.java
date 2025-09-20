@@ -117,7 +117,9 @@ public class LinkController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<LinkEntity>> paging(@RequestBody LinkQueryVO filterVo, Integer page, Integer size) {
+    public Result<Paging<LinkEntity>> paging(@RequestBody LinkQueryVO filterVo,
+                                             @RequestParam(defaultValue = "1") Integer page,
+                                             @RequestParam(defaultValue = "10") Integer size) {
         Page<LinkEntity> data = linkService.paging(new Page<>(page, size), filterVo);
         return Result.page(data);
     }

@@ -120,7 +120,9 @@ public class WallController {
      * @return {@link Result }
      */
     @PostMapping("/paging")
-    public Result<Paging<WallEntity>> paging(@RequestBody WallQueryVO filterVo, Integer page, Integer size) {
+    public Result<Paging<WallEntity>> paging(@RequestBody WallQueryVO filterVo,
+                                             @RequestParam(defaultValue = "1") Integer page,
+                                             @RequestParam(defaultValue = "10") Integer size) {
         Page<WallEntity> list = wallService.paging(new Page<>(page, size), filterVo);
         return Result.page(list);
     }

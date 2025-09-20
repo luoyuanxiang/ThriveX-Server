@@ -31,7 +31,8 @@ public class EmailLogsController {
      * @return {@link Result }<{@link Paging }<{@link EmailLogsEntity }>>
      */
     @GetMapping("/paging")
-    public Result<Paging<EmailLogsEntity>> paging(Integer page, Integer size) {
+    public Result<Paging<EmailLogsEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
+                                                  @RequestParam(defaultValue = "10") Integer size) {
         Page<EmailLogsEntity> logsEntityPage = emailLogsService.page(new Page<>(page, size));
         return Result.page(logsEntityPage);
     }

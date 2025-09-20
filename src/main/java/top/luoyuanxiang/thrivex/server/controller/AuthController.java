@@ -64,7 +64,7 @@ public class AuthController {
             String token = jwtUtils.parseJwt(request);
             boolean tokenExpired = jwtUtils.isTokenExpired(token);
             return tokenExpired ? Result.error(424, "token已过期") : Result.success();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         return Result.error(424, "token 无效");
