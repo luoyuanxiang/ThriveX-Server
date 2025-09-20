@@ -1,14 +1,14 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 import top.luoyuanxiang.thrivex.server.entity.RouteRoleEntity;
 import top.luoyuanxiang.thrivex.server.mapper.RouteRoleMapper;
 import top.luoyuanxiang.thrivex.server.service.IRouteRoleService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang

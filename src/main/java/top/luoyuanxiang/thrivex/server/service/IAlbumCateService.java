@@ -1,13 +1,13 @@
 package top.luoyuanxiang.thrivex.server.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity;
 import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author luoyuanxiang

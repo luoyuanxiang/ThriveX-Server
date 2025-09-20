@@ -1,11 +1,11 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author luoyuanxiang

@@ -55,7 +55,7 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, OssEntity> implements
             oss.setEndPoint(projectPath + "/");
 
             // 每次修改时候，如果路径不包含static则追加上
-            if(!oss.getDomain().contains("static")){
+            if (!oss.getDomain().contains("static")) {
                 oss.setDomain(oss.getDomain() + "static/");
             }
         }

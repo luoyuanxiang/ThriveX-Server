@@ -1,11 +1,11 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 import top.luoyuanxiang.thrivex.server.entity.CateEntity;
 import top.luoyuanxiang.thrivex.server.mapper.CateMapper;
 import top.luoyuanxiang.thrivex.server.service.ICateService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 import top.luoyuanxiang.thrivex.server.vo.CateArticleCount;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang

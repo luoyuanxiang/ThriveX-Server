@@ -1,7 +1,7 @@
 package top.luoyuanxiang.thrivex.server.service;
 
-import top.luoyuanxiang.thrivex.server.entity.FileDetailEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.luoyuanxiang.thrivex.server.entity.FileDetailEntity;
 
 /**
  * <p>

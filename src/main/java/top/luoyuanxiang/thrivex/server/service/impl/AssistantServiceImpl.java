@@ -1,10 +1,10 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 import top.luoyuanxiang.thrivex.server.entity.AssistantEntity;
 import top.luoyuanxiang.thrivex.server.mapper.AssistantMapper;
 import top.luoyuanxiang.thrivex.server.service.IAssistantService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 
 /**
  * <p>

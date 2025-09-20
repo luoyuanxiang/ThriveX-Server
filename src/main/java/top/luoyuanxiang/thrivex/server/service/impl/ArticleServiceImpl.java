@@ -30,7 +30,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang
@@ -52,6 +52,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleEntity
     private ITagService tagService;
     @Resource
     private CommentMapper commentMapper;
+
     @Override
     @Transactional
     public void add(ArticleEntity article) {
@@ -617,7 +618,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, ArticleEntity
 
         return data;
     }
-
 
 
     /**

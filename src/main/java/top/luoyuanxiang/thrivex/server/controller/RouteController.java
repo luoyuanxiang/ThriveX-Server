@@ -2,9 +2,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.entity.RouteEntity;
 import top.luoyuanxiang.thrivex.server.entity.RouteRoleEntity;
-import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IRouteRoleService;
 import top.luoyuanxiang.thrivex.server.service.IRouteService;
 import top.luoyuanxiang.thrivex.server.vo.Result;

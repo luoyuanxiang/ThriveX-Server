@@ -58,7 +58,7 @@ public class AmapLocationUtil {
                     String status = jsonNode.get("status").textValue();
 
                     // 状态为1表示成功
-                    if (Objects.equals("1",  status)) {
+                    if (Objects.equals("1", status)) {
                         String province = jsonNode.get("province").textValue();
                         String city = jsonNode.get("city").textValue();
                         if (StrUtil.isNotBlank(province)) {

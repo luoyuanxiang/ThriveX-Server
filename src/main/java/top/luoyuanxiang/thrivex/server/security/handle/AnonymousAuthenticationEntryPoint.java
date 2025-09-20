@@ -21,7 +21,7 @@ import java.io.IOException;
 @Component
 public class AnonymousAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException  {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         log.info("用户需要登录，访问[{}]失败，AuthenticationException={}", request.getRequestURI(), authException.getMessage(), authException);
         // 允许跨域
         response.setHeader("Access-Control-Allow-Origin", "*");

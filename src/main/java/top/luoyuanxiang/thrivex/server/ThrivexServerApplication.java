@@ -34,9 +34,9 @@ public class ThrivexServerApplication {
     @Resource
     private WebClient webClient;
 
-	public static void main(String[] args) {
-		SpringApplication.run(ThrivexServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ThrivexServerApplication.class, args);
+    }
 
     /**
      * 更新百度统计

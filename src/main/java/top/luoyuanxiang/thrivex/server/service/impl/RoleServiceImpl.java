@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang
@@ -38,7 +38,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> impleme
 
     @Override
     public List<PermissionEntity> getPermissionList(Integer id) {
-        if(id != 1) return baseMapper.getPermissionList(id);
+        if (id != 1) return baseMapper.getPermissionList(id);
         return permissionService.list();
     }
 

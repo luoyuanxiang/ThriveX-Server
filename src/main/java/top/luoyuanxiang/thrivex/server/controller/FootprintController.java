@@ -2,9 +2,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.FootprintEntity;
-import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IFootprintService;
 import top.luoyuanxiang.thrivex.server.vo.QueryCommonVO;
 import top.luoyuanxiang.thrivex.server.vo.Result;

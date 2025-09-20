@@ -4,26 +4,26 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.WallEntity">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="content" property="content" />
-        <result column="color" property="color" />
-        <result column="email" property="email" />
-        <result column="cate_id" property="cateId" />
-        <result column="audit_status" property="auditStatus" />
-        <result column="is_choice" property="isChoice" />
-        <result column="create_time" property="createTime" />
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="content" property="content"/>
+        <result column="color" property="color"/>
+        <result column="email" property="email"/>
+        <result column="cate_id" property="cateId"/>
+        <result column="audit_status" property="auditStatus"/>
+        <result column="is_choice" property="isChoice"/>
+        <result column="create_time" property="createTime"/>
         <association property="cate" javaType="top.luoyuanxiang.thrivex.server.entity.WallCateEntity">
-            <id column="wc_id" property="id" />
-            <result column="wc_name" property="name" />
-            <result column="mark" property="mark" />
-            <result column="order" property="order" />
+            <id column="wc_id" property="id"/>
+            <result column="wc_name" property="name"/>
+            <result column="mark" property="mark"/>
+            <result column="order" property="order"/>
         </association>
     </resultMap>
     <select id="list" resultType="top.luoyuanxiang.thrivex.server.entity.WallEntity">
         select w.id, w.name, content, color, email, cate_id, audit_status, is_choice, create_time,
-               wc.id wc_id, wc.name wc_name, mark, `order`
-               from wall w left join wall_cate wc on w.cate_id = wc.id
+        wc.id wc_id, wc.name wc_name, mark, `order`
+        from wall w left join wall_cate wc on w.cate_id = wc.id
         <where>
             <if test="vo.cateId != null">
                 and w.cate_id = #{vo.cateId}

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang
@@ -29,6 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
     @Override
     public UserEntity findByUsername(String username) {
         return baseMapper.findByUsername(username);

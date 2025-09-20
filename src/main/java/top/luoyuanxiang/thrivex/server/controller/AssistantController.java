@@ -2,8 +2,8 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
-import top.luoyuanxiang.thrivex.server.entity.AssistantEntity;
 import top.luoyuanxiang.thrivex.server.ann.HasPermission;
+import top.luoyuanxiang.thrivex.server.entity.AssistantEntity;
 import top.luoyuanxiang.thrivex.server.service.IAssistantService;
 import top.luoyuanxiang.thrivex.server.vo.Result;
 

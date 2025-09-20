@@ -19,7 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import top.luoyuanxiang.thrivex.server.security.handle.*;
+import top.luoyuanxiang.thrivex.server.security.handle.AnonymousAuthenticationEntryPoint;
+import top.luoyuanxiang.thrivex.server.security.handle.CustomAccessDeniedHandler;
+import top.luoyuanxiang.thrivex.server.security.handle.RequestMappingCollector;
 
 import java.util.List;
 

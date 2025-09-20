@@ -8,8 +8,8 @@ import org.dromara.x.file.storage.core.get.RemoteDirInfo;
 import org.dromara.x.file.storage.core.get.RemoteFileInfo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import top.luoyuanxiang.thrivex.server.exception.CustomException;
 import top.luoyuanxiang.thrivex.server.ann.HasPermission;
+import top.luoyuanxiang.thrivex.server.exception.CustomException;
 import top.luoyuanxiang.thrivex.server.utils.OssUtils;
 import top.luoyuanxiang.thrivex.server.vo.Result;
 
@@ -97,7 +97,7 @@ public class FileController {
      */
     @HasPermission("file:info")
     @GetMapping("/info")
-    public Result<FileInfo> get(@RequestParam String filePath)  {
+    public Result<FileInfo> get(@RequestParam String filePath) {
         FileInfo fileInfo = fileStorageService.getFileInfoByUrl(filePath);
         return Result.success(fileInfo);
     }

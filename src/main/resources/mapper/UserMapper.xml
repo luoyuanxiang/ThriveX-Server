@@ -4,21 +4,21 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="top.luoyuanxiang.thrivex.server.entity.UserEntity">
-        <id column="id" property="id" />
-        <result column="username" property="username" />
-        <result column="password" property="password" />
-        <result column="name" property="name" />
-        <result column="email" property="email" />
-        <result column="avatar" property="avatar" />
-        <result column="info" property="info" />
-        <result column="role_id" property="roleId" />
-        <result column="create_time" property="createTime" />
-        <result column="permissionsCode" property="permissionsCode" />
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="info" property="info"/>
+        <result column="role_id" property="roleId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="permissionsCode" property="permissionsCode"/>
         <association property="role" javaType="top.luoyuanxiang.thrivex.server.entity.RoleEntity">
-            <id column="r_id" property="id" />
-            <result column="r_name" property="name" />
-            <result column="mark" property="mark" />
-            <result column="description" property="description" />
+            <id column="r_id" property="id"/>
+            <result column="r_name" property="name"/>
+            <result column="mark" property="mark"/>
+            <result column="description" property="description"/>
         </association>
     </resultMap>
     <select id="findByUsername" resultMap="BaseResultMap">

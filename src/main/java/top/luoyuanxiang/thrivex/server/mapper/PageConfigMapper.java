@@ -6,7 +6,7 @@ import top.luoyuanxiang.thrivex.server.entity.PageConfigEntity;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author luoyuanxiang

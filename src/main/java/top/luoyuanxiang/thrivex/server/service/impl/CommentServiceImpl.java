@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang
@@ -135,7 +135,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
         List<ArticleEntity> articleEntityList = articleService.listByIds(ids);
         list.parallelStream().forEach(commentEntity -> commentEntity.setArticleTitle(articleEntityList
                 .stream().filter(articleEntity -> articleEntity.getId().equals(commentEntity.getArticleId()))
-                        .map(ArticleEntity::getTitle)
+                .map(ArticleEntity::getTitle)
                 .findFirst().orElse("")));
     }
 
@@ -158,7 +158,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
      * 递归构建评论列表
      *
      * @param list 列表
-     * @param cid 父级id
+     * @param cid  父级id
      * @return {@link List }<{@link CommentEntity }>
      */
     private List<CommentEntity> buildCommentTree(List<CommentEntity> list, Integer cid) {

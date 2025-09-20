@@ -1,18 +1,18 @@
 package top.luoyuanxiang.thrivex.server.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
 import top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity;
 import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
 import top.luoyuanxiang.thrivex.server.mapper.AlbumCateMapper;
 import top.luoyuanxiang.thrivex.server.service.IAlbumCateService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
 import top.luoyuanxiang.thrivex.server.service.IAlbumImageService;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author luoyuanxiang
