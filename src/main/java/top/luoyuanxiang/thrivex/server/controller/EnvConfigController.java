@@ -2,8 +2,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.EnvConfigEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IEnvConfigService;
 import top.luoyuanxiang.thrivex.server.vo.Result;
 
@@ -98,6 +99,7 @@ public class EnvConfigController {
      *
      * @return {@link Result }<{@link Map }<{@link String }, {@link Object }>>
      */
+    @NoAuth
     @GetMapping("/gaode_map")
     public Result<Map<String, Object>> getGaodeMapConfig() {
         EnvConfigEntity envConfigEntity = envConfigService.getByName("gaode_map");

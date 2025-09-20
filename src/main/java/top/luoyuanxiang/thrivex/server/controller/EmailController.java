@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IEmailService;
 import top.luoyuanxiang.thrivex.server.vo.DismissEmailVO;
 import top.luoyuanxiang.thrivex.server.vo.Result;

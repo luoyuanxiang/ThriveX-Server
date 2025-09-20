@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.RecordEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IRecordService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
 import top.luoyuanxiang.thrivex.server.vo.QueryCommonVO;
@@ -96,8 +97,11 @@ public class RecordController {
      * @param filterVo 过滤 VO
      * @return {@link Result }
      */
+    @NoAuth
     @PostMapping("/paging")
-    public Result<Paging<RecordEntity>> paging(@RequestBody QueryCommonVO<RecordEntity> filterVo, Integer page, Integer size) {
+    public Result<Paging<RecordEntity>> paging(@RequestBody QueryCommonVO<RecordEntity> filterVo,
+                                               @RequestParam(defaultValue = "1") Integer page,
+                                               @RequestParam(defaultValue = "10") Integer size) {
         Page<RecordEntity> data = recordService.page(new Page<>(page, size), filterVo.buildQueryWrapper("content"));
         return Result.page(data);
     }

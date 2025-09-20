@@ -1,4 +1,4 @@
-package top.luoyuanxiang.thrivex.server.security;
+package top.luoyuanxiang.thrivex.server.ann;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 

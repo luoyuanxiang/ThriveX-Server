@@ -3,7 +3,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import top.luoyuanxiang.thrivex.server.entity.OssEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IOssService;
 import top.luoyuanxiang.thrivex.server.vo.Result;
 

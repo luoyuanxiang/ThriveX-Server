@@ -5,8 +5,9 @@ import jakarta.annotation.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.ArticleEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IArticleService;
 import top.luoyuanxiang.thrivex.server.vo.ArticleQueryVO;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -101,6 +102,7 @@ public class ArticleController {
      * @param password 密码
      * @return {@link Result }<{@link ArticleEntity }>
      */
+    @NoAuth
     @GetMapping("/{id}")
     public Result<ArticleEntity> get(@PathVariable Integer id, @RequestParam(defaultValue = "") String password) {
         password = !password.isEmpty() ? password : "";
@@ -114,6 +116,7 @@ public class ArticleController {
      * @param articleQueryVO 文章查询 vo
      * @return {@link Result }<{@link List }<{@link ArticleEntity }>>
      */
+    @NoAuth
     @PostMapping("/list")
     public Result<List<ArticleEntity>> list(@RequestBody ArticleQueryVO articleQueryVO) {
         List<ArticleEntity> data = articleService.list(articleQueryVO);
@@ -128,6 +131,7 @@ public class ArticleController {
      * @param size           大小
      * @return {@link Result }
      */
+    @NoAuth
     @PostMapping("/paging")
     public Result<Paging<ArticleEntity>> paging(@RequestBody ArticleQueryVO articleQueryVO, Integer page, Integer size) {
         Page<ArticleEntity> list = articleService.paging(new Page<>(page, size), articleQueryVO);
@@ -142,6 +146,7 @@ public class ArticleController {
      * @param size   大小
      * @return {@link Result }<{@link Paging }<{@link ArticleEntity }>>
      */
+    @NoAuth
     @GetMapping("/cate/{cateId}")
     public Result<Paging<ArticleEntity>> getCateArticleList(@PathVariable Integer cateId, Integer page, Integer size) {
         ArticleQueryVO articleQueryVO = new ArticleQueryVO();
@@ -158,6 +163,7 @@ public class ArticleController {
      * @param size  大小
      * @return {@link Result }<{@link Paging }<{@link ArticleEntity }>>
      */
+    @NoAuth
     @GetMapping("/tag/{tagId}")
     public Result<Paging<ArticleEntity>> getTagArticleList(@PathVariable Integer tagId, Integer page, Integer size) {
         ArticleQueryVO articleQueryVO = new ArticleQueryVO();
@@ -172,6 +178,7 @@ public class ArticleController {
      * @param count 计数
      * @return {@link Result }<{@link List }<{@link ArticleEntity }>>
      */
+    @NoAuth
     @GetMapping("/random")
     public Result<List<ArticleEntity>> getRandomArticles(@RequestParam(defaultValue = "5") Integer count) {
         List<ArticleEntity> data = articleService.getRandomArticles(count);
@@ -184,6 +191,7 @@ public class ArticleController {
      * @param count 计数
      * @return {@link Result }<{@link List }<{@link ArticleEntity }>>
      */
+    @NoAuth
     @GetMapping("/hot")
     public Result<List<ArticleEntity>> getRecommendedArticles(@RequestParam(defaultValue = "5") Integer count) {
         List<ArticleEntity> data = articleService.getRecommendedArticles(count);
@@ -196,6 +204,7 @@ public class ArticleController {
      * @param articleId 文章 ID
      * @return {@link Result }<{@link String }>
      */
+    @NoAuth
     @GetMapping("/view/{articleId}")
     public Result<String> recordView(@PathVariable Integer articleId) {
         articleService.recordView(articleId);

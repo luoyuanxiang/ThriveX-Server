@@ -2,6 +2,7 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.WebConfigEntity;
 import top.luoyuanxiang.thrivex.server.service.IWebConfigService;
 import top.luoyuanxiang.thrivex.server.vo.Result;
@@ -39,6 +40,7 @@ public class WebConfigController {
      * @param name 名字
      * @return {@link Result }<{@link WebConfigEntity }>
      */
+    @NoAuth
     @GetMapping("/name/{name}")
     public Result<WebConfigEntity> getByName(@PathVariable String name) {
         WebConfigEntity webConfig = webConfigService.getByName(name);

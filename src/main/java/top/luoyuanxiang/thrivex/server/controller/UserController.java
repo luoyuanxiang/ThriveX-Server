@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.UserEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IUserService;
 import top.luoyuanxiang.thrivex.server.vo.EditPassVO;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -153,6 +154,7 @@ public class UserController {
      *
      * @return {@link Result }<{@link UserEntity }>
      */
+    @NoAuth
     @GetMapping("/author")
     public Result<UserEntity> getAuthor() {
         UserQueryVO userQueryVO = new UserQueryVO();

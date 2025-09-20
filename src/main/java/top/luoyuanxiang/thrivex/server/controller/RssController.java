@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.RssEntity;
 import top.luoyuanxiang.thrivex.server.service.IRssService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
 import top.luoyuanxiang.thrivex.server.vo.Result;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 订阅管理
@@ -31,6 +31,7 @@ public class RssController {
      *
      * @return {@link Result }<{@link List }<{@link RssEntity }>>
      */
+    @NoAuth
     @GetMapping("/list")
     public Result<List<RssEntity>> list() {
         List<RssEntity> list = rssService.list();

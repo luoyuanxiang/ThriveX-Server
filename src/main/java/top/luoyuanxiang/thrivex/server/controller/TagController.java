@@ -3,8 +3,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.TagEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ITagService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
 import top.luoyuanxiang.thrivex.server.vo.Result;
@@ -96,6 +97,7 @@ public class TagController {
      *
      * @return {@link Result }<{@link List }<{@link TagEntity }>>
      */
+    @NoAuth
     @PostMapping("/list")
     public Result<List<TagEntity>> list() {
         List<TagEntity> data = tagService.list();
@@ -121,6 +123,7 @@ public class TagController {
      *
      * @return {@link Result }
      */
+    @NoAuth
     @GetMapping("/article/count")
     public Result<List<TagEntity>> staticArticleCount() {
         List<TagEntity> list = tagService.staticArticleCount();

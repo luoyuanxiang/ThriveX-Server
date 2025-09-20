@@ -1,5 +1,6 @@
 package top.luoyuanxiang.thrivex.server.security;
 
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import top.luoyuanxiang.thrivex.server.security.handle.*;
 
 import java.util.List;
 
@@ -28,6 +30,13 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Resource
+    private RequestMappingCollector requestMappingCollector;
+    @Resource
+    private AnonymousAuthenticationEntryPoint anonymousAuthenticationEntryPoint;
+    @Resource
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     /**
      * 鉴权具体的实现逻辑
@@ -66,7 +75,6 @@ public class SecurityConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -80,34 +88,21 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // 设置会话管理为无状态
                 .sessionManagement(se -> se.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(
-                            "/error",
-                            "/login",
-                            "/check",
-                            "/web_config/**",
-                            "/role/permission/**",
-                            "/user/author",
-                            "/cate/list",
-                            "/record/paging",
-                            "/album/cate/**",
-                            "/article/**",
-                            "/cate/list",
-                            "/cate/article/count",
-                            "/comment/**",
-                            "/page_config/**",
-                            "/env_config/**",
-                            "/footprint/list",
-                            "/rss/list",
-                            "/swiper/list",
-                            "/tag/**",
-                            "/wall/**",
-                            "/link/**"
-                    ).permitAll();
-                    auth.anyRequest().authenticated();
-                });
-        // 添加 JWT 过滤器
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(requestMappingCollector.getPermitAllUrls().toArray(new String[0]))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .formLogin(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> {
+                    // 认证异常处理
+                    exception.authenticationEntryPoint(anonymousAuthenticationEntryPoint);
+                    // 授权异常处理
+                    exception.accessDeniedHandler(customAccessDeniedHandler);
+                })
+                // 添加 JWT 过滤器
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

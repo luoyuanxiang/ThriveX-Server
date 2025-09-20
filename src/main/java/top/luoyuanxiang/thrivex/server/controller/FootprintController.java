@@ -2,8 +2,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.FootprintEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IFootprintService;
 import top.luoyuanxiang.thrivex.server.vo.QueryCommonVO;
 import top.luoyuanxiang.thrivex.server.vo.Result;
@@ -93,6 +94,7 @@ public class FootprintController {
      * @param queryCommonVO 查询VO
      * @return {@link Result }<{@link List }<{@link FootprintEntity }>>
      */
+    @NoAuth
     @PostMapping("/list")
     public Result<List<FootprintEntity>> list(@RequestBody QueryCommonVO<FootprintEntity> queryCommonVO) {
         List<FootprintEntity> data = footprintService.list(queryCommonVO);

@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.AlbumCateEntity;
 import top.luoyuanxiang.thrivex.server.entity.AlbumImageEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IAlbumCateService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
 import top.luoyuanxiang.thrivex.server.vo.Result;
@@ -112,6 +113,7 @@ public class AlbumCateController {
      * @param size 大小
      * @return {@link Result }
      */
+    @NoAuth
     @PostMapping("/paging")
     public Result<Paging<AlbumCateEntity>> paging(@RequestParam(defaultValue = "1") Integer page,
                                                   @RequestParam(defaultValue = "10") Integer size) {
@@ -127,6 +129,7 @@ public class AlbumCateController {
      * @param size 大小
      * @return {@link Result }
      */
+    @NoAuth
     @GetMapping("/{id}/images")
     public Result<Paging<AlbumImageEntity>> getImagesByAlbumId(@PathVariable Integer id,
                                                                @RequestParam(defaultValue = "1") Integer page,

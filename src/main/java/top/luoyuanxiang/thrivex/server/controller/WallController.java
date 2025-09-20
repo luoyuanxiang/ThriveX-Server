@@ -3,9 +3,10 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.WallCateEntity;
 import top.luoyuanxiang.thrivex.server.entity.WallEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.IWallCateService;
 import top.luoyuanxiang.thrivex.server.service.IWallService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -36,6 +37,7 @@ public class WallController {
      * @return {@link Result }<{@link String }>
      * @throws Exception 例外
      */
+    @NoAuth
     @PostMapping
     public Result<String> add(@RequestBody WallEntity wall) throws Exception {
         wallService.add(wall);
@@ -131,8 +133,11 @@ public class WallController {
      * @param size   大小
      * @return {@link Result }
      */
+    @NoAuth
     @PostMapping("/cate/{cateId}")
-    public Result<Paging<WallEntity>> getCateWallList(@PathVariable Integer cateId, Integer page, Integer size) {
+    public Result<Paging<WallEntity>> getCateWallList(@PathVariable Integer cateId,
+                                                      @RequestParam(defaultValue = "1") Integer page,
+                                                      @RequestParam(defaultValue = "10") Integer size) {
         WallQueryVO wallQueryVO = new WallQueryVO();
         wallQueryVO.setCateId(cateId);
         Page<WallEntity> list = wallService.paging(new Page<>(page, size), wallQueryVO);
@@ -144,6 +149,7 @@ public class WallController {
      *
      * @return {@link Result }
      */
+    @NoAuth
     @GetMapping("/cate")
     public Result<List<WallCateEntity>> getCateList() {
         List<WallCateEntity> list = wallCateService.list();

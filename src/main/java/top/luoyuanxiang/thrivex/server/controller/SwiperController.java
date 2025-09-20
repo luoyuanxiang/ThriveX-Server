@@ -3,8 +3,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.SwiperEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ISwiperService;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
 import top.luoyuanxiang.thrivex.server.vo.Result;
@@ -99,6 +100,7 @@ public class SwiperController {
      *
      * @return {@link Result }<{@link List }<{@link SwiperEntity }>>
      */
+    @NoAuth
     @PostMapping("/list")
     public Result<List<SwiperEntity>> list() {
         List<SwiperEntity> data = swiperService.list();

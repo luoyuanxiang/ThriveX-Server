@@ -3,8 +3,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.CommentEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ICommentService;
 import top.luoyuanxiang.thrivex.server.vo.CommentQueryVO;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -32,6 +33,7 @@ public class CommentController {
      * @return {@link Result }<{@link String }>
      * @throws Exception 例外
      */
+    @NoAuth
     @PostMapping
     public Result<String> add(@RequestBody CommentEntity comment) throws Exception {
         commentService.add(comment);
@@ -103,6 +105,7 @@ public class CommentController {
      * @param commentQueryVO 评论查询 vo
      * @return {@link Result }<{@link List }<{@link CommentEntity }>>
      */
+    @NoAuth
     @PostMapping("/list")
     public Result<List<CommentEntity>> list(@RequestBody CommentQueryVO commentQueryVO) {
         List<CommentEntity> list = commentService.list(commentQueryVO);
@@ -117,8 +120,11 @@ public class CommentController {
      * @param size           大小
      * @return {@link Result }<{@link Paging }<{@link CommentEntity }>>
      */
+    @NoAuth
     @PostMapping("/paging")
-    public Result<Paging<CommentEntity>> paging(@RequestBody CommentQueryVO commentQueryVO, Integer page, Integer size) {
+    public Result<Paging<CommentEntity>> paging(@RequestBody CommentQueryVO commentQueryVO,
+                                                @RequestParam(defaultValue = "1") Integer page,
+                                                @RequestParam(defaultValue = "10") Integer size) {
         Page<CommentEntity> list = commentService.paging(new Page<>(page, size), commentQueryVO);
         return Result.page(list);
     }
@@ -131,8 +137,11 @@ public class CommentController {
      * @param size      大小
      * @return {@link Result }<{@link Paging }<{@link CommentEntity }>>
      */
+    @NoAuth
     @PostMapping("/article/{articleId}")
-    public Result<Paging<CommentEntity>> getArticleCommentList(@PathVariable Integer articleId, Integer page, Integer size) {
+    public Result<Paging<CommentEntity>> getArticleCommentList(@PathVariable Integer articleId,
+                                                               @RequestParam(defaultValue = "1") Integer page,
+                                                               @RequestParam(defaultValue = "10") Integer size) {
         CommentQueryVO commentQueryVO = new CommentQueryVO();
         commentQueryVO.setArticleId(articleId);
         Page<CommentEntity> list = commentService.paging(new Page<>(page, size), commentQueryVO);

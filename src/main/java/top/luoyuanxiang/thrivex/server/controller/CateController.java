@@ -3,8 +3,9 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.CateEntity;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ICateService;
 import top.luoyuanxiang.thrivex.server.vo.CateArticleCount;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -95,6 +96,7 @@ public class CateController {
      * @param pattern 默认为tree树性结构，设置为list表示列表结构
      * @return {@link Result }<{@link List }<{@link CateEntity }>>
      */
+    @NoAuth
     @PostMapping("/list")
     public Result<List<CateEntity>> list(@RequestParam(defaultValue = "recursion") String pattern) {
         List<CateEntity> data = cateService.list(pattern);
@@ -120,6 +122,7 @@ public class CateController {
      *
      * @return {@link Result }<{@link List }<{@link CateArticleCount }>>
      */
+    @NoAuth
     @GetMapping("/article/count")
     public Result<List<CateArticleCount>> cateArticleCount() {
         List<CateArticleCount> list = cateService.cateArticleCount();

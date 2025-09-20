@@ -3,10 +3,11 @@ package top.luoyuanxiang.thrivex.server.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import top.luoyuanxiang.thrivex.server.ann.NoAuth;
 import top.luoyuanxiang.thrivex.server.entity.LinkEntity;
 import top.luoyuanxiang.thrivex.server.entity.LinkTypeEntity;
 import top.luoyuanxiang.thrivex.server.mapper.LinkTypeMapper;
-import top.luoyuanxiang.thrivex.server.security.HasPermission;
+import top.luoyuanxiang.thrivex.server.ann.HasPermission;
 import top.luoyuanxiang.thrivex.server.service.ILinkService;
 import top.luoyuanxiang.thrivex.server.vo.LinkQueryVO;
 import top.luoyuanxiang.thrivex.server.vo.Paging;
@@ -36,6 +37,7 @@ public class LinkController {
      * @return {@link Result }<{@link String }>
      * @throws Exception 例外
      */
+    @NoAuth
     @PostMapping
     public Result<String> add(@RequestBody LinkEntity linkEntity) throws Exception {
         linkService.add(linkEntity);
@@ -101,6 +103,7 @@ public class LinkController {
      * @param linkQueryVO 过滤 VO
      * @return {@link Result }<{@link List }<{@link LinkEntity }>>
      */
+    @NoAuth
     @PostMapping("/list")
     public Result<List<LinkEntity>> list(@RequestBody LinkQueryVO linkQueryVO) {
         List<LinkEntity> data = linkService.list(linkQueryVO);
@@ -124,6 +127,7 @@ public class LinkController {
      *
      * @return {@link Result }<{@link List }<{@link LinkTypeEntity }>>
      */
+    @NoAuth
     @GetMapping("/type")
     public Result<List<LinkTypeEntity>> typeList() {
         List<LinkTypeEntity> data = linkTypeMapper.selectList(null);
