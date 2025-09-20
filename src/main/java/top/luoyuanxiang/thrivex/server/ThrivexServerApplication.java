@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.reactive.function.client.WebClient;
 import top.luoyuanxiang.thrivex.server.entity.EnvConfigEntity;
 import top.luoyuanxiang.thrivex.server.service.IEnvConfigService;
@@ -42,7 +43,7 @@ public class ThrivexServerApplication {
      * 更新百度统计
      *
      */
-//    @Scheduled(fixedRate = 241920000)
+    @Scheduled(fixedRate = 241920000)
     public void updBaiduStatistics() throws Exception {
         EnvConfigEntity envConfig = envConfigService.getByName("baidu_statis");
         Map<String, Object> value = envConfig.getValue();
