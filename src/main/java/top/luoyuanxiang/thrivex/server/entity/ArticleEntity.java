@@ -71,6 +71,12 @@ public class ArticleEntity extends Model<ArticleEntity> {
     private Integer comment;
 
     /**
+     * 是顶部
+     */
+    @TableField("is_top")
+    private Boolean isTop;
+
+    /**
      * 文章创建时间
      */
     @TableField("create_time")
