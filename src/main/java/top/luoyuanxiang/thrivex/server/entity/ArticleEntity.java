@@ -67,7 +67,7 @@ public class ArticleEntity extends Model<ArticleEntity> {
     /**
      * 评论数量
      */
-    @TableField("comment")
+    @TableField("`comment`")
     private Integer comment;
 
     /**
@@ -75,6 +75,36 @@ public class ArticleEntity extends Model<ArticleEntity> {
      */
     @TableField("is_top")
     private Boolean isTop;
+
+    /**
+     * 文章状态: default:正常,no_home:不显示在首页,hide:隐藏
+     */
+    @TableField("status")
+    private String status;
+
+    /**
+     * 是否文章加密
+     */
+    @TableField("password")
+    private String password;
+
+    /**
+     * 是否加密
+     */
+    @TableField("is_encrypt")
+    private Integer isEncrypt;
+
+    /**
+     * 是否为草稿
+     */
+    @TableField("is_draft")
+    private Integer isDraft;
+
+    /**
+     * 是否回收站
+     */
+    @TableField("is_del")
+    private Integer isDel;
 
     /**
      * 文章创建时间
@@ -93,12 +123,6 @@ public class ArticleEntity extends Model<ArticleEntity> {
      */
     @TableField(exist = false)
     private List<Integer> tagIds;
-
-    /**
-     * 文章配置项
-     */
-    @TableField(exist = false)
-    private ArticleConfigEntity config;
 
     /**
      * 分类列表

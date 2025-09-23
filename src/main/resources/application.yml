@@ -16,6 +16,7 @@ jwt:
 mybatis-plus:
   configuration:
     cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 dromara:
   # 文件存储配置

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import top.luoyuanxiang.thrivex.server.entity.ArticleEntity;
 
+import java.util.List;
+
 /**
  * 文章查询
  *
@@ -17,6 +19,9 @@ public class ArticleQueryVO extends QueryCommonVO<ArticleEntity> {
      * 根据分类进行筛选
      */
     private Integer cateId;
+    private List<Integer> ids;
+    private boolean isAdmin;
+    private Integer randCount;
     /**
      * 根据标签进行筛选
      */

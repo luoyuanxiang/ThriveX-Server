@@ -1,5 +1,6 @@
 package top.luoyuanxiang.thrivex.server.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +14,7 @@ import java.util.Map;
 /**
  * 认证和授权异常处理器
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobExceptionHandler {
 
@@ -32,7 +34,7 @@ public class GlobExceptionHandler {
         body.put("error", "Internal Server Error");
         body.put("message", ex.getMessage());
         body.put("path", request.getDescription(false).replace("uri=", ""));
-
+        log.error("Exception: {}", ex.getMessage(), ex);
         return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), body);
     }
 }
