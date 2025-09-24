@@ -39,8 +39,12 @@ public class MarkdownExporterUtils {
         Map<String, Object> frontMatterMap = new LinkedHashMap<>();
         frontMatterMap.put("title", frontMatter.getTitle());
         frontMatterMap.put("description", frontMatter.getDescription());
-        frontMatterMap.put("tags", frontMatter.getTags());
-        frontMatterMap.put("categories", frontMatter.getCategories());
+        if (frontMatter.getTags() != null && !frontMatter.getTags().isEmpty()) {
+            frontMatterMap.put("tags", frontMatter.getTags().toArray(new String[0]));
+        }
+        if (frontMatter.getCategories() != null && !frontMatter.getCategories().isEmpty()) {
+            frontMatterMap.put("categories", frontMatter.getCategories().toArray(new String[0]));
+        }
         frontMatterMap.put("cover", frontMatter.getCover());
 
         // 格式化日期
