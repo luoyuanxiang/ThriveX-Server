@@ -26,7 +26,7 @@ WORKDIR /app
 # 从构建阶段复制打包好的jar文件
 COPY --from=builder /app/target/*.jar app.jar
 # 添加环境变量
-ENV JAVA_OPTS="-Xmx512m -Xms256m"
+ENV JAVA_OPTS="-Xmx256m -Xms256m"
 # 暴露应用端口
 EXPOSE 8080
 
