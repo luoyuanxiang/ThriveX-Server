@@ -53,6 +53,6 @@ jobs:
             // 更新镜像
             docker rmi registry.cn-chengdu.aliyuncs.com/thrivex-blog/thrive-blog:latest
             docker pull registry.cn-chengdu.aliyuncs.com/thrivex-blog/thrive-blog:latest
-            cd /root/thrive-blog
+            cd /root/thrivex-blog
             docker-compose up -d
             echo "服务器命令执行完成"
