@@ -21,32 +21,29 @@ import java.util.*;
 @Service
 public class RequestMappingCollector implements BeanPostProcessor {
 
-    private static final String PATTERN = "\\{(.*?)}";
-
-    public static final String ASTERISK = "*";
-
     @Getter
     @Setter
-    private List<String> permitAllUrls = new ArrayList<>();
+    private Set<String> permitAllUrls = new LinkedHashSet<>();
 
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+
         if (bean instanceof RequestMappingHandlerMapping handlerMapping) {
-            Map<RequestMappingInfo, HandlerMethod> map = handlerMapping.getHandlerMethods();
-            map.keySet().forEach(x -> {
-                HandlerMethod handlerMethod = map.get(x);
+            Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
+            for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
+                RequestMappingInfo info = entry.getKey();
+                HandlerMethod method = entry.getValue();
 
-                // 获取方法上边的注解 替代path variable 为 *
-                NoAuth method = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), NoAuth.class);
-                Optional.ofNullable(method).ifPresent(inner -> Objects.requireNonNull(x.getPathPatternsCondition())
-                        .getPatternValues().forEach(url -> permitAllUrls.add(url.replaceAll(PATTERN, ASTERISK))));
+                // 判断类或方法是否有 @NoAuth 注解
+                boolean hasNoAuth = AnnotationUtils.findAnnotation(method.getBeanType(), NoAuth.class) != null
+                        || AnnotationUtils.findAnnotation(method.getMethod(), NoAuth.class) != null;
 
-                // 获取类上边的注解, 替代path variable 为 *
-                NoAuth controller = AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), NoAuth.class);
-                Optional.ofNullable(controller).ifPresent(inner -> Objects.requireNonNull(x.getPathPatternsCondition())
-                        .getPatternValues().forEach(url -> permitAllUrls.add(url.replaceAll(PATTERN, ASTERISK))));
-            });
+                if (hasNoAuth) {
+                    // 直接获取路径，无需替换 {id}（Spring Security 支持 {*} 匹配）
+                    permitAllUrls.addAll(info.getPathPatternsCondition().getPatternValues());
+                }
+            }
         }
         return bean;
     }
