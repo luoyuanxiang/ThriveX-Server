@@ -82,4 +82,12 @@ public class OssServiceImpl extends ServiceImpl<OssMapper, OssEntity> implements
         OssEntity oss = this.getById(id);
         OssUtils.registerPlatform(oss);
     }
+
+    @Override
+    public OssEntity getEnableOss() {
+        return lambdaQuery()
+                .eq(OssEntity::getIsEnable, 1)
+                .last("limit 1")
+                .one();
+    }
 }

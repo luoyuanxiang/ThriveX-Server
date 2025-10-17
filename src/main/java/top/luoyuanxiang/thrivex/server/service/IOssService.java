@@ -40,4 +40,11 @@ public interface IOssService extends IService<OssEntity> {
      * @param id id
      */
     void enable(Integer id);
+
+    /**
+     * 获取启用的oss配置
+     *
+     * @return oss
+     */
+    OssEntity getEnableOss();
 }
